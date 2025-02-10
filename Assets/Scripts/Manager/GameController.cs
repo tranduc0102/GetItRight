@@ -45,7 +45,7 @@ namespace Game
                             if (posHolderObj[i].IsNone)
                             {
                                 posHolderObj[i].answer = component.Answer;
-                                MoveAndRotateToPosition(hit.transform, posHolderObj[i]);
+                                MoveAndRotateToPosition(hit.transform, posHolderObj[i], i);
                                 break;
                             }
                         }
@@ -54,7 +54,7 @@ namespace Game
             }
         }
 
-        private void MoveAndRotateToPosition(Transform objToMove, HolderObject targetPos)
+        private void MoveAndRotateToPosition(Transform objToMove, HolderObject targetPos, int i)
         {
             float moveDuration = 1f;
             float rotationDuration = 1f;
@@ -63,17 +63,14 @@ namespace Game
             {
                 targetPos.IsNone = false;
                 objToMove.SetParent(targetPos.transform);
-                if (posHolderObj.Any(obj => obj.IsNone))
+                if (targetPos.answer != currentLevel.answers[i])
                 {
-                    return;
-                }
-                for (int i = 0; i < currentLevel.AmountAnswers; i++)
-                {
-                    if (posHolderObj[i].answer != currentLevel.answers[i])
+                    targetPos.IsNone = true;
+                    DOVirtual.DelayedCall(1f, () =>
                     {
-                        posHolderObj[i].IsNone = true;
-                        ReturnPos(posHolderObj[i].transform.GetChild(0), posReturn[i]);
-                    }
+                        ReturnPos(objToMove, posReturn[i]);
+                        posReturn.Remove(posReturn[i]);
+                    });
                 }
             });
         }
