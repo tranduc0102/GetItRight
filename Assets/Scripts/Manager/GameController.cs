@@ -13,12 +13,22 @@ namespace Game
         public bool IsNone = true;
     }
 
+    public enum ModeGame
+    {
+        SinglePlayer,
+        MultiPlayer,
+    }
+
     public class GameController : MonoBehaviour
     {
+        [SerializeField] private PlayerManager playerManager;
         [SerializeField] private DataLevelGame dataLevelGame;
         [SerializeField] private Level currentLevel = null;
         [SerializeField] private List<HolderObject> posHolderObj;
         [SerializeField] private List<Transform> posReturn;
+        [SerializeField] private ModeGame mode = ModeGame.SinglePlayer;
+
+        [SerializeField] private bool canClick = true;
         private int IndexCurrentLevel
         {
             set => PlayerPrefs.SetInt("CurrentLevel", value);
@@ -27,6 +37,14 @@ namespace Game
         private void Start()
         {
             currentLevel = dataLevelGame.levels[IndexCurrentLevel];
+            if (mode == ModeGame.SinglePlayer)
+            {
+                playerManager.SetNumberPlayer(3, false);
+            }
+            else
+            {
+                playerManager.SetNumberPlayer(4, true);
+            }
         }
 
         void Update()
@@ -35,8 +53,9 @@ namespace Game
             {
                 Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
-                if (Physics.Raycast(ray, out RaycastHit hit))
+                if (Physics.Raycast(ray, out RaycastHit hit) && canClick)
                 {
+                    canClick = false;
                     Item component;
                     if (hit.transform.TryGetComponent(out component))
                     {
@@ -45,7 +64,8 @@ namespace Game
                             if (posHolderObj[i].IsNone)
                             {
                                 posHolderObj[i].answer = component.Answer;
-                                MoveAndRotateToPosition(hit.transform, posHolderObj[i], i);
+                                Transform t = Instantiate(component.gameObject, component.transform.position, Quaternion.identity, component.transform.parent).GetComponent<Transform>();
+                                MoveAndRotateToPosition(t, posHolderObj[i], i);
                                 break;
                             }
                         }
@@ -56,31 +76,65 @@ namespace Game
 
         private void MoveAndRotateToPosition(Transform objToMove, HolderObject targetPos, int i)
         {
-            float moveDuration = 1f;
-            float rotationDuration = 1f;
-            posReturn.Add(objToMove.transform.parent);
+            float moveDuration = 0.5f;
+            targetPos.IsNone = false;
+            if (posHolderObj.Any(p => p.IsNone))
+            {
+                canClick = true;
+            }
             objToMove.DOMove(targetPos.transform.position, moveDuration).SetEase(Ease.Linear).OnComplete(() =>
             {
-                targetPos.IsNone = false;
                 objToMove.SetParent(targetPos.transform);
-                if (targetPos.answer != currentLevel.answers[i])
+                if(canClick) return;
+                if (posHolderObj.Any(p => !p.IsNone))
                 {
-                    targetPos.IsNone = true;
                     DOVirtual.DelayedCall(1f, () =>
                     {
-                        ReturnPos(objToMove, posReturn[i]);
-                        posReturn.Remove(posReturn[i]);
+                        bool check = false;
+                        for (int j = 0; j < posHolderObj.Count; j++)
+                        {
+                            if (posHolderObj[j].answer != currentLevel.answers[j])
+                            {
+                                // spawn...
+                                Item t = posHolderObj[j].transform.GetChild(0).GetComponent<Item>();
+                                ReturnPos(t.transform, t.Parent);
+                                posHolderObj[j].IsNone = true;
+                                posHolderObj[j].answer = EnumAnswer.None;
+                                check = true;
+                            }
+                            else
+                            {
+                                // spawn ...
+                            }
+                        }
+                        if (check)
+                        {
+                            // spawn....
+                            /*
+                            playerManager.SetCanMove(true);
+                            */
+                            return;
+                        }
+                        canClick = true;
                     });
                 }
             });
         }
         private void ReturnPos(Transform objToMove, Transform targetPos){
             float moveDuration = 1f;
-            float rotationDuration = 1f;
 
             objToMove.DOMove(targetPos.transform.position, moveDuration).SetEase(Ease.Linear).OnComplete(() =>
             {
-                objToMove.SetParent(targetPos.transform);
+                canClick = true;
+                objToMove.SetParent(targetPos);
+
+                DOVirtual.DelayedCall(0.4f, () =>
+                {
+                    if (objToMove != null)
+                    {
+                        Destroy(objToMove.gameObject);
+                    }
+                });
             });
         }
     }
