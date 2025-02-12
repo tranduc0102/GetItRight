@@ -25,7 +25,7 @@ namespace Game
         public HolderObject[] AmountObjects => amountObjects;
 
         [SerializeField] private float heightOfObjects;
-        private int currentIndex = 0;
+        [SerializeField] private int currentIndex;
         private int checkWinLose;
         
         [Space]
@@ -46,6 +46,7 @@ namespace Game
                 GameController.instance.CanClick = false;
                 for (int index = currentIndex - 3; index < currentIndex; index++)
                 {
+                    if(index < 0)continue;
                     if (amountObjects[index].answer != GameController.instance.CurrentLevelGame.answers[index % countInRow])
                     {
                         win = false;
@@ -95,13 +96,31 @@ namespace Game
                     if (checkWinLose == 0)
                     {
                         if (win) Debug.Log("Win");
-                        else Debug.Log("Lose");
+                        else
+                        {
+                            if(amountObjectReward == 0) return;
+                        }
                     }
                 });
             }
             else
             {
                 GameController.instance.CanClick = true;
+            }
+        }
+        void Update()
+        {
+            if (Input.GetKeyDown(KeyCode.Space) && amountObjectReward != 0)
+            {
+                checkWinLose = 1;
+                for (int i = amountObjects.Length - amountObjectReward; i < amountObjects.Length; i++)
+                {
+                    amountObjects[i].transform.parent.gameObject.SetActive(true);
+                }
+                amountObjectReward = 0;
+                currentIndex -= 1;
+                NextLine();
+                amountObjectReward = 0;
             }
         }
         private void OnDestroy()
