@@ -13,5 +13,6 @@ MonoBehaviour:
   m_Name: DataLevelGame
   m_EditorClassIdentifier: 
   levels:
-  - name: level1
-    answers: 0100000002000000020000000300000001000000
+  - name: level
+    answers: 010000000300000002000000
+    amountSameEnumAnswers: 0

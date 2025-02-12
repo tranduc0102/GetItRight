@@ -1,7 +1,5 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using Cinemachine;
 using UnityEngine;
 
 namespace Game
@@ -16,6 +14,8 @@ namespace Game
     {
         public string name;
         public List<EnumAnswer> answers = new List<EnumAnswer>();
+        
+        public int amountSameEnumAnswers;
         public int AmountAnswers => answers.Count;
     }
 }

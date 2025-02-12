@@ -5,14 +5,6 @@ using UnityEngine;
 using DG.Tweening;
 namespace Game
 {
-    [Serializable]
-    public class HolderObject
-    {
-        public EnumAnswer answer;
-        public Transform transform;
-        public bool IsNone = true;
-    }
-
     public enum ModeGame
     {
         SinglePlayer,
@@ -21,18 +13,59 @@ namespace Game
 
     public class GameController : MonoBehaviour
     {
-        [SerializeField] private PlayerManager playerManager;
+        public static GameController instance;
+        [Space]
+        [Header("DataGame")]
         [SerializeField] private DataLevelGame dataLevelGame;
         [SerializeField] private Level currentLevel = null;
-        [SerializeField] private List<HolderObject> posHolderObj;
+        public Level CurrentLevelGame => currentLevel;
+        
+        [Space]
+        [Header("Player")]
+        [SerializeField] private PlayerManager playerManager;
+        
+        [Space]
+        [Header("Board Game")]
+        [SerializeField] private BoardManager board;
+        
         [SerializeField] private List<Transform> posReturn;
+        
+        [Space]
+        [Header("Mode Game")]
         [SerializeField] private ModeGame mode = ModeGame.SinglePlayer;
-
         [SerializeField] private bool canClick = true;
+        public bool CanClick
+        {
+            get => canClick;
+            set => canClick = value;
+        }
+        
         private int IndexCurrentLevel
         {
             set => PlayerPrefs.SetInt("CurrentLevel", value);
             get => PlayerPrefs.GetInt("CurrentLevel", 0);
+        }
+        [Space]
+        [Header("Win Game")]
+        [SerializeField] private GameObject effectWin;
+        private bool isWin;
+        public bool IsWin
+        {
+            get => isWin;
+            set
+            {
+                isWin = value;
+                effectWin.gameObject.SetActive(value);
+            }
+        }
+        private void Awake()
+        {
+            if (instance == null)
+            {
+                instance = this;
+                return;
+            }
+            Destroy(this);
         }
         private void Start()
         {
@@ -59,13 +92,15 @@ namespace Game
                     Item component;
                     if (hit.transform.TryGetComponent(out component))
                     {
-                        for (int i = 0; i < posHolderObj.Count; i++)
+                        for (int i = 0; i < board.AmountObjects.Length; i++)
                         {
-                            if (posHolderObj[i].IsNone)
+                            if (board.AmountObjects[i].IsNone)
                             {
-                                posHolderObj[i].answer = component.Answer;
-                                Transform t = Instantiate(component.gameObject, component.transform.position, Quaternion.identity, component.transform.parent).GetComponent<Transform>();
-                                MoveAndRotateToPosition(t, posHolderObj[i], i);
+                                board.AmountObjects[i].answer = component.Answer;
+                                Transform t = Instantiate(component.gameObject, component.transform.position, Quaternion.identity).GetComponent<Transform>();
+                                
+                                board.AmountObjects[i].currentItem = t;
+                                MoveAndRotateToPosition(t, board.AmountObjects[i], i);
                                 break;
                             }
                         }
@@ -78,47 +113,8 @@ namespace Game
         {
             float moveDuration = 0.5f;
             targetPos.IsNone = false;
-            if (posHolderObj.Any(p => p.IsNone))
-            {
-                canClick = true;
-            }
-            objToMove.DOMove(targetPos.transform.position, moveDuration).SetEase(Ease.Linear).OnComplete(() =>
-            {
-                objToMove.SetParent(targetPos.transform);
-                if(canClick) return;
-                if (posHolderObj.Any(p => !p.IsNone))
-                {
-                    DOVirtual.DelayedCall(1f, () =>
-                    {
-                        bool check = false;
-                        for (int j = 0; j < posHolderObj.Count; j++)
-                        {
-                            if (posHolderObj[j].answer != currentLevel.answers[j])
-                            {
-                                // spawn...
-                                Item t = posHolderObj[j].transform.GetChild(0).GetComponent<Item>();
-                                ReturnPos(t.transform, t.Parent);
-                                posHolderObj[j].IsNone = true;
-                                posHolderObj[j].answer = EnumAnswer.None;
-                                check = true;
-                            }
-                            else
-                            {
-                                // spawn ...
-                            }
-                        }
-                        if (check)
-                        {
-                            // spawn....
-                            /*
-                            playerManager.SetCanMove(true);
-                            */
-                            return;
-                        }
-                        canClick = true;
-                    });
-                }
-            });
+            board.NextLine();
+            objToMove.DOJump(targetPos.transform.position, 1f,1, moveDuration).SetEase(Ease.Linear);
         }
         private void ReturnPos(Transform objToMove, Transform targetPos){
             float moveDuration = 1f;
@@ -136,6 +132,10 @@ namespace Game
                     }
                 });
             });
+        }
+        private void NextLevel()
+        {
+            
         }
     }
 }
