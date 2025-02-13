@@ -18,15 +18,29 @@ namespace Game
         [Header("DataGame")]
         [SerializeField] private DataLevelGame dataLevelGame;
         [SerializeField] private Level currentLevel = null;
+        public int CurrentTheme
+        {
+            get {return PlayerPrefs.GetInt("CurrentThem", 0); }
+            set
+            {
+                if(value < 0) return;
+                PlayerPrefs.SetInt("CurrentThem", value);
+            }
+        }
         public Level CurrentLevelGame => currentLevel;
         
         [Space]
         [Header("Player")]
         [SerializeField] private PlayerManager playerManager;
+
+        [Space]
+        [Header("Panel Objects")]
+        [SerializeField] private PanelController pane;
         
         [Space]
         [Header("Board Game")]
         [SerializeField] private BoardManager board;
+        public BoardManager Board => board;
         
         [SerializeField] private List<Transform> posReturn;
         
@@ -47,7 +61,7 @@ namespace Game
         }
         [Space]
         [Header("Win Game")]
-        [SerializeField] private GameObject effectWin;
+        [SerializeField] private ParticleSystem effectWin;
         private bool isWin;
         public bool IsWin
         {
@@ -55,9 +69,19 @@ namespace Game
             set
             {
                 isWin = value;
-                effectWin.gameObject.SetActive(value);
+                if (isWin)
+                {
+                    effectWin.Play();
+                }
             }
         }
+        
+        public Action<bool> ClickAction;
+        
+        [Space]
+        [Header("Box Answer")]
+        [SerializeField] private BoxManager box;
+        public BoxManager Box => box;
         private void Awake()
         {
             if (instance == null)
@@ -69,6 +93,7 @@ namespace Game
         }
         private void Start()
         {
+            CurrentTheme = 0;
             currentLevel = dataLevelGame.levels[IndexCurrentLevel];
             if (mode == ModeGame.SinglePlayer)
             {
@@ -77,61 +102,8 @@ namespace Game
             else
             {
                 playerManager.SetNumberPlayer(4, true);
+                ClickAction += playerManager.SetCanMove;
             }
-        }
-
-        void Update()
-        {
-            if (Input.GetMouseButtonDown(0))
-            {
-                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-
-                if (Physics.Raycast(ray, out RaycastHit hit) && canClick)
-                {
-                    canClick = false;
-                    Item component;
-                    if (hit.transform.TryGetComponent(out component))
-                    {
-                        for (int i = 0; i < board.AmountObjects.Length; i++)
-                        {
-                            if (board.AmountObjects[i].IsNone)
-                            {
-                                board.AmountObjects[i].answer = component.Answer;
-                                Transform t = Instantiate(component.gameObject, component.transform.position, Quaternion.identity).GetComponent<Transform>();
-                                
-                                board.AmountObjects[i].currentItem = t;
-                                MoveAndRotateToPosition(t, board.AmountObjects[i], i);
-                                break;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        private void MoveAndRotateToPosition(Transform objToMove, HolderObject targetPos, int i)
-        {
-            float moveDuration = 0.5f;
-            targetPos.IsNone = false;
-            board.NextLine();
-            objToMove.DOJump(targetPos.transform.position, 1f,1, moveDuration).SetEase(Ease.Linear);
-        }
-        private void ReturnPos(Transform objToMove, Transform targetPos){
-            float moveDuration = 1f;
-
-            objToMove.DOMove(targetPos.transform.position, moveDuration).SetEase(Ease.Linear).OnComplete(() =>
-            {
-                canClick = true;
-                objToMove.SetParent(targetPos);
-
-                DOVirtual.DelayedCall(0.4f, () =>
-                {
-                    if (objToMove != null)
-                    {
-                        Destroy(objToMove.gameObject);
-                    }
-                });
-            });
         }
         private void NextLevel()
         {
