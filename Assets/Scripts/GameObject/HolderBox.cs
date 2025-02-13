@@ -11,9 +11,10 @@ namespace Game
         [SerializeField] private Transform holderAnswer;
         [SerializeField] private Transform explode;
         
-        public void ShowBox(Transform answer = null)
+        public void ShowBox(Transform answer)
         {
-            PoolingManager.Spawn(answer, holderAnswer.position, Quaternion.identity, holderAnswer);
+            if(!box.activeSelf) return;
+            PoolingManager.Spawn(answer, holderAnswer.position, Quaternion.Euler(0f, 180f, 0f), holderAnswer);
             box.SetActive(false);
             Transform t = Instantiate(explode, transform.position, Quaternion.identity);
             Destroy(t.gameObject, 5f);

@@ -20,7 +20,7 @@ namespace Game
            DOVirtual.DelayedCall(0.1f, delegate
            {
                transform.position = new Vector3(10f, transform.position.y, transform.position.z);
-               transform.DOMoveX(0f, 1f);
+               transform.DOLocalMoveX(0f, 1f);
                UpdateChangeTheme(GameController.instance.CurrentTheme);
            });
        }
@@ -70,7 +70,6 @@ namespace Game
                    Item component;
                    if (hit.transform.TryGetComponent(out component))
                    {
-                       Debug.Log(GameController.instance.Board.amountObjects.Length);
                        for (int i = 0; i < GameController.instance.Board.amountObjects.Length; i++)
                        {
                            if (GameController.instance.Board.amountObjects[i].IsNone)
@@ -78,7 +77,7 @@ namespace Game
                                GameController.instance.Board.amountObjects[i].answer = component.Answer;
                                Transform t =  PoolingManager.Spawn(component.transform, component.transform.position, Quaternion.identity);
                                 
-                               GameController.instance.Board.amountObjects[i].currentItem = t;
+                               GameController.instance.Board.amountObjects[i].currentItem = component.transform;
                                MoveAndRotateToPosition(t,  GameController.instance.Board.amountObjects[i], i);
                                break;
                            }
@@ -92,16 +91,15 @@ namespace Game
        {
            float moveDuration = 0.5f;
            targetPos.IsNone = false;
-           GameController.instance.Board.NextLine();
-    
-           objToMove.DOJump(targetPos.transform.position + Vector3.up * 1f, 1f, 1, moveDuration)
+           objToMove.DOJump(targetPos.transform.position + Vector3.up * 0.3f, 1f, 1, moveDuration)
                     .SetEase(Ease.Linear)
                     .OnComplete(delegate
                     {
                         objToMove.SetParent(targetPos.transform);
+                        GameController.instance.Board.NextLine();
                     });
 
-           objToMove.DORotate(new Vector3(360f, 0f, 0f), moveDuration, RotateMode.FastBeyond360)
+           objToMove.DORotate(new Vector3(360f, 180f, 0f), moveDuration, RotateMode.FastBeyond360)
                     .SetEase(Ease.Linear);
        }
 

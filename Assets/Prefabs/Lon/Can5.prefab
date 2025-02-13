@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 4597444716307433091}
   - component: {fileID: 1629141938647473356}
   - component: {fileID: 5012225614001882274}
-  - component: {fileID: 8710032112295597720}
+  - component: {fileID: 3656011947244580894}
   m_Layer: 0
   m_Name: Can5
   m_TagString: Untagged
@@ -42,7 +42,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6436611993365549780}
-  m_Mesh: {fileID: -6297394667138465575, guid: c618ec4a7b69fb641b24abd769ddaa33, type: 3}
+  m_Mesh: {fileID: -6297394667138465575, guid: 5c50ba9ae7de0c04db1aa557a2b3b6f2, type: 3}
 --- !u!23 &1629141938647473356
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -63,7 +63,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: -5548680417778433438, guid: c618ec4a7b69fb641b24abd769ddaa33, type: 3}
+  - {fileID: -5548680417778433438, guid: 5c50ba9ae7de0c04db1aa557a2b3b6f2, type: 3}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -98,7 +98,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _answer: 5
---- !u!64 &8710032112295597720
+--- !u!64 &3656011947244580894
 MeshCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -119,4 +119,4 @@ MeshCollider:
   serializedVersion: 5
   m_Convex: 1
   m_CookingOptions: 30
-  m_Mesh: {fileID: -6297394667138465575, guid: c618ec4a7b69fb641b24abd769ddaa33, type: 3}
+  m_Mesh: {fileID: -6297394667138465575, guid: 5c50ba9ae7de0c04db1aa557a2b3b6f2, type: 3}

@@ -40,6 +40,11 @@ namespace Game
         [Space]
         [Header("Board Game")]
         [SerializeField] private BoardManager board;
+
+        [Space] [Header("Box")] [SerializeField]
+        private BoxManager boxManager;
+
+        public BoxManager BoxManager => boxManager;
         public BoardManager Board => board;
         
         [SerializeField] private List<Transform> posReturn;

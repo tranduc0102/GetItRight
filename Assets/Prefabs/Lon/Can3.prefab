@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 435877947232436651}
   - component: {fileID: 3074086993959598063}
   - component: {fileID: 5301306591287665619}
-  - component: {fileID: 4260071304143559516}
+  - component: {fileID: 6780779740079450143}
   m_Layer: 0
   m_Name: Can3
   m_TagString: Untagged
@@ -42,7 +42,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4860731195331861159}
-  m_Mesh: {fileID: -8155363768236911147, guid: 495a8d1969104b94689b4c13bbc91c43, type: 3}
+  m_Mesh: {fileID: -8155363768236911147, guid: ae22d13475601db45b95c89fbc95b962, type: 3}
 --- !u!23 &3074086993959598063
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -63,7 +63,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: -5548680417778433438, guid: 495a8d1969104b94689b4c13bbc91c43, type: 3}
+  - {fileID: -5548680417778433438, guid: ae22d13475601db45b95c89fbc95b962, type: 3}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -98,7 +98,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _answer: 3
---- !u!64 &4260071304143559516
+--- !u!64 &6780779740079450143
 MeshCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -119,4 +119,4 @@ MeshCollider:
   serializedVersion: 5
   m_Convex: 1
   m_CookingOptions: 30
-  m_Mesh: {fileID: -8155363768236911147, guid: 495a8d1969104b94689b4c13bbc91c43, type: 3}
+  m_Mesh: {fileID: -8155363768236911147, guid: ae22d13475601db45b95c89fbc95b962, type: 3}
