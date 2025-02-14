@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using DG.Tweening;
+using pooling;
+using Random = UnityEngine.Random;
 namespace Game
 {
     public enum ModeGame
@@ -28,30 +30,35 @@ namespace Game
             }
         }
         public Level CurrentLevelGame => currentLevel;
+        [SerializeField] private List<EnumAnswer> _answers;
+        public List<EnumAnswer> Answers => _answers;
         
         [Space]
         [Header("Player")]
-        [SerializeField] private PlayerManager playerManager;
+        [SerializeField] private PlayerManager playerManager; 
+        public PlayerManager PlayerManager => playerManager;
+        public bool PlayerMoved = true;
 
         [Space]
         [Header("Panel Objects")]
-        [SerializeField] private PanelController pane;
-        
+        [SerializeField] private PanelAnswerController pane;
+        public PanelAnswerController PanelAnswerController => pane;
+
         [Space]
         [Header("Board Game")]
-        [SerializeField] private BoardManager board;
-
-        [Space] [Header("Box")] [SerializeField]
-        private BoxManager boxManager;
-
-        public BoxManager BoxManager => boxManager;
-        public BoardManager Board => board;
+        [SerializeField] private Transform table;
+        [SerializeField] private Board[] boardDat;
+        [SerializeField] private Board currentBoard;
+        public Board Board => currentBoard;
         
+        /*
         [SerializeField] private List<Transform> posReturn;
+        */
         
         [Space]
         [Header("Mode Game")]
         [SerializeField] private ModeGame mode = ModeGame.SinglePlayer;
+        public ModeGame Mode => mode;
         [SerializeField] private bool canClick = true;
         public bool CanClick
         {
@@ -64,9 +71,8 @@ namespace Game
             set => PlayerPrefs.SetInt("CurrentLevel", value);
             get => PlayerPrefs.GetInt("CurrentLevel", 0);
         }
-        [Space]
-        [Header("Win Game")]
-        [SerializeField] private ParticleSystem effectWin;
+       
+        
         private bool isWin;
         public bool IsWin
         {
@@ -76,17 +82,16 @@ namespace Game
                 isWin = value;
                 if (isWin)
                 {
-                    effectWin.Play();
+                    playerManager.AnimWin();
+                    UIController.instance.ShowDisplayWin(true);
                 }
             }
         }
         
-        public Action<bool> ClickAction;
-        
         [Space]
         [Header("Box Answer")]
-        [SerializeField] private BoxManager box;
-        public BoxManager Box => box;
+        [SerializeField] private BoxManager boxManager;
+        public BoxManager BoxManager => boxManager;
         private void Awake()
         {
             if (instance == null)
@@ -98,7 +103,8 @@ namespace Game
         }
         private void Start()
         {
-            CurrentTheme = 0;
+            UIController.instance.SetActionOnWin(NextLevel);
+            UIController.instance.SetActionOnLose(PlayAgain);
             currentLevel = dataLevelGame.levels[IndexCurrentLevel];
             if (mode == ModeGame.SinglePlayer)
             {
@@ -107,12 +113,94 @@ namespace Game
             else
             {
                 playerManager.SetNumberPlayer(4, true);
+                /*
                 ClickAction += playerManager.SetCanMove;
+            */
             }
+            GetAnswers();
+            SpawnBoard();
+            boxManager.NextLevelOrReplay(currentLevel.amountAnswers);
+            playerManager.MoveToTarget();
+        }
+        private void PlayAgain()
+        {
+            UIController.instance.ShowDisplayWin(false);
+            UIController.instance.ShowDisplayLose(false);
+            IsWin = false;
+            currentLevel = dataLevelGame.levels[IndexCurrentLevel];
+            canClick = true;
+            GetAnswers();
+            /*
+            PoolingManager.Despawn(currentLevel.);
+            */
+            Destroy(currentBoard.gameObject);
+            SpawnBoard();
+            boxManager.NextLevelOrReplay(currentLevel.amountAnswers);
         }
         private void NextLevel()
         {
+            UIController.instance.ShowDisplayWin(false);
+            UIController.instance.ShowDisplayLose(false);
             
+            IsWin = false;
+            IndexCurrentLevel++;
+            currentLevel = dataLevelGame.levels[IndexCurrentLevel];
+            canClick = true;
+            GetAnswers();
+            /*
+            PoolingManager.Despawn(currentLevel.);
+            */
+            Destroy(currentBoard.gameObject);
+            SpawnBoard();
+            boxManager.NextLevelOrReplay(currentLevel.amountAnswers);
+        }
+        private void GetAnswers()
+        {
+            _answers.Clear();
+            EnumAnswer randomSameValue = (EnumAnswer)Random.Range(1, 7);
+            for (int i = 0; i < currentLevel.amountSameValue; i++)
+            {
+                _answers.Add(randomSameValue);
+            }
+            for (int i = 0; i < currentLevel.amountValueRemain; )
+            {
+                EnumAnswer randomValue = (EnumAnswer)Random.Range(1, 7);
+                if (randomValue != randomSameValue)
+                {
+                    _answers.Add(randomValue);
+                    i++;
+                }
+            }
+            ShuffleList(_answers);
+        }
+        private void ShuffleList<T>(List<T> list)
+        {
+            System.Random rng = new System.Random();
+            int n = list.Count;
+            while (n > 1)
+            {
+                n--;
+                int k = rng.Next(n + 1);
+                (list[k], list[n]) = (list[n], list[k]);
+            }
+        }
+        private void SpawnBoard()
+        {
+            switch (currentLevel.amountAnswers)
+            {
+                case 3:
+                    currentBoard = PoolingManager.Spawn(boardDat[0], table.position, Quaternion.identity, table);
+                    break;
+                case 4:
+                    currentBoard = PoolingManager.Spawn(boardDat[1], table.position, Quaternion.identity, table);
+                    break;
+                case 5:
+                    currentBoard = PoolingManager.Spawn(boardDat[2], table.position, Quaternion.identity, table);
+                    break;
+                case 6:
+                    currentBoard = PoolingManager.Spawn(boardDat[3], table.position, Quaternion.identity, table);
+                    break;
+            }
         }
     }
 }

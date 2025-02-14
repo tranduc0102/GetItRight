@@ -2,34 +2,26 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
-[Serializable]
-public class Player
-{
-    public Transform playerTransform;
-    public float speed;
-}
+using DG.Tweening;
+using Game;
 
 public class PlayerManager : MonoBehaviour
 {
-    [SerializeField] private List<Player> players;
-    [SerializeField] private Vector2 center = Vector2.zero;
-    [SerializeField] private float radius = 5f;
-    [SerializeField] private float rotationSpeed = 50f;
+    [SerializeField] private List<Transform> players;
+    [SerializeField] private Vector3 positionTarget;
+    [SerializeField] private float speed;
+    private Vector3[] initialPositions;
+    private int currentIndex = 0;
+    private List<float> durations = new List<float>();
 
-    private float currentAngle;
-    private bool canMove = false;
-    private float targetAngle = 0f;  
-
-    public void SetCanMove(bool canMove)
+    private void OnValidate()
     {
-        if (canMove)
+        initialPositions = new Vector3[players.Count];
+        for (int i = 0; i < players.Count; i++)
         {
-            targetAngle = currentAngle + 90f;            
-            if (targetAngle >= 360f) targetAngle -= 360f; 
+            initialPositions[i] = players[i].position;
+            durations.Add(Vector3.Distance(players[i].position, positionTarget) / speed);
         }
-
-        this.canMove = canMove;
     }
     public void SetNumberPlayer(int number, bool active)
     {
@@ -37,52 +29,67 @@ public class PlayerManager : MonoBehaviour
         {
             for (int i = players.Count - 1; i >= players.Count - number; i--)
             {
-                players[i].playerTransform.gameObject.SetActive(false);
+                players[i].gameObject.SetActive(false);
             }   
         }
         else
         {
             for (int i = 0; i < number; i++)
             {
-                players[i].playerTransform.gameObject.SetActive(true);
+                players[i].gameObject.SetActive(true);
             }  
         }
     }
 
-    private void Update()
+    public void MoveToTarget()
     {
-        if (canMove)
+        if (currentIndex >= players.Count)
         {
-            MovePlayersInCircle();
+            currentIndex = 0;
         }
+
+        Transform player = players[currentIndex];
+
+        player.DORotate(new Vector3(0, 180, 0), 1f)
+              .OnComplete(() =>
+              {
+                  Vector3 newPosition = new Vector3(positionTarget.x, player.position.y, positionTarget.z);
+                  player.DOMove(newPosition, durations[currentIndex]).OnComplete(() =>
+                  {
+                      GameController.instance.PlayerMoved = false;
+                  });
+              });
     }
 
-    private void MovePlayersInCircle()
+    public void NextPlayerMovement()
     {
-        if (players.Count == 0) return;
+        Transform player = players[currentIndex];
 
-        float angleStep = 360f / players.Count;
+        player.DORotate(new Vector3(0, 360, 0), 1f)
+              .OnComplete(() =>
+              {
+                  player.DOMove(initialPositions[currentIndex], durations[currentIndex])
+                        .OnComplete(() =>
+                        {
+                            currentIndex++;
+                            MoveToTarget();
+                        });
+              });
+    }
+    public void AnimWin()
+    {
+        players[currentIndex].GetComponent<Animator>().SetTrigger("Win");
+    }
+
+    public void ResetPlayers()
+    {
+        DOTween.KillAll();
 
         for (int i = 0; i < players.Count; i++)
         {
-            float angle = currentAngle + angleStep * i;
-            float radian = angle * Mathf.Deg2Rad;
-
-            Vector3 newPosition = new Vector3(
-                Mathf.Cos(radian) * radius + center.x,
-                Mathf.Sin(radian) * radius + center.y,
-                players[i].playerTransform.position.z
-            );
-
-            players[i].playerTransform.position = newPosition;
+            players[i].position = initialPositions[i];
+            players[i].rotation = Quaternion.Euler(0, 360, 0);
         }
-
-        float step = rotationSpeed * Time.deltaTime;
-        currentAngle = Mathf.MoveTowardsAngle(currentAngle, targetAngle, step);
-
-        if (Mathf.Abs(currentAngle - targetAngle) < 1f)
-        {
-            canMove = false; 
-        }
+        currentIndex = 0;
     }
 }

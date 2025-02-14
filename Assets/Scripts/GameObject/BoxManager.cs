@@ -6,10 +6,6 @@ public class BoxManager : MonoBehaviour
     [SerializeField] private GameObject[] allBoxes;
     [SerializeField] private HolderBox[] boxes;
     public HolderBox[] Boxes => boxes;
-    private void Start()
-    {
-        NextLevelOrReplay(6);
-    }
     public void NextLevelOrReplay(int amountBox)
     {
         foreach (GameObject obj in allBoxes)

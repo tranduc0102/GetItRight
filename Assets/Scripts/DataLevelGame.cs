@@ -12,10 +12,9 @@ namespace Game
     [Serializable]
     public class Level
     {
-        public string name;
-        public List<EnumAnswer> answers = new List<EnumAnswer>();
-        
-        public int amountSameEnumAnswers;
-        public int AmountAnswers => answers.Count;
+        public string name = "level 1";
+        public int amountSameValue = 1;
+        public int amountAnswers = 3;
+        public int amountValueRemain => amountAnswers - amountSameValue;
     }
 }

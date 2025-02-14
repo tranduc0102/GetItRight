@@ -13,6 +13,33 @@ MonoBehaviour:
   m_Name: DataLevelGame
   m_EditorClassIdentifier: 
   levels:
-  - name: level
-    answers: 010000000300000002000000030000000400000005000000
-    amountSameEnumAnswers: 0
+  - name: Level1
+    amountSameValue: 1
+    amountAnswers: 4
+  - name: Level2
+    amountSameValue: 2
+    amountAnswers: 4
+  - name: Level3
+    amountSameValue: 2
+    amountAnswers: 5
+  - name: Level4
+    amountSameValue: 3
+    amountAnswers: 6
+  - name: Level5
+    amountSameValue: 1
+    amountAnswers: 6
+  - name: Level6
+    amountSameValue: 1
+    amountAnswers: 5
+  - name: Level7
+    amountSameValue: 2
+    amountAnswers: 4
+  - name: Level8
+    amountSameValue: 3
+    amountAnswers: 5
+  - name: Level9
+    amountSameValue: 1
+    amountAnswers: 5
+  - name: Level10
+    amountSameValue: 4
+    amountAnswers: 6

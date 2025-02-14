@@ -1,0 +1,56 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.Events;
+using UnityEngine.UI;
+
+public class UIController : Singleton<UIController>
+{
+    
+    [Space]
+    [Header("UI Win")]
+    [SerializeField] private GameObject uiWin;
+    [SerializeField] private Button btnNext;
+    private UnityAction actionNext;
+    
+    [Space]
+    [Header("UI Lose")]
+    [SerializeField] private GameObject uiLose;
+    [SerializeField] private Button btnPlayAgain;
+    private UnityAction actionAgain;
+
+    private void Start()
+    {
+        btnNext.onClick.AddListener(delegate
+        {
+            actionNext?.Invoke();
+        });
+        btnPlayAgain.onClick.AddListener(delegate
+        {
+            actionAgain?.Invoke();
+        });
+    }
+    public void ShowDisplayWin(bool enable)
+    {
+        uiWin.SetActive(enable);
+    }
+    public void ShowDisplayLose(bool enable)
+    {
+        uiLose.SetActive(enable);
+    }
+
+    public void SetActionOnWin(UnityAction action)
+    {
+        actionNext = action;
+    }
+    public void SetActionOnLose(UnityAction action)
+    {
+        actionAgain = action;
+    }
+    
+    public UISetting UISetting
+    {
+        get => GetComponentInChildren<UISetting>();
+    } 
+}
