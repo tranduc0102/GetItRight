@@ -20,6 +20,12 @@ public class UIController : Singleton<UIController>
     [SerializeField] private Button btnPlayAgain;
     private UnityAction actionAgain;
 
+    [Space] [Header("Shop")] 
+    [SerializeField] private Button btnShop;
+    [SerializeField] private Button btnBackShop;
+
+    [SerializeField] private GameObject objShop;
+
     private void Start()
     {
         btnNext.onClick.AddListener(delegate
@@ -29,6 +35,14 @@ public class UIController : Singleton<UIController>
         btnPlayAgain.onClick.AddListener(delegate
         {
             actionAgain?.Invoke();
+        });
+        btnShop.onClick.AddListener(delegate
+        {
+            objShop.SetActive(true);
+        });
+        btnBackShop.onClick.AddListener(delegate
+        {
+            objShop.SetActive(false);
         });
     }
     public void ShowDisplayWin(bool enable)

@@ -1,9 +1,7 @@
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
-using DG.Tweening;
 using pooling;
+using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
 namespace Game
 {
@@ -15,29 +13,30 @@ namespace Game
 
     public class GameController : MonoBehaviour
     {
-        public static GameController instance;
+        public static GameController Instance;
         [Space]
         [Header("DataGame")]
         [SerializeField] private DataLevelGame dataLevelGame;
-        [SerializeField] private Level currentLevel = null;
+        [SerializeField] private Level currentLevel;
         public int CurrentTheme
         {
-            get {return PlayerPrefs.GetInt("CurrentThem", 0); }
+            get => PlayerPrefs.GetInt("CurrentThem", 0);
             set
             {
                 if(value < 0) return;
                 PlayerPrefs.SetInt("CurrentThem", value);
+                pane.UpdateChangeTheme(value, true);
             }
         }
         public Level CurrentLevelGame => currentLevel;
-        [SerializeField] private List<EnumAnswer> _answers;
-        public List<EnumAnswer> Answers => _answers;
+        [FormerlySerializedAs("_answers")] [SerializeField] private List<EnumAnswer> answers;
+        public List<EnumAnswer> Answers => answers;
         
         [Space]
         [Header("Player")]
         [SerializeField] private PlayerManager playerManager; 
         public PlayerManager PlayerManager => playerManager;
-        public bool PlayerMoved = true;
+        [FormerlySerializedAs("PlayerMoved")] public bool playerMoved = true;
 
         [Space]
         [Header("Panel Objects")]
@@ -84,6 +83,7 @@ namespace Game
                 {
                     playerManager.AnimWin();
                     UIController.instance.ShowDisplayWin(true);
+                    pane.gameObject.SetActive(false);
                 }
             }
         }
@@ -94,9 +94,9 @@ namespace Game
         public BoxManager BoxManager => boxManager;
         private void Awake()
         {
-            if (instance == null)
+            if (Instance == null)
             {
-                instance = this;
+                Instance = this;
                 return;
             }
             Destroy(this);
@@ -141,6 +141,7 @@ namespace Game
         {
             UIController.instance.ShowDisplayWin(false);
             UIController.instance.ShowDisplayLose(false);
+            pane.gameObject.SetActive(true);
             
             IsWin = false;
             IndexCurrentLevel++;
@@ -156,22 +157,22 @@ namespace Game
         }
         private void GetAnswers()
         {
-            _answers.Clear();
+            answers.Clear();
             EnumAnswer randomSameValue = (EnumAnswer)Random.Range(1, 7);
             for (int i = 0; i < currentLevel.amountSameValue; i++)
             {
-                _answers.Add(randomSameValue);
+                answers.Add(randomSameValue);
             }
             for (int i = 0; i < currentLevel.amountValueRemain; )
             {
                 EnumAnswer randomValue = (EnumAnswer)Random.Range(1, 7);
                 if (randomValue != randomSameValue)
                 {
-                    _answers.Add(randomValue);
+                    answers.Add(randomValue);
                     i++;
                 }
             }
-            ShuffleList(_answers);
+            ShuffleList(answers);
         }
         private void ShuffleList<T>(List<T> list)
         {

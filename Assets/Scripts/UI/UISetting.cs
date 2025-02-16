@@ -64,6 +64,7 @@ public class UISetting : MonoBehaviour
             _spriteIconMusic.sprite = _spritesIconMusic[0];
             CanMusic = true;
         }
+        _spriteIconMusic.SetNativeSize();
     }
     private void ButtonSoundClick()
     {
@@ -77,6 +78,7 @@ public class UISetting : MonoBehaviour
             _spriteIconSound.sprite = _spritesIconSound[0];
             CanSound = true;
         }
+        _spriteIconSound.SetNativeSize();
     }
     private void ButtonVibrationClick()
     {
@@ -90,6 +92,7 @@ public class UISetting : MonoBehaviour
             _spriteIconVibration.sprite = _spritesIconVibration[0];
             CanVibration = true;
         }
+        _spriteIconVibration.SetNativeSize();
     }
     
 }

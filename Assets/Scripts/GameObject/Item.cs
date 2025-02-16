@@ -1,3 +1,4 @@
+using System;
 using DG.Tweening;
 using UnityEngine;
 
@@ -20,6 +21,11 @@ namespace Game
     public class Item : MonoBehaviour
     {
         [SerializeField] private EnumAnswer _answer;
+        public bool CanMove
+        {
+            get;
+            set;
+        }
         public EnumAnswer Answer => _answer;
         public Transform Parent
         {
@@ -29,6 +35,12 @@ namespace Game
         {
             Parent = transform.parent;
         }
+
+        private void OnEnable()
+        {
+            CanMove = true;
+        }
+
         private void OnDestroy()
         {
             transform.DOKill();

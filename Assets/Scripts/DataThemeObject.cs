@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Game;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "DataThemeObject", menuName = "DataThemeObject")]
@@ -12,6 +13,6 @@ public class DataThemeObject : ScriptableObject
 public class ThemeData
 {
     public string name;
-    public List<Transform> transforms;
+    public List<Item> items;
 }
 

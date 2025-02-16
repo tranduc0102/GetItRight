@@ -1,26 +1,47 @@
-using System;
 using System.Collections.Generic;
 using DG.Tweening;
 using pooling;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace Game
 {
     public class PanelAnswerController : MonoBehaviour
     { 
         [SerializeField] private List<Transform> posObject;
+        [SerializeField] private List<Vector3> posOrigin;
+        [SerializeField] private List<Transform> objItem;
         [SerializeField] private DataThemeObject dataThemeObject;
+        private List<Item> themeObjects = new List<Item>();
+        private List<Item> results = new List<Item>();
        private void OnEnable()
        {
+           results.Clear();
+           if (posOrigin.Count > 0)
+           {
+               for (int i = 0; i < objItem.Count; i++)
+               {
+                   PoolingManager.Despawn(objItem[i].gameObject);
+               }
+               posOrigin.Clear();
+           }
            DOVirtual.DelayedCall(0.1f, delegate
            {
                transform.position = new Vector3(10f, transform.position.y, transform.position.z);
-               transform.DOLocalMoveX(0f, 1f);
-               UpdateChangeTheme(GameController.instance.CurrentTheme);
+               UpdateChangeTheme(GameController.Instance.CurrentTheme);
+               transform.DOLocalMoveX(0f, 1f).OnComplete(delegate
+               {
+                   for (int i = 0; i < posObject.Count; i++)
+                   {
+                       posOrigin.Add(objItem[i].position);
+                   }
+               });
            });
        }
        public void UpdateChangeTheme(int id, bool enable = false)
        {
+           if(id >= dataThemeObject.themeData.Count) return;
+           objItem.Clear();
            if (enable)
            {
                foreach (Transform child in posObject)
@@ -34,13 +55,51 @@ namespace Game
                    }
                }
            }
-           List<Transform> themeObjects = new List<Transform>(dataThemeObject.themeData[id].transforms);
-           ShuffleList(themeObjects);
+
+           themeObjects.Clear();
+           themeObjects.AddRange(dataThemeObject.themeData[id].items);
+
+           if (results.Count <= 0)
+           {
+               for (int i = 0; i < GameController.Instance.Answers.Count; i++)
+               {
+                   foreach (var item in themeObjects)
+                   {
+                       if (GameController.Instance.Answers[i] == item.Answer)
+                       {
+                           results.Add(item);
+                           break;
+                       }
+                   }
+               }
+
+               for (int i = GameController.Instance.Answers.Count; i < 6; i++)
+               {
+                   results.Add(themeObjects[Random.Range(0, themeObjects.Count)]);
+               }
+           }
+           else
+           {
+               List<Item> newResualt = new List<Item>(results);
+               results.Clear();
+               for (int i = 0; i < newResualt.Count; i++)
+               {
+                   foreach (var item in newResualt)
+                   {
+                       if (themeObjects[i].Answer == item.Answer)
+                       {
+                           results.Add(themeObjects[i]);
+                       }
+                   }
+               }
+           }
+           ShuffleList(results);
            for (int i = 0; i < posObject.Count; i++)
            {
-               PoolingManager.Spawn(themeObjects[i], posObject[i].position, posObject[i].rotation, posObject[i].transform);
+               objItem.Add(PoolingManager.Spawn(results[i].transform, posObject[i].position, posObject[i].rotation, posObject[i].transform));
            }
        }
+
        private void ShuffleList<T>(List<T> list)
        {
            System.Random rng = new System.Random();
@@ -57,25 +116,25 @@ namespace Game
        {
            if (Input.GetMouseButtonDown(0))
            {
-               if(GameController.instance.PlayerMoved) return;
-               Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-
-               if (Physics.Raycast(ray, out RaycastHit hit) && GameController.instance.CanClick)
+               if(GameController.Instance.playerMoved) return;
+               if (Camera.main != null)
                {
-                   GameController.instance.CanClick = false;
-                   Item component;
-                   if (hit.transform.TryGetComponent(out component))
+                   Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+
+                   if (Physics.Raycast(ray, out RaycastHit hit) && GameController.Instance.CanClick)
                    {
-                       for (int i = 0; i < GameController.instance.Board.amountObjects.Length; i++)
+                       if (hit.transform.TryGetComponent(out Item component) && component.CanMove)
                        {
-                           if (GameController.instance.Board.amountObjects[i].IsNone)
+                           for (int i = 0; i < GameController.Instance.Board.amountObjects.Length; i++)
                            {
-                               GameController.instance.Board.amountObjects[i].answer = component.Answer;
-                               Transform t =  PoolingManager.Spawn(component.transform, component.transform.position, Quaternion.identity);
-                                
-                               GameController.instance.Board.amountObjects[i].currentItem = component.transform;
-                               MoveAndRotateToPosition(t,  GameController.instance.Board.amountObjects[i], i);
-                               break;
+                               if (GameController.Instance.Board.amountObjects[i].IsNone)
+                               {
+                                   GameController.Instance.Board.amountObjects[i].answer = component.Answer;
+                                   component.CanMove = false;
+                                   GameController.Instance.Board.amountObjects[i].currentItem = component.transform;
+                                   MoveAndRotateToPosition(component.transform,  GameController.Instance.Board.amountObjects[i]);
+                                   break;
+                               }
                            }
                        }
                    }
@@ -83,38 +142,51 @@ namespace Game
            }
        }
 
-       private void MoveAndRotateToPosition(Transform objToMove, HolderObject targetPos, int i)
+       private void MoveAndRotateToPosition(Transform objToMove, HolderObject targetPos)
        {
            float moveDuration = 0.5f;
            targetPos.IsNone = false;
-           objToMove.DOJump(targetPos.transform.position + Vector3.up * 0.3f, 1f, 1, moveDuration)
+           float hight = 0.6f;
+           if (objToMove.name.Contains("Can"))
+           {
+               hight = 0.3f;
+           }
+           objToMove.DOJump(targetPos.transform.position + Vector3.up * hight, 1f, 1, moveDuration)
                     .SetEase(Ease.Linear)
                     .OnComplete(delegate
                     {
-                        objToMove.SetParent(targetPos.transform);
-                        GameController.instance.Board.NextLine();
+                        GameController.Instance.Board.NextLine();
                     });
 
            objToMove.DORotate(new Vector3(360f, 180f, 0f), moveDuration, RotateMode.FastBeyond360)
                     .SetEase(Ease.Linear);
        }
 
-       private void ReturnPos(Transform objToMove, Transform targetPos){
+       public void ReturnPos(Transform objToMove, int i)
+       {
            float moveDuration = 1f;
 
-           objToMove.DOMove(targetPos.transform.position, moveDuration).SetEase(Ease.Linear).OnComplete(() =>
+           int index = objItem.IndexOf(objToMove);
+           if (index >= 0 && index < posOrigin.Count)
            {
-               GameController.instance.CanClick = true;
-               objToMove.SetParent(targetPos);
+               Vector3 targetPos = posOrigin[index];
 
-               DOVirtual.DelayedCall(0.4f, () =>
+               objToMove.DOMove(targetPos, moveDuration).SetEase(Ease.Linear).OnComplete(() =>
                {
-                   if (objToMove != null)
-                   {
-                       Destroy(objToMove.gameObject);
-                   }
+                   objToMove.localEulerAngles = Vector3.zero; 
+
+                   GameController.Instance.CanClick = true;
+
+                   objToMove.GetComponent<Item>().CanMove = true;
+                   GameController.Instance.Board.amountObjects[i].answer = EnumAnswer.None;
+                   GameController.Instance.Board.amountObjects[i].IsNone = true;
                });
-           });
+           }
+           else
+           {
+               Debug.LogWarning("Không tìm thấy vị trí gốc cho object: " + objToMove.name);
+           }
        }
+
     }
 }

@@ -56,7 +56,7 @@ public class PlayerManager : MonoBehaviour
                   Vector3 newPosition = new Vector3(positionTarget.x, player.position.y, positionTarget.z);
                   player.DOMove(newPosition, durations[currentIndex]).OnComplete(() =>
                   {
-                      GameController.instance.PlayerMoved = false;
+                      GameController.Instance.playerMoved = false;
                   });
               });
     }
