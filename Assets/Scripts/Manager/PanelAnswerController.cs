@@ -115,6 +115,7 @@ namespace Game
                                if (GameController.Instance.Board.amountObjects[i].IsNone)
                                {
                                    GameController.Instance.Board.amountObjects[i].answer = component.Answer;
+                                   component.transform.DOScale(component.transform.localScale * 0.9f, 0.05f).SetLoops(2, LoopType.Yoyo);
                                    Item t = PoolingManager.Spawn(component, component.transform.position, component.transform.rotation);
                                    GameController.Instance.Board.amountObjects[i].currentItem = t.transform;
                                    if (!objItem.Contains(t.transform))
@@ -149,8 +150,8 @@ namespace Game
                         GameController.Instance.Board.NextLine();
                     });
 
-           objToMove.DORotate(new Vector3(360f, 180f, 0f), moveDuration, RotateMode.FastBeyond360)
-                    .SetEase(Ease.Linear);
+           /*objToMove.DORotate(new Vector3(0f, 180f, 0f), moveDuration, RotateMode.FastBeyond360)
+                    .SetEase(Ease.Linear);*/
            GameController.Instance.AmountMove -= 1;
            UIController.instance.ShowButtonShop(false);
        }

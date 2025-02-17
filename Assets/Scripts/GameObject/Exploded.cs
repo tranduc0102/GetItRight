@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using DG.Tweening;
 using UnityEngine;
 
 namespace Game
@@ -14,9 +15,9 @@ namespace Game
 
         private void ExplodeBox()
         {
-            float epxlosionMinForce = 10f;
-            float epxlosionMaxForce = 50f;
-            float explosionForceRadius = 10f;
+            float epxlosionMinForce = 50f;
+            float epxlosionMaxForce = 100f;
+            float explosionForceRadius = 15f;
             Vector3 explosionPosition = box.position;
             foreach (Transform obj in box)
             {

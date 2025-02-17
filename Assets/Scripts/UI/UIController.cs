@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using DG.Tweening;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
@@ -11,6 +12,8 @@ public class UIController : Singleton<UIController>
     [Space]
     [Header("UI Text")]
     [SerializeField] private TextMeshProUGUI textMove;
+    [SerializeField] private TextMeshProUGUI coinText;
+    [SerializeField] private TextMeshProUGUI textLevel;
     [Space]
     [Header("UI Win")]
     [SerializeField] private GameObject uiWin;
@@ -28,6 +31,11 @@ public class UIController : Singleton<UIController>
     [SerializeField] private Button btnBackShop;
 
     [SerializeField] private GameObject objShop;
+
+    [Space]
+    [Header("Coin")]
+    public Transform coinParent;
+    public RectTransform imgCoin;
 
     private void Start()
     {
@@ -47,10 +55,12 @@ public class UIController : Singleton<UIController>
         {
             objShop.SetActive(false);
         });
+        coinText.text = PlayerPrefs.GetInt("AmountCoin", 0).ToString();
+        textLevel.text = "Level " + PlayerPrefs.GetInt("CurrentLevel", 0);
     }
     public void UpdateTextMove(int amountMove)
     {
-        textMove.text = "Can Move: "+amountMove;
+        textMove.text = amountMove.ToString();
     }
     public void ShowButtonShop(bool enable)
     {
@@ -73,7 +83,17 @@ public class UIController : Singleton<UIController>
     {
         actionAgain = action;
     }
-    
+    public void UpdateCoin(int amountCoint)
+    {
+        imgCoin.transform.DOScale(Vector3.one * 1.2f, 0.05f).SetLoops(2, LoopType.Yoyo);
+        PlayerPrefs.SetInt("AmountCoin", PlayerPrefs.GetInt("AmountCoin") + amountCoint);
+        coinText.text = PlayerPrefs.GetInt("AmountCoin", 0).ToString();
+        PlayerPrefs.Save();
+    }
+    public void UpdateTextedLevel(int level)
+    {
+        textLevel.text = "Level " + level;
+    }
     public UISetting UISetting
     {
         get => GetComponentInChildren<UISetting>();

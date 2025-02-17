@@ -7,92 +7,74 @@ public class UISetting : MonoBehaviour
 
     private bool CanMusic
     {
-        get => PlayerPrefs.GetInt("CanMusic", 0) == 1;
+        get => PlayerPrefs.GetInt("CanMusic", 1) == 1;
         set => PlayerPrefs.SetInt("CanMusic", value ? 1 : 0);
     }
     private bool CanSound
     {
-        get => PlayerPrefs.GetInt("CanSound", 0) == 1;
+        get => PlayerPrefs.GetInt("CanSound", 1) == 1;
         set => PlayerPrefs.SetInt("CanSound", value ? 1 : 0);
     }
-    private bool CanVibration
+    public bool IsOffVibration
     {
-        get => PlayerPrefs.GetInt("CanVibration", 0) == 1;
-        set => PlayerPrefs.SetInt("CanVibration", value ? 1 : 0);
+        get => PlayerPrefs.GetInt("IsOffVibration", 0) == 1;
+        set => PlayerPrefs.SetInt("IsOffVibration", value ? 1 : 0);
     }
     
-    [Space]
     [Header("Button Music")]
     [SerializeField] private Button _btnMusic;
     [SerializeField] private Image _spriteIconMusic;
     [SerializeField] private Sprite[] _spritesIconMusic;
     
-    [Space]
     [Header("Button Sound")]
     [SerializeField] private Button _btnSound;
     [SerializeField] private Image _spriteIconSound;
     [SerializeField] private Sprite[] _spritesIconSound;
     
-    [Space]
     [Header("Button Vibration")]
     [SerializeField] private Button _btnVibration;
     [SerializeField] private Image _spriteIconVibration;
     [SerializeField] private Sprite[] _spritesIconVibration;
+
     void Start()
     {
         _btnMusic.onClick.AddListener(ButtonMusicClick);
         _btnSound.onClick.AddListener(ButtonSoundClick);
         _btnVibration.onClick.AddListener(ButtonVibrationClick);
+        
+        LoadSettings();
     }
+    
     public void ShowDisplay(bool enable = false)
     {
         panelSetting.SetActive(enable);
     }
+    
     private void LoadSettings()
     {
-        
-    }
-    private void ButtonMusicClick()
-    {
-        if (_spriteIconMusic.sprite == _spritesIconMusic[0])
-        {
-            _spriteIconMusic.sprite = _spritesIconMusic[1];
-            CanMusic = false;
-        }
-        else
-        {
-            _spriteIconMusic.sprite = _spritesIconMusic[0];
-            CanMusic = true;
-        }
-        _spriteIconMusic.SetNativeSize();
-    }
-    private void ButtonSoundClick()
-    {
-        if (_spriteIconSound.sprite == _spritesIconSound[0])
-        {
-            _spriteIconSound.sprite = _spritesIconSound[1];
-            CanSound = false;
-        }
-        else
-        {
-            _spriteIconSound.sprite = _spritesIconSound[0];
-            CanSound = true;
-        }
-        _spriteIconSound.SetNativeSize();
-    }
-    private void ButtonVibrationClick()
-    {
-        if (_spriteIconVibration.sprite == _spritesIconVibration[0])
-        {
-            _spriteIconVibration.sprite = _spritesIconVibration[1];
-            CanVibration = false;
-        }
-        else
-        {
-            _spriteIconVibration.sprite = _spritesIconVibration[0];
-            CanVibration = true;
-        }
-        _spriteIconVibration.SetNativeSize();
+        _spriteIconMusic.sprite = CanMusic ? _spritesIconMusic[0] : _spritesIconMusic[1];
+        _spriteIconSound.sprite = CanSound ? _spritesIconSound[0] : _spritesIconSound[1];
+        _spriteIconVibration.sprite = IsOffVibration ? _spritesIconVibration[1] : _spritesIconVibration[0];
     }
     
+    private void ButtonMusicClick()
+    {
+        CanMusic = !CanMusic;
+        _spriteIconMusic.sprite = CanMusic ? _spritesIconMusic[0] : _spritesIconMusic[1];
+        _spriteIconMusic.SetNativeSize();
+    }
+    
+    private void ButtonSoundClick()
+    {
+        CanSound = !CanSound;
+        _spriteIconSound.sprite = CanSound ? _spritesIconSound[0] : _spritesIconSound[1];
+        _spriteIconSound.SetNativeSize();
+    }
+    
+    private void ButtonVibrationClick()
+    {
+        IsOffVibration = !IsOffVibration;
+        _spriteIconVibration.sprite = IsOffVibration ? _spritesIconVibration[1] : _spritesIconVibration[0];
+        _spriteIconVibration.SetNativeSize();
+    }
 }

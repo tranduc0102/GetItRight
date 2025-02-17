@@ -21,7 +21,8 @@ namespace Game
             }
             PoolingManager.Spawn(answer, holderAnswer.position + Vector3.up*hight, Quaternion.Euler(0f, 180f, 0f), holderAnswer);
             box.SetActive(false);
-            Transform t = Instantiate(explode, transform.position, Quaternion.identity);
+            Transform t = Instantiate(explode, transform.position, Quaternion.identity);  
+            EffectRewardCoin x = PoolingManager.Spawn(GameController.Instance.EffectCoin,holderAnswer.position + Vector3.up*hight, Quaternion.identity, UIController.instance.coinParent);
             Destroy(t.gameObject, 2f);
         }
         public void ResetBox()

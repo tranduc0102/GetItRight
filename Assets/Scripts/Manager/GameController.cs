@@ -5,12 +5,6 @@ using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
 namespace Game
 {
-    public enum ModeGame
-    {
-        SinglePlayer,
-        MultiPlayer,
-    }
-
     public class GameController : MonoBehaviour
     {
         public static GameController Instance;
@@ -63,10 +57,11 @@ namespace Game
         [SerializeField] private List<Transform> posReturn;
         */
         
+        /*
         [Space]
         [Header("Mode Game")]
         [SerializeField] private ModeGame mode = ModeGame.SinglePlayer;
-        public ModeGame Mode => mode;
+        public ModeGame Mode => mode;*/
         [SerializeField] private bool canClick = true;
         public bool CanClick
         {
@@ -76,11 +71,15 @@ namespace Game
         
         private int IndexCurrentLevel
         {
-            set => PlayerPrefs.SetInt("CurrentLevel", value);
+            set
+            {
+                PlayerPrefs.SetInt("CurrentLevel", value);
+                UIController.instance.UpdateTextedLevel(value);
+            }
             get => PlayerPrefs.GetInt("CurrentLevel", 0);
         }
-       
-        
+
+
         private bool isWin;
         public bool IsWin
         {
@@ -101,6 +100,11 @@ namespace Game
         [Header("Box Answer")]
         [SerializeField] private BoxManager boxManager;
         public BoxManager BoxManager => boxManager;
+        
+        [Space]
+        [Header("EffectCoin")]
+        [SerializeField] private EffectRewardCoin effectCoin;
+        public EffectRewardCoin EffectCoin => effectCoin;
         private void Awake()
         {
             if (Instance == null)
@@ -112,21 +116,9 @@ namespace Game
         }
         private void Start()
         {
-            PlayerPrefs.DeleteAll();
             UIController.instance.SetActionOnWin(NextLevel);
             UIController.instance.SetActionOnLose(PlayAgain);
             currentLevel = dataLevelGame.levels[IndexCurrentLevel];
-            if (mode == ModeGame.SinglePlayer)
-            {
-                playerManager.SetNumberPlayer(3, false);
-            }
-            else
-            {
-                playerManager.SetNumberPlayer(4, true);
-                /*
-                ClickAction += playerManager.SetCanMove;
-            */
-            }
             GetAnswers();
             SpawnBoard();
             boxManager.NextLevelOrReplay(currentLevel.amountAnswers);

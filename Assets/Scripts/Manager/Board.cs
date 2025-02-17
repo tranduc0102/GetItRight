@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using _Scripts.Extension;
 using DG.Tweening;
 using pooling;
 using UnityEngine;
@@ -57,11 +58,11 @@ namespace Game
                     GameController.Instance.IsWin = true;
                     yield break;
                 }
-                if (GameController.Instance.Mode == ModeGame.MultiPlayer)
+                /*if (GameController.Instance.Mode == ModeGame.MultiPlayer)
                 {
                     GameController.Instance.playerMoved = true;
                     GameController.Instance.PlayerManager.NextPlayerMovement();
-                }
+                }*/
                 if (GameController.Instance.AmountMove <= 0)
                 {
                     UIController.instance.ShowDisplayLose(true);
@@ -137,7 +138,11 @@ namespace Game
             }
 
             currentIndex = 0;
-            if (count == 0) win = true;
+            if (count == 0)
+            {
+                win = true;
+                Vibration.Vibrate();
+            }
         }
     }
 }
