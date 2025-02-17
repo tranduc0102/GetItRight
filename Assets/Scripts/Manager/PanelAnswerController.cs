@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using _Scripts.Extension;
 using DG.Tweening;
 using pooling;
 using UnityEngine;
@@ -102,6 +103,7 @@ namespace Game
            if (Input.GetMouseButtonDown(0))
            {
                if(GameController.Instance.playerMoved) return;
+               if(UIDetection.IsPointerOverUIObject())return;
                if (Camera.main != null)
                {
                    Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
