@@ -1,13 +1,16 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
 
 public class UIController : Singleton<UIController>
 {
-    
+    [Space]
+    [Header("UI Text")]
+    [SerializeField] private TextMeshProUGUI textMove;
     [Space]
     [Header("UI Win")]
     [SerializeField] private GameObject uiWin;
@@ -44,6 +47,14 @@ public class UIController : Singleton<UIController>
         {
             objShop.SetActive(false);
         });
+    }
+    public void UpdateTextMove(int amountMove)
+    {
+        textMove.text = "Can Move: "+amountMove;
+    }
+    public void ShowButtonShop(bool enable)
+    {
+        btnShop.gameObject.SetActive(enable);
     }
     public void ShowDisplayWin(bool enable)
     {

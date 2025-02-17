@@ -61,22 +61,7 @@ namespace Game
 
            if (results.Count <= 0)
            {
-               for (int i = 0; i < GameController.Instance.Answers.Count; i++)
-               {
-                   foreach (var item in themeObjects)
-                   {
-                       if (GameController.Instance.Answers[i] == item.Answer)
-                       {
-                           results.Add(item);
-                           break;
-                       }
-                   }
-               }
-
-               for (int i = GameController.Instance.Answers.Count; i < 6; i++)
-               {
-                   results.Add(themeObjects[Random.Range(0, themeObjects.Count)]);
-               }
+               results.AddRange(themeObjects);
            }
            else
            {
@@ -130,9 +115,15 @@ namespace Game
                                if (GameController.Instance.Board.amountObjects[i].IsNone)
                                {
                                    GameController.Instance.Board.amountObjects[i].answer = component.Answer;
-                                   component.CanMove = false;
-                                   GameController.Instance.Board.amountObjects[i].currentItem = component.transform;
-                                   MoveAndRotateToPosition(component.transform,  GameController.Instance.Board.amountObjects[i]);
+                                   Item t = PoolingManager.Spawn(component, component.transform.position, component.transform.rotation);
+                                   GameController.Instance.Board.amountObjects[i].currentItem = t.transform;
+                                   if (!objItem.Contains(t.transform))
+                                   {
+                                       objItem.Add(t.transform);
+                                       posOrigin.Add(t.transform.position);
+                                   }
+                                   t.CanMove = false;
+                                   MoveAndRotateToPosition(t.transform,  GameController.Instance.Board.amountObjects[i]);
                                    break;
                                }
                            }
@@ -160,6 +151,8 @@ namespace Game
 
            objToMove.DORotate(new Vector3(360f, 180f, 0f), moveDuration, RotateMode.FastBeyond360)
                     .SetEase(Ease.Linear);
+           GameController.Instance.AmountMove -= 1;
+           UIController.instance.ShowButtonShop(false);
        }
 
        public void ReturnPos(Transform objToMove, int i)
@@ -180,6 +173,7 @@ namespace Game
                    objToMove.GetComponent<Item>().CanMove = true;
                    GameController.Instance.Board.amountObjects[i].answer = EnumAnswer.None;
                    GameController.Instance.Board.amountObjects[i].IsNone = true;
+                   PoolingManager.Despawn(objToMove.gameObject);
                });
            }
            else

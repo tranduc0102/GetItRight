@@ -14,7 +14,12 @@ namespace Game
         public void ShowBox(Transform answer)
         {
             if(!box.activeSelf) return;
-            PoolingManager.Spawn(answer, holderAnswer.position, Quaternion.Euler(0f, 180f, 0f), holderAnswer);
+            float hight = 0f;
+            if (!answer.name.Contains("Can"))
+            {
+                hight = 0.5f;
+            }
+            PoolingManager.Spawn(answer, holderAnswer.position + Vector3.up*hight, Quaternion.Euler(0f, 180f, 0f), holderAnswer);
             box.SetActive(false);
             Transform t = Instantiate(explode, transform.position, Quaternion.identity);
             Destroy(t.gameObject, 2f);

@@ -16,30 +16,40 @@ MonoBehaviour:
   - name: Level1
     amountSameValue: 2
     amountAnswers: 4
+    amountMove: 30
   - name: Level2
     amountSameValue: 2
     amountAnswers: 4
+    amountMove: 30
   - name: Level3
     amountSameValue: 2
     amountAnswers: 5
+    amountMove: 30
   - name: Level4
     amountSameValue: 3
     amountAnswers: 6
+    amountMove: 30
   - name: Level5
     amountSameValue: 1
     amountAnswers: 6
+    amountMove: 30
   - name: Level6
     amountSameValue: 1
     amountAnswers: 5
+    amountMove: 30
   - name: Level7
     amountSameValue: 2
     amountAnswers: 4
+    amountMove: 30
   - name: Level8
     amountSameValue: 3
     amountAnswers: 5
+    amountMove: 30
   - name: Level9
     amountSameValue: 1
     amountAnswers: 5
+    amountMove: 30
   - name: Level10
     amountSameValue: 4
     amountAnswers: 6
+    amountMove: 30

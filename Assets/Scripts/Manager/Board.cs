@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using DG.Tweening;
 using pooling;
 using UnityEngine;
@@ -23,13 +24,11 @@ namespace Game
         [SerializeField] private float heightOfObjects;
 
         private int currentIndex;
-        private int checkWinLose = 5;
         bool win = false;
         private List<EnumAnswer> answers;
 
         private void Start()
         {
-            checkWinLose = (amountObjects.Length - amountObjectReward) / countInRow;
             DOVirtual.DelayedCall(0.2f, delegate
             {
                 SetLevel(GameController.Instance.Answers);
@@ -48,8 +47,6 @@ namespace Game
         private IEnumerator ProcessNextLine()
         {
             currentIndex++;
-            int bonus = 0;
-
             if (currentIndex % countInRow == 0)
             {
                 GameController.Instance.CanClick = false;
@@ -57,7 +54,6 @@ namespace Game
                 yield return StartCoroutine(CheckAnswerInLine());
                 if (win)
                 {
-                    Debug.Log("Win");
                     GameController.Instance.IsWin = true;
                     yield break;
                 }
@@ -66,12 +62,12 @@ namespace Game
                     GameController.Instance.playerMoved = true;
                     GameController.Instance.PlayerManager.NextPlayerMovement();
                 }
-                GameController.Instance.CanClick = true;
-                if (checkWinLose == 0)
+                if (GameController.Instance.AmountMove <= 0)
                 {
-                    Debug.Log("Lose");
                     UIController.instance.ShowDisplayLose(true);
+                    yield break;
                 }
+                GameController.Instance.CanClick = true;
             }
             else
             {
@@ -80,8 +76,9 @@ namespace Game
         }
         private IEnumerator CheckAnswerInLine()
         {
-            List<EnumAnswer> tempAnswers = new List<EnumAnswer>(answers); 
+            List<EnumAnswer> tempAnswers = new List<EnumAnswer>(answers);
             Material[] tempMaterials = new Material[countInRow];
+
             for (int index = currentIndex - countInRow; index < currentIndex; index++)
             {
                 EnumAnswer currentAnswer = amountObjects[index].answer;
@@ -92,14 +89,23 @@ namespace Game
                     tempMaterials[index % countInRow] = materialYes;
                     tempAnswers.Remove(currentAnswer);
                 }
-                else if (tempAnswers.Contains(currentAnswer))
+            }
+
+            for (int index = currentIndex - countInRow; index < currentIndex; index++)
+            {
+                EnumAnswer currentAnswer = amountObjects[index].answer;
+
+                if (tempMaterials[index % countInRow] == null)
                 {
-                    tempMaterials[index % countInRow] = materialMaybe;
-                    tempAnswers.Remove(currentAnswer);
-                }
-                else
-                {
-                    tempMaterials[index % countInRow] = materialNo;
+                    if (tempAnswers.Contains(currentAnswer))
+                    {
+                        tempMaterials[index % countInRow] = materialMaybe;
+                        tempAnswers.Remove(currentAnswer);
+                    }
+                    else
+                    {
+                        tempMaterials[index % countInRow] = materialNo;
+                    }
                 }
             }
 
@@ -109,6 +115,7 @@ namespace Game
                 if (meshRenderer.sharedMaterial != materialYes)
                 {
                     meshRenderer.sharedMaterial = tempMaterials[index % countInRow];
+
                     if (tempMaterials[index % countInRow] == materialYes)
                     {
                         GameController.Instance.BoxManager.Boxes[index % countInRow].ShowBox(amountObjects[index].currentItem);
@@ -116,19 +123,20 @@ namespace Game
                     yield return new WaitForSeconds(0.5f);
                 }
             }
+
             int count = 0;
             for (int index = currentIndex - countInRow; index < currentIndex; index++)
             {
-                if (tempMaterials[index % countInRow] == materialNo || tempMaterials[index % countInRow] == materialMaybe)
+                if (tempMaterials.Contains(materialMaybe) || tempMaterials.Contains(materialNo))
                 {
                     amountObjects[index].GetComponent<MeshRenderer>().material = materialWhite;
                     GameController.Instance.PanelAnswerController.ReturnPos(amountObjects[index].currentItem, index);
                     count++;
-                    checkWinLose--;
+                    yield return new WaitForSeconds(0.05f);
                 }
-                yield return new WaitForSeconds(0.05f);
             }
-            currentIndex -= count;
+
+            currentIndex = 0;
             if (count == 0) win = true;
         }
     }

@@ -29,6 +29,15 @@ namespace Game
             }
         }
         public Level CurrentLevelGame => currentLevel;
+        [SerializeField] private int amountMove;
+        public int AmountMove {
+            get => amountMove;
+            set
+            {
+                amountMove = value;
+                UIController.instance.UpdateTextMove(value);
+            }
+        }
         [FormerlySerializedAs("_answers")] [SerializeField] private List<EnumAnswer> answers;
         public List<EnumAnswer> Answers => answers;
         
@@ -103,6 +112,7 @@ namespace Game
         }
         private void Start()
         {
+            PlayerPrefs.DeleteAll();
             UIController.instance.SetActionOnWin(NextLevel);
             UIController.instance.SetActionOnLose(PlayAgain);
             currentLevel = dataLevelGame.levels[IndexCurrentLevel];
@@ -124,15 +134,14 @@ namespace Game
         }
         private void PlayAgain()
         {
+            pane.gameObject.SetActive(false);
             UIController.instance.ShowDisplayWin(false);
             UIController.instance.ShowDisplayLose(false);
+            pane.gameObject.SetActive(true);
             IsWin = false;
             currentLevel = dataLevelGame.levels[IndexCurrentLevel];
             canClick = true;
             GetAnswers();
-            /*
-            PoolingManager.Despawn(currentLevel.);
-            */
             Destroy(currentBoard.gameObject);
             SpawnBoard();
             boxManager.NextLevelOrReplay(currentLevel.amountAnswers);
@@ -148,9 +157,6 @@ namespace Game
             currentLevel = dataLevelGame.levels[IndexCurrentLevel];
             canClick = true;
             GetAnswers();
-            /*
-            PoolingManager.Despawn(currentLevel.);
-            */
             Destroy(currentBoard.gameObject);
             SpawnBoard();
             boxManager.NextLevelOrReplay(currentLevel.amountAnswers);
@@ -172,7 +178,9 @@ namespace Game
                     i++;
                 }
             }
+            AmountMove = currentLevel.amountMove;
             ShuffleList(answers);
+            UIController.instance.ShowButtonShop(true);
         }
         private void ShuffleList<T>(List<T> list)
         {
