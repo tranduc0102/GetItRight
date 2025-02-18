@@ -31,19 +31,20 @@ namespace Game
             get => currentIndex;
             set
             {
-                currentIndex += value;
-                    
+                currentIndex = value;
                 if (currentIndex % countInRow == 0)
                 {
                     GameController.Instance.CanClick = false;
                 }
             }
         }
+
         bool win = false;
         private List<EnumAnswer> answers;
 
         private void Start()
         {
+            currentIndex = 0;
             DOVirtual.DelayedCall(0.2f, delegate
             {
                 SetLevel(GameController.Instance.Answers);
@@ -68,34 +69,68 @@ namespace Game
                 yield return StartCoroutine(CheckAnswerInLine());
                 yield return new WaitForSeconds(1f);
                 int bonus = 0;
-                for (int index = currentIndex - countInRow; index < currentIndex; index++)
+
+                if (GameController.Instance.IsGameTest1)
                 {
-                    if (amountObjects[index].answer == GameController.Instance.Answers[index % countInRow] && !win)
+                    int index = currentIndex - countInRow;
+                    for  (; index < currentIndex; )
                     {
-                        if (currentIndex + index % countInRow < amountObjects.Length - amountObjectReward)
+                        if(currentIndex + index % countInRow >= amountObjects.Length)break;
+                        if (amountObjects[index].answer == GameController.Instance.Answers[index % countInRow] && !win && amountObjects[currentIndex + index % countInRow].IsNone)
                         {
-                            amountObjects[currentIndex + index % countInRow].answer = amountObjects[index].answer;
-                            amountObjects[currentIndex + index % countInRow].IsNone = false;
-                            amountObjects[currentIndex + index % countInRow].gameObject.SetActive(false);
-                            Debug.Log(index);
-                            /*amountObjects[currentIndex + index % countInRow].currentItem =
-                                Instantiate(amountObjects[index].currentItem,
-                                            new Vector3(amountObjects[currentIndex + index % countInRow].transform.position.x,
-                                                        amountObjects[currentIndex + index % countInRow].transform.position.y - 1f,
-                                                        amountObjects[currentIndex + index % countInRow].transform.position.z), Quaternion.identity);
-                            amountObjects[currentIndex + index % countInRow].currentItem.DOLocalMoveY(amountObjects[currentIndex + index % countInRow].transform.position.y, 0.5f);*/
-                            bonus++;
+                            if (currentIndex + index % countInRow < amountObjects.Length)
+                            {
+                                amountObjects[currentIndex + index % countInRow].answer = amountObjects[index].answer;
+                                amountObjects[currentIndex + index % countInRow].IsNone = false;
+                                amountObjects[currentIndex + index % countInRow].gameObject.SetActive(false);
+                                bonus++;
+                            }
                         }
-                    }
+
+                        index++;
+                    }   
                 }
+                
                 if (currentIndex + countInRow <= amountObjects.Length - amountObjectReward && !win)
                 {
-                    amountObjects[currentIndex - 1].transform.parent.DOLocalMoveX(0.2f, 1f);
-
-                    amountObjects[currentIndex].transform.parent.DOLocalMoveY(heightOfObjects, 1f).OnComplete(delegate
+                    if (GameController.Instance.IsGameTest1)
                     {
+                        amountObjects[currentIndex - 1].transform.parent.DOLocalMoveX(0.2f, 1f);
+   
+                    }
+                    amountObjects[currentIndex].transform.parent.DOLocalMoveY(heightOfObjects, 1f);
+                    DOVirtual.DelayedCall(1.05f, delegate
+                    {
+                        if (GameController.Instance.IsGameTest2)
+                        {
+                            for (int index = currentIndex - countInRow; index < currentIndex; index++)
+                            {
+                                if (currentIndex + index % countInRow >= amountObjects.Length) break;
+        
+                                if (amountObjects[index].answer == GameController.Instance.Answers[index % countInRow] && !win)
+                                {
+                                    int targetIndex = currentIndex + (index % countInRow);
+
+                                    if (targetIndex < amountObjects.Length)
+                                    {
+                                        amountObjects[targetIndex].answer = amountObjects[index].answer;
+                                        amountObjects[targetIndex].IsNone = false;
+                                        amountObjects[targetIndex].currentItem =
+                                            Instantiate(amountObjects[index].currentItem,
+                                                new Vector3(amountObjects[targetIndex].transform.position.x,
+                                                    amountObjects[targetIndex].transform.position.y,
+                                                    amountObjects[targetIndex].transform.position.z),
+                                                new Quaternion(0, 180, 0, 0),
+                                                amountObjects[targetIndex].transform);
+                
+                                        amountObjects[targetIndex].currentItem.DOLocalMoveY(0.003125003f, 0.5f);
+                                        bonus++;
+                                        Debug.Log($"Loop Index: {index}, Modulo: {index % countInRow}, Target Index: {targetIndex} , Current Index{currentIndex}");
+                                    }
+                                }
+                            }
+                        }
                         currentIndex += bonus;
-                        bonus = 0;
                     });
                 }
                 if (win)
@@ -103,11 +138,6 @@ namespace Game
                     GameController.Instance.IsWin = true;
                     yield break;
                 }
-                /*if (GameController.Instance.Mode == ModeGame.MultiPlayer)
-                {
-                    GameController.Instance.playerMoved = true;
-                    GameController.Instance.PlayerManager.NextPlayerMovement();
-                }*/
                 if (GameController.Instance.AmountMove <= 0 || !win && currentIndex >= amountObjects.Length)
                 {
                     UIController.instance.ShowDisplayLose(true);

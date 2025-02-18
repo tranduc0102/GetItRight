@@ -6992,6 +6992,8 @@ MonoBehaviour:
   - {fileID: 1479779530692416403, guid: 32fb2eacfe5d7404c90f4104f200af69, type: 3}
   currentBoard: {fileID: 0}
   IsTest1: 0
+  IsGameTest1: 0
+  IsGameTest2: 1
   canClick: 1
   boxManager: {fileID: 267062466}
   effectCoin: {fileID: 2652305588173522609, guid: f307e2dbddd6bf54c9b0a20abf0e2081, type: 3}

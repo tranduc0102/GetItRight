@@ -7116,6 +7116,7 @@ MonoBehaviour:
   - {fileID: 1479779530692416403, guid: 32fb2eacfe5d7404c90f4104f200af69, type: 3}
   currentBoard: {fileID: 267062467}
   IsTest1: 1
+  IsGameTest1: 0
   canClick: 1
   boxManager: {fileID: 267062466}
   effectCoin: {fileID: 2652305588173522609, guid: f307e2dbddd6bf54c9b0a20abf0e2081, type: 3}
@@ -9581,10 +9582,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_UiScaleMode: 0
+  m_UiScaleMode: 1
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
-  m_ReferenceResolution: {x: 800, y: 600}
+  m_ReferenceResolution: {x: 1080, y: 1920}
   m_ScreenMatchMode: 0
   m_MatchWidthOrHeight: 0
   m_PhysicalUnit: 3

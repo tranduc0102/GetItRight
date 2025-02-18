@@ -56,6 +56,7 @@ namespace Game
         public Board Board => currentBoard;
         public bool IsTest1;
         public bool IsGameTest1;
+        public bool IsGameTest2;
         
         /*
         [SerializeField] private List<Transform> posReturn;

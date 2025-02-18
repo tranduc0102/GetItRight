@@ -144,7 +144,7 @@ namespace Game
 
         private void MoveAndRotateToPosition(Transform objToMove, HolderItem targetPos)
         {
-           GameController.Instance.Board.CurrentIndex = 1;
+           GameController.Instance.Board.CurrentIndex += 1;
             float moveDuration = 0.5f;
             targetPos.IsNone = false;
             float hight = 0.6f;
