@@ -66,20 +66,37 @@ namespace Game
             {
                 yield return new WaitForSeconds(0.5f);
                 yield return StartCoroutine(CheckAnswerInLine());
-                if (GameController.Instance.IsTest)
+                yield return new WaitForSeconds(1f);
+                int bonus = 0;
+                for (int index = currentIndex - countInRow; index < currentIndex; index++)
                 {
-                    if (currentIndex + countInRow <= amountObjects.Length - amountObjectReward && !win)
+                    if (amountObjects[index].answer == GameController.Instance.Answers[index % countInRow] && !win)
                     {
-                        for (int i = currentIndex - countInRow; i < currentIndex; i++)
+                        if (currentIndex + index % countInRow < amountObjects.Length - amountObjectReward)
                         {
-                            int i1 = i;
-                            amountObjects[i].transform.parent.DOLocalMoveX(0.2f, 1f);
-                        }
-                        for (int i = currentIndex; i < currentIndex + countInRow ; i++)
-                        {
-                            amountObjects[i].transform.parent.DOLocalMoveY(heightOfObjects, 1f);
+                            amountObjects[currentIndex + index % countInRow].answer = amountObjects[index].answer;
+                            amountObjects[currentIndex + index % countInRow].IsNone = false;
+                            amountObjects[currentIndex + index % countInRow].gameObject.SetActive(false);
+                            Debug.Log(index);
+                            /*amountObjects[currentIndex + index % countInRow].currentItem =
+                                Instantiate(amountObjects[index].currentItem,
+                                            new Vector3(amountObjects[currentIndex + index % countInRow].transform.position.x,
+                                                        amountObjects[currentIndex + index % countInRow].transform.position.y - 1f,
+                                                        amountObjects[currentIndex + index % countInRow].transform.position.z), Quaternion.identity);
+                            amountObjects[currentIndex + index % countInRow].currentItem.DOLocalMoveY(amountObjects[currentIndex + index % countInRow].transform.position.y, 0.5f);*/
+                            bonus++;
                         }
                     }
+                }
+                if (currentIndex + countInRow <= amountObjects.Length - amountObjectReward && !win)
+                {
+                    amountObjects[currentIndex - 1].transform.parent.DOLocalMoveX(0.2f, 1f);
+
+                    amountObjects[currentIndex].transform.parent.DOLocalMoveY(heightOfObjects, 1f).OnComplete(delegate
+                    {
+                        currentIndex += bonus;
+                        bonus = 0;
+                    });
                 }
                 if (win)
                 {
@@ -160,22 +177,19 @@ namespace Game
                 {
                     count++;
                     if (currentIndex >= amountObjects.Length) break;
+                    /*
                     amountObjects[index].GetComponent<MeshRenderer>().material = materialWhite;
-                    if (GameController.Instance.IsTest)
-                    {
-                
-                    }
-                    else
-                    {
+                    */
+                    /*
                         GameController.Instance.PanelAnswerController.ReturnPos(amountObjects[index].currentItem, index);
-                    }
+                    */
                     yield return new WaitForSeconds(0.05f);
                 }
             }
-            if (!GameController.Instance.IsTest)
+            /*if (!GameController.Instance.IsTest)
             {
                 currentIndex = 0;
-            }
+            }*/
             if (count == 0)
             {
                 win = true;

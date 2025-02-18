@@ -54,6 +54,8 @@ namespace Game
         [SerializeField] private Board[] boardDat;
         [SerializeField] private Board currentBoard;
         public Board Board => currentBoard;
+        public bool IsTest1;
+        public bool IsGameTest1;
         
         /*
         [SerializeField] private List<Transform> posReturn;
@@ -107,7 +109,6 @@ namespace Game
         [Header("EffectCoin")]
         [SerializeField] private EffectRewardCoin effectCoin;
         public EffectRewardCoin EffectCoin => effectCoin;
-        public bool IsTest;
         private void Awake()
         {
             if (Instance == null)
@@ -202,6 +203,7 @@ namespace Game
         }
         private void SpawnBoard()
         {
+            if(IsTest1) return;
             switch (currentLevel.amountAnswers)
             {
                 case 3:

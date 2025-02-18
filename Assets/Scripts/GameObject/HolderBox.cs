@@ -16,23 +16,18 @@ namespace Game
 
         public void ShowBox(Transform answer)
         {
-            if (GameController.Instance.IsTest)
+            if(canMove)return;
+            canMove = true;
+            napThung.DOLocalRotate(new Vector3(-180f, -180f, 0f), .2f).OnComplete(delegate
             {
-                if(canMove)return;
-                canMove = true;
-                napThung.DOLocalRotate(new Vector3(-180f, -180f, 0f), .2f).OnComplete(delegate
+                float high = 0f;
+                if (!answer.name.Contains("Can"))
                 {
-                    float high = 0f;
-                    if (!answer.name.Contains("Can"))
-                    {
-                    }
-                    Transform t = PoolingManager.Spawn(answer, holderAnswer.position, Quaternion.Euler(0f, 180f, 0f), holderAnswer);
-                    t.DOLocalMoveY(0.005f, .2f).SetEase(Ease.OutBounce);
-                });
-            }
-            else
-            {
-                if(!box.activeSelf) return;
+                }
+                Transform t = PoolingManager.Spawn(answer, holderAnswer.position, Quaternion.Euler(0f, 180f, 0f), holderAnswer);
+                t.DOLocalMoveY(0.005f, .2f).SetEase(Ease.OutBounce);
+            });
+                /*if(!box.activeSelf) return;
                 float high = 0f;
                 if (!answer.name.Contains("Can"))
                 {
@@ -42,8 +37,7 @@ namespace Game
                 box.SetActive(false);
                 Transform t = Instantiate(explode, transform.position, Quaternion.identity);  
                 EffectRewardCoin x = PoolingManager.Spawn(GameController.Instance.EffectCoin,holderAnswer.position + Vector3.up, Quaternion.identity, UIController.instance.coinParent);
-                Destroy(t.gameObject, 2f);   
-            }
+                Destroy(t.gameObject, 2f);   */
         }
         public void ResetBox()
         {
@@ -56,7 +50,6 @@ namespace Game
             }
             napThung.localRotation = Quaternion.Euler(0f, -180f, 0f);
             canMove = false;
-            box.SetActive(true);
         }
     }
 }

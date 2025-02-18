@@ -119,16 +119,12 @@ namespace Game
                                     GameController.Instance.Board.amountObjects[i].answer = component.Answer;
                                     component.transform.DOScale(component.transform.localScale * 0.9f, 0.05f).SetLoops(2, LoopType.Yoyo);
                                     Item t;
-                                    if (GameController.Instance.IsTest)
-                                    {
-                                        t = PoolingManager.Spawn(component, component.transform.position, component.transform.rotation,
-                                                                 GameController.Instance.Board.amountObjects[i].transform);
-
-                                    }
-                                    else
+                                    t = PoolingManager.Spawn(component, component.transform.position, component.transform.rotation,
+                                                             GameController.Instance.Board.amountObjects[i].transform);
+                                    /*else
                                     {
                                         t = PoolingManager.Spawn(component, component.transform.position, component.transform.rotation);
-                                    }
+                                    }*/
                                     GameController.Instance.Board.amountObjects[i].currentItem = t.transform;
                                     if (!objItem.Contains(t.transform))
                                     {
