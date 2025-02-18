@@ -15,41 +15,81 @@ MonoBehaviour:
   levels:
   - name: Level1
     amountSameValue: 2
-    amountAnswers: 4
-    amountMove: 30
+    amountAnswers: 3
+    amountMove: 15
   - name: Level2
     amountSameValue: 2
-    amountAnswers: 4
-    amountMove: 30
+    amountAnswers: 3
+    amountMove: 20
   - name: Level3
     amountSameValue: 2
-    amountAnswers: 5
-    amountMove: 30
+    amountAnswers: 3
+    amountMove: 25
   - name: Level4
-    amountSameValue: 3
-    amountAnswers: 6
+    amountSameValue: 1
+    amountAnswers: 3
     amountMove: 30
   - name: Level5
     amountSameValue: 1
-    amountAnswers: 6
+    amountAnswers: 3
     amountMove: 30
   - name: Level6
     amountSameValue: 1
-    amountAnswers: 5
+    amountAnswers: 3
     amountMove: 30
   - name: Level7
     amountSameValue: 2
-    amountAnswers: 4
-    amountMove: 30
+    amountAnswers: 3
+    amountMove: 28
   - name: Level8
-    amountSameValue: 3
-    amountAnswers: 5
-    amountMove: 30
+    amountSameValue: 1
+    amountAnswers: 3
+    amountMove: 20
   - name: Level9
     amountSameValue: 1
-    amountAnswers: 5
+    amountAnswers: 3
     amountMove: 30
   - name: Level10
-    amountSameValue: 4
+    amountSameValue: 1
+    amountAnswers: 3
+    amountMove: 24
+  - name: Level11
+    amountSameValue: 1
+    amountAnswers: 3
+    amountMove: 30
+  - name: Level12
+    amountSameValue: 1
+    amountAnswers: 3
+    amountMove: 25
+  - name: Level13
+    amountSameValue: 1
+    amountAnswers: 4
+    amountMove: 20
+  - name: Level14
+    amountSameValue: 2
+    amountAnswers: 4
+    amountMove: 20
+  - name: Level15
+    amountSameValue: 2
+    amountAnswers: 5
+    amountMove: 25
+  - name: Level16
+    amountSameValue: 2
+    amountAnswers: 6
+    amountMove: 24
+  - name: Level17
+    amountSameValue: 1
     amountAnswers: 6
     amountMove: 30
+  - name: Level18
+    amountSameValue: 3
+    amountAnswers: 6
+    amountMove: 24
+  - name: Level19
+    amountSameValue: 3
+    amountAnswers: 5
+    amountMove: 25
+  - name: Level20
+    amountSameValue: 3
+    amountAnswers: 4
+    amountMove: 20

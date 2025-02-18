@@ -19,6 +19,12 @@ public class UIController : Singleton<UIController>
     [SerializeField] private GameObject uiWin;
     [SerializeField] private Button btnNext;
     private UnityAction actionNext;
+    [Space]
+    [Header("UI Level Fail")]
+    [SerializeField] private GameObject uiLevelFail;
+    [SerializeField] private Button btnNoThanks;
+    [SerializeField] private Button btnSave;
+    private UnityAction actionSave;
     
     [Space]
     [Header("UI Lose")]
@@ -41,10 +47,12 @@ public class UIController : Singleton<UIController>
     {
         btnNext.onClick.AddListener(delegate
         {
+            uiWin.SetActive(false);
             actionNext?.Invoke();
         });
         btnPlayAgain.onClick.AddListener(delegate
         {
+            uiLose.SetActive(false);
             actionAgain?.Invoke();
         });
         btnShop.onClick.AddListener(delegate
@@ -55,8 +63,18 @@ public class UIController : Singleton<UIController>
         {
             objShop.SetActive(false);
         });
+        btnNoThanks.onClick.AddListener(delegate
+        {
+            uiLevelFail.SetActive(false);
+            uiLose.SetActive(true);
+        });
+        btnSave.onClick.AddListener(delegate
+        {
+            uiLevelFail.SetActive(false);
+            actionSave?.Invoke();
+        });
         coinText.text = PlayerPrefs.GetInt("AmountCoin", 0).ToString();
-        textLevel.text = "Level " + PlayerPrefs.GetInt("CurrentLevel", 0);
+        textLevel.text = "Level " + (PlayerPrefs.GetInt("CurrentLevel", 0) + 1);
     }
     public void UpdateTextMove(int amountMove)
     {
@@ -74,7 +92,10 @@ public class UIController : Singleton<UIController>
     {
         uiLose.SetActive(enable);
     }
-
+    public void ShowDisplayLevelFail(bool enable)
+    {
+        uiLevelFail.SetActive(enable);
+    }
     public void SetActionOnWin(UnityAction action)
     {
         actionNext = action;
@@ -82,6 +103,10 @@ public class UIController : Singleton<UIController>
     public void SetActionOnLose(UnityAction action)
     {
         actionAgain = action;
+    }
+    public void SetActionSave(UnityAction action)
+    {
+        actionSave = action;
     }
     public void UpdateCoin(int amountCoint)
     {

@@ -19,7 +19,6 @@ namespace pooling
             if (prefab != null && !listPools.ContainsKey(prefab.GetInstanceID()))
             {
                 listPools[prefab.GetInstanceID()] = new Pool(prefab);
-                Debug.Log($"Initialized pool for prefab: {prefab.name}, ID: {prefab.GetInstanceID()}");
             }
         }
         public static GameObject Spawn(GameObject prefab)

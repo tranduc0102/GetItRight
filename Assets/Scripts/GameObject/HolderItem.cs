@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Game
 {
-    public class HolderObject : MonoBehaviour
+    public class HolderItem : MonoBehaviour
     {
         public EnumAnswer answer;
         public bool IsNone = true;

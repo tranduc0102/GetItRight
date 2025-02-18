@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using _Scripts.Extension;
+using ACEPlay.Bridge;
 using DG.Tweening;
 using pooling;
 using UnityEngine;
@@ -13,7 +14,7 @@ namespace Game
         [Space]
         [Header("Setting Board")]
         [SerializeField] private int countInRow;
-        [SerializeField] public HolderObject[] amountObjects;
+        [SerializeField] public HolderItem[] amountObjects;
         [SerializeField] private int amountObjectReward;
         [SerializeField] private GameObject[] objectRewards;
 
@@ -25,6 +26,19 @@ namespace Game
         [SerializeField] private float heightOfObjects;
 
         private int currentIndex;
+        public int CurrentIndex
+        {
+            get => currentIndex;
+            set
+            {
+                currentIndex += value;
+                    
+                if (currentIndex % countInRow == 0)
+                {
+                    GameController.Instance.CanClick = false;
+                }
+            }
+        }
         bool win = false;
         private List<EnumAnswer> answers;
 
@@ -47,12 +61,26 @@ namespace Game
         }
         private IEnumerator ProcessNextLine()
         {
-            currentIndex++;
+            if (currentIndex > amountObjects.Length) yield break;
             if (currentIndex % countInRow == 0)
             {
-                GameController.Instance.CanClick = false;
                 yield return new WaitForSeconds(0.5f);
                 yield return StartCoroutine(CheckAnswerInLine());
+                if (GameController.Instance.IsTest)
+                {
+                    if (currentIndex + countInRow <= amountObjects.Length - amountObjectReward && !win)
+                    {
+                        for (int i = currentIndex - countInRow; i < currentIndex; i++)
+                        {
+                            int i1 = i;
+                            amountObjects[i].transform.parent.DOLocalMoveX(0.2f, 1f);
+                        }
+                        for (int i = currentIndex; i < currentIndex + countInRow ; i++)
+                        {
+                            amountObjects[i].transform.parent.DOLocalMoveY(heightOfObjects, 1f);
+                        }
+                    }
+                }
                 if (win)
                 {
                     GameController.Instance.IsWin = true;
@@ -63,12 +91,13 @@ namespace Game
                     GameController.Instance.playerMoved = true;
                     GameController.Instance.PlayerManager.NextPlayerMovement();
                 }*/
-                if (GameController.Instance.AmountMove <= 0)
+                if (GameController.Instance.AmountMove <= 0 || !win && currentIndex >= amountObjects.Length)
                 {
                     UIController.instance.ShowDisplayLose(true);
+                    BridgeController.instance.LogLevelFailWithParameter(PlayerPrefs.GetInt("CurrentLevel", 0));
                     yield break;
                 }
-                GameController.Instance.CanClick = true;
+                DOVirtual.DelayedCall(0.5f, delegate { GameController.Instance.CanClick = true; });
             }
             else
             {
@@ -122,22 +151,31 @@ namespace Game
                         GameController.Instance.BoxManager.Boxes[index % countInRow].ShowBox(amountObjects[index].currentItem);
                     }
                     yield return new WaitForSeconds(0.5f);
-                }
+                } 
             }
-
             int count = 0;
             for (int index = currentIndex - countInRow; index < currentIndex; index++)
             {
                 if (tempMaterials.Contains(materialMaybe) || tempMaterials.Contains(materialNo))
                 {
-                    amountObjects[index].GetComponent<MeshRenderer>().material = materialWhite;
-                    GameController.Instance.PanelAnswerController.ReturnPos(amountObjects[index].currentItem, index);
                     count++;
+                    if (currentIndex >= amountObjects.Length) break;
+                    amountObjects[index].GetComponent<MeshRenderer>().material = materialWhite;
+                    if (GameController.Instance.IsTest)
+                    {
+                
+                    }
+                    else
+                    {
+                        GameController.Instance.PanelAnswerController.ReturnPos(amountObjects[index].currentItem, index);
+                    }
                     yield return new WaitForSeconds(0.05f);
                 }
             }
-
-            currentIndex = 0;
+            if (!GameController.Instance.IsTest)
+            {
+                currentIndex = 0;
+            }
             if (count == 0)
             {
                 win = true;

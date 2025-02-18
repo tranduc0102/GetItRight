@@ -1,6 +1,8 @@
 using System.Collections.Generic;
+using ACEPlay.Bridge;
 using UnityEngine;
 using pooling;
+using UnityEngine.Events;
 using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
 namespace Game
@@ -74,7 +76,7 @@ namespace Game
             set
             {
                 PlayerPrefs.SetInt("CurrentLevel", value);
-                UIController.instance.UpdateTextedLevel(value);
+                UIController.instance.UpdateTextedLevel(value + 1);
             }
             get => PlayerPrefs.GetInt("CurrentLevel", 0);
         }
@@ -105,6 +107,7 @@ namespace Game
         [Header("EffectCoin")]
         [SerializeField] private EffectRewardCoin effectCoin;
         public EffectRewardCoin EffectCoin => effectCoin;
+        public bool IsTest;
         private void Awake()
         {
             if (Instance == null)
@@ -117,18 +120,32 @@ namespace Game
         private void Start()
         {
             UIController.instance.SetActionOnWin(NextLevel);
+            UIController.instance.SetActionSave(SaveLevelFail);
             UIController.instance.SetActionOnLose(PlayAgain);
             currentLevel = dataLevelGame.levels[IndexCurrentLevel];
             GetAnswers();
             SpawnBoard();
             boxManager.NextLevelOrReplay(currentLevel.amountAnswers);
             playerManager.MoveToTarget();
+            BridgeController.instance.LogLevelStartWithParameter(PlayerPrefs.GetInt("CurrentLevel", 0));
+        }
+        private void SaveLevelFail()
+        {
+            if (BridgeController.instance.IsRewardReady())
+            {
+                UnityEvent e = new UnityEvent();
+                e.AddListener(delegate
+                {
+                    IsWin = false;
+                    AmountMove = currentLevel.amountAnswers * 2;
+                    canClick = true;
+                });
+                BridgeController.instance.ShowRewarded("SaveMe", e);
+            }
         }
         private void PlayAgain()
         {
             pane.gameObject.SetActive(false);
-            UIController.instance.ShowDisplayWin(false);
-            UIController.instance.ShowDisplayLose(false);
             pane.gameObject.SetActive(true);
             IsWin = false;
             currentLevel = dataLevelGame.levels[IndexCurrentLevel];
@@ -140,12 +157,10 @@ namespace Game
         }
         private void NextLevel()
         {
-            UIController.instance.ShowDisplayWin(false);
-            UIController.instance.ShowDisplayLose(false);
             pane.gameObject.SetActive(true);
-            
             IsWin = false;
             IndexCurrentLevel++;
+            BridgeController.instance.LogLevelCompleteWithParameter(PlayerPrefs.GetInt("CurrentLevel", 0));
             currentLevel = dataLevelGame.levels[IndexCurrentLevel];
             canClick = true;
             GetAnswers();
