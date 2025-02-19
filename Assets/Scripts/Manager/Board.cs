@@ -26,18 +26,6 @@ namespace Game
         [SerializeField] private float heightOfObjects;
 
         private int currentIndex;
-        public int CurrentIndex
-        {
-            get => currentIndex;
-            set
-            {
-                currentIndex = value;
-                if (currentIndex % countInRow == 0)
-                {
-                    GameController.Instance.CanClick = false;
-                }
-            }
-        }
 
         bool win = false;
         private List<EnumAnswer> answers;
@@ -62,20 +50,22 @@ namespace Game
         }
         private IEnumerator ProcessNextLine()
         {
+            currentIndex += 1;
+            GameController.Instance.CanClick = false;
             if (currentIndex > amountObjects.Length) yield break;
             if (currentIndex % countInRow == 0)
             {
                 yield return new WaitForSeconds(0.5f);
                 yield return StartCoroutine(CheckAnswerInLine());
-                yield return new WaitForSeconds(1f);
+                yield return new WaitForSeconds(0.5f);
                 int bonus = 0;
 
                 if (GameController.Instance.IsGameTest1)
                 {
                     int index = currentIndex - countInRow;
-                    for  (; index < currentIndex; )
+                    for (; index < currentIndex;)
                     {
-                        if(currentIndex + index % countInRow >= amountObjects.Length)break;
+                        if (currentIndex + index % countInRow >= amountObjects.Length) break;
                         if (amountObjects[index].answer == GameController.Instance.Answers[index % countInRow] && !win && amountObjects[currentIndex + index % countInRow].IsNone)
                         {
                             if (currentIndex + index % countInRow < amountObjects.Length)
@@ -88,61 +78,77 @@ namespace Game
                         }
 
                         index++;
-                    }   
+                    }
                 }
-                
+                if (GameController.Instance.IsGameTest2)
+                {
+                    int tmp = currentIndex;
+                    for (int index = tmp - countInRow; index < tmp; index++)
+                    {
+                        if (currentIndex + (index % countInRow) >= amountObjects.Length || index < 0) break;
+                        Debug.Log(index);
+                        if (amountObjects[index].answer == GameController.Instance.Answers[index % countInRow] && !win)
+                        {
+                            int targetIndex = currentIndex + (index % countInRow);
+
+                            if (targetIndex < amountObjects.Length)
+                            {
+                                amountObjects[targetIndex].answer = amountObjects[index].answer;
+                                amountObjects[targetIndex].IsNone = false;
+                                float high = 0f;
+                                if (amountObjects[index].currentItem.name.Contains("Egg"))
+                                {
+                                    high = 0.003f;
+                                }
+                                amountObjects[targetIndex].currentItem =
+                                    Instantiate(amountObjects[index].currentItem,
+                                                new Vector3(amountObjects[targetIndex].transform.position.x,
+                                                            amountObjects[targetIndex].transform.position.y,
+                                                            amountObjects[targetIndex].transform.position.z),
+                                                new Quaternion(0, 180, 0, 0),
+                                                amountObjects[targetIndex].transform);
+
+                                amountObjects[targetIndex].currentItem.DOLocalMoveY(0.003125003f + high, 0.5f);
+                                bonus++;
+                            }
+                        }
+                    }
+                }
+
                 if (currentIndex + countInRow <= amountObjects.Length - amountObjectReward && !win)
                 {
                     if (GameController.Instance.IsGameTest1)
                     {
                         amountObjects[currentIndex - 1].transform.parent.DOLocalMoveX(0.2f, 1f);
-   
+                        amountObjects[currentIndex].transform.parent.DOLocalMoveY(heightOfObjects, 1f);
                     }
-                    amountObjects[currentIndex].transform.parent.DOLocalMoveY(heightOfObjects, 1f);
-                    DOVirtual.DelayedCall(1.05f, delegate
+                    if (GameController.Instance.IsGameTest2)
                     {
-                        if (GameController.Instance.IsGameTest2)
+                        amountObjects[currentIndex].transform.parent.DOLocalMoveY(heightOfObjects, 1f);
+                        foreach (FadeWithPropertyBlock fadeObject in amountObjects[currentIndex].transform.parent.GetComponentsInChildren<FadeWithPropertyBlock>())
                         {
-                            for (int index = currentIndex - countInRow; index < currentIndex; index++)
-                            {
-                                if (currentIndex + index % countInRow >= amountObjects.Length) break;
-        
-                                if (amountObjects[index].answer == GameController.Instance.Answers[index % countInRow] && !win)
-                                {
-                                    int targetIndex = currentIndex + (index % countInRow);
-
-                                    if (targetIndex < amountObjects.Length)
-                                    {
-                                        amountObjects[targetIndex].answer = amountObjects[index].answer;
-                                        amountObjects[targetIndex].IsNone = false;
-                                        amountObjects[targetIndex].currentItem =
-                                            Instantiate(amountObjects[index].currentItem,
-                                                new Vector3(amountObjects[targetIndex].transform.position.x,
-                                                    amountObjects[targetIndex].transform.position.y,
-                                                    amountObjects[targetIndex].transform.position.z),
-                                                new Quaternion(0, 180, 0, 0),
-                                                amountObjects[targetIndex].transform);
-                
-                                        amountObjects[targetIndex].currentItem.DOLocalMoveY(0.003125003f, 0.5f);
-                                        bonus++;
-                                        Debug.Log($"Loop Index: {index}, Modulo: {index % countInRow}, Target Index: {targetIndex} , Current Index{currentIndex}");
-                                    }
-                                }
-                            }
+                            fadeObject.FadeIn(0.2f);
                         }
-                        currentIndex += bonus;
-                    });
+
+                    }
+                    currentIndex += bonus;
                 }
                 if (win)
                 {
                     GameController.Instance.IsWin = true;
                     yield break;
                 }
-                if (GameController.Instance.AmountMove <= 0 || !win && currentIndex >= amountObjects.Length)
+                if (!win && currentIndex >= amountObjects.Length)
                 {
+                    GameController.Instance.PlayerManager.PlayAnim("ThatBai");
+                    yield return new WaitForSeconds(0.7f);
                     UIController.instance.ShowDisplayLose(true);
                     BridgeController.instance.LogLevelFailWithParameter(PlayerPrefs.GetInt("CurrentLevel", 0));
                     yield break;
+                }
+                else
+                {
+                    GameController.Instance.PlayerManager.PlayAnim("DoanSai");
                 }
                 DOVirtual.DelayedCall(0.5f, delegate { GameController.Instance.CanClick = true; });
             }
@@ -185,41 +191,47 @@ namespace Game
                     }
                 }
             }
-
-            for (int index = currentIndex - countInRow; index < currentIndex; index++)
+            
+            if (GameController.Instance.IsGameTest1)
             {
-                var meshRenderer = amountObjects[index].GetComponent<MeshRenderer>();
-                if (meshRenderer.sharedMaterial != materialYes)
+                for (int index = currentIndex - countInRow; index < currentIndex; index++)
                 {
-                    meshRenderer.sharedMaterial = tempMaterials[index % countInRow];
-
-                    if (tempMaterials[index % countInRow] == materialYes)
+                    var meshRenderer = amountObjects[index].GetComponent<MeshRenderer>();
+                    if (meshRenderer.sharedMaterial != materialYes && amountObjects[index].gameObject.activeSelf)
                     {
-                        GameController.Instance.BoxManager.Boxes[index % countInRow].ShowBox(amountObjects[index].currentItem);
+                        meshRenderer.sharedMaterial = tempMaterials[index % countInRow];
+
+                        if (tempMaterials[index % countInRow] == materialYes)
+                        {
+                            GameController.Instance.BoxManager.Boxes[index % countInRow].ShowBox(amountObjects[index].currentItem);
+                        }
+                        yield return new WaitForSeconds(0.5f);
                     }
-                    yield return new WaitForSeconds(0.5f);
-                } 
-            }
-            int count = 0;
-            for (int index = currentIndex - countInRow; index < currentIndex; index++)
-            {
-                if (tempMaterials.Contains(materialMaybe) || tempMaterials.Contains(materialNo))
-                {
-                    count++;
-                    if (currentIndex >= amountObjects.Length) break;
-                    /*
-                    amountObjects[index].GetComponent<MeshRenderer>().material = materialWhite;
-                    */
-                    /*
-                        GameController.Instance.PanelAnswerController.ReturnPos(amountObjects[index].currentItem, index);
-                    */
-                    yield return new WaitForSeconds(0.05f);
                 }
             }
-            /*if (!GameController.Instance.IsTest)
+
+            if (GameController.Instance.IsGameTest2)
             {
-                currentIndex = 0;
-            }*/
+                for (int index = currentIndex - countInRow; index < currentIndex; index++)
+                {
+                    var meshRenderer = amountObjects[index].GetComponent<MeshRenderer>();
+                    if (meshRenderer.sharedMaterial != materialYes)
+                    {
+                        meshRenderer.sharedMaterial = tempMaterials[index % countInRow];
+
+                        if (tempMaterials[index % countInRow] == materialYes)
+                        {
+                            GameController.Instance.BoxManager.Boxes[index % countInRow].ShowBox(amountObjects[index].currentItem);
+                        }
+                        yield return new WaitForSeconds(0.5f);
+                    }
+                }
+            }
+            int count = 0;
+            if (tempMaterials.Contains(materialMaybe) || tempMaterials.Contains(materialNo))
+            {
+                count++;
+            }
             if (count == 0)
             {
                 win = true;

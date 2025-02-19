@@ -20,7 +20,7 @@ public class PlayerManager : MonoBehaviour
         for (int i = 0; i < players.Count; i++)
         {
             initialPositions[i] = players[i].position;
-            durations.Add(Vector3.Distance(players[i].position, positionTarget) / speed);
+            durations.Add(Vector3.Distance(players[i].localPosition, positionTarget) / speed);
         }
     }
     public void SetNumberPlayer(int number, bool active)
@@ -53,8 +53,7 @@ public class PlayerManager : MonoBehaviour
         player.DORotate(new Vector3(0, 180, 0), 1f)
               .OnComplete(() =>
               {
-                  Vector3 newPosition = new Vector3(positionTarget.x, player.position.y, positionTarget.z);
-                  player.DOMove(newPosition, durations[currentIndex]).OnComplete(() =>
+                  player.DOLocalMove(positionTarget, durations[currentIndex]).OnComplete(() =>
                   {
                       GameController.Instance.playerMoved = false;
                   });
@@ -76,9 +75,14 @@ public class PlayerManager : MonoBehaviour
                         });
               });
     }
-    public void AnimWin()
+    public void PlayAnim(string animName)
     {
-        players[currentIndex].GetComponent<Animator>().SetTrigger("Win");
+        Animator anim = players[currentIndex].GetComponent<Animator>();
+        if (!anim.GetCurrentAnimatorStateInfo(0).IsName(animName))
+        {
+            anim.SetTrigger(animName);
+  
+        } 
     }
 
     public void ResetPlayers()

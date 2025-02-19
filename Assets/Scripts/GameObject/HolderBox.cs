@@ -10,34 +10,28 @@ namespace Game
     {
         [SerializeField] private GameObject box;
         [SerializeField] private Transform holderAnswer;
-        [SerializeField] private Transform explode;
+        [SerializeField] private ParticleSystem effectOpen;
         public Transform napThung;
-        private bool canMove;
+        private bool canOpen;
 
         public void ShowBox(Transform answer)
         {
-            if(canMove)return;
-            canMove = true;
-            napThung.DOLocalRotate(new Vector3(-180f, -180f, 0f), .2f).OnComplete(delegate
+            if(canOpen)return;
+            GameController.Instance.PlayerManager.PlayAnim("DoanDung");
+            canOpen = true;
+            napThung.DOLocalRotate(new Vector3(-180f, -180f, 0f), .5f).OnComplete(delegate
             {
                 float high = 0f;
-                if (!answer.name.Contains("Can"))
+                if (answer.name.Contains("Egg"))
                 {
+                    high = 0.004f;
                 }
-                Transform t = PoolingManager.Spawn(answer, holderAnswer.position, Quaternion.Euler(0f, 180f, 0f), holderAnswer);
-                t.DOLocalMoveY(0.005f, .2f).SetEase(Ease.OutBounce);
+                effectOpen.Play();
+                DOVirtual.DelayedCall(0.2f, delegate {
+                    Transform t = PoolingManager.Spawn(answer, holderAnswer.position, Quaternion.Euler(0f, 180f, 0f), holderAnswer);
+                    t.DOLocalMoveY(0.005f + high, .2f).SetEase(Ease.OutBounce); 
+                });
             });
-                /*if(!box.activeSelf) return;
-                float high = 0f;
-                if (!answer.name.Contains("Can"))
-                {
-                    high = 0.5f;
-                }
-                PoolingManager.Spawn(answer, holderAnswer.position + Vector3.up*high, Quaternion.Euler(0f, 180f, 0f), holderAnswer);
-                box.SetActive(false);
-                Transform t = Instantiate(explode, transform.position, Quaternion.identity);  
-                EffectRewardCoin x = PoolingManager.Spawn(GameController.Instance.EffectCoin,holderAnswer.position + Vector3.up, Quaternion.identity, UIController.instance.coinParent);
-                Destroy(t.gameObject, 2f);   */
         }
         public void ResetBox()
         {
@@ -49,7 +43,7 @@ namespace Game
                 }
             }
             napThung.localRotation = Quaternion.Euler(0f, -180f, 0f);
-            canMove = false;
+            canOpen = false;
         }
     }
 }

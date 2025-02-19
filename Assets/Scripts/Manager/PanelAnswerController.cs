@@ -41,6 +41,7 @@ namespace Game
         }
         public void UpdateChangeTheme(int id, bool enable = false)
         {
+            themeObjects.Clear();
             if (id >= dataThemeObject.themeData.Count) return;
             objItem.Clear();
             if (enable)
@@ -57,12 +58,32 @@ namespace Game
                 }
             }
 
-            themeObjects.Clear();
             themeObjects.AddRange(dataThemeObject.themeData[id].items);
-
+            results.Clear();
             if (results.Count <= 0)
             {
-                results.AddRange(themeObjects);
+                foreach (var answer in themeObjects)
+                {
+                    for (int i = 0; i < GameController.Instance.Answers.Count; i++)
+                    {
+                        if (answer.Answer == GameController.Instance.Answers[i])
+                        {
+                            if (!results.Contains(answer))
+                            {
+                                results.Add(answer);
+                                Debug.Log(GameController.Instance.Answers[i]);
+                            }
+                        }
+                    }
+                }
+                
+                foreach (var answer in themeObjects)
+                {
+                    if(results.Count < posObject.Count && !results.Contains(answer))
+                    {
+                        results.Add(answer);
+                    }
+                }
             }
             else
             {
@@ -80,9 +101,14 @@ namespace Game
                 }
             }
             ShuffleList(results);
+            float high = 0;
+            if (results[^1].name.Contains("Egg"))
+            {
+                high = 0.2f;
+            }
             for (int i = 0; i < posObject.Count; i++)
             {
-                objItem.Add(PoolingManager.Spawn(results[i].transform, posObject[i].position, posObject[i].rotation, posObject[i].transform));
+                objItem.Add(PoolingManager.Spawn(results[i].transform, posObject[i].position + Vector3.up*high, posObject[i].rotation, posObject[i].transform));
             }
         }
 
@@ -119,8 +145,11 @@ namespace Game
                                     GameController.Instance.Board.amountObjects[i].answer = component.Answer;
                                     component.transform.DOScale(component.transform.localScale * 0.9f, 0.05f).SetLoops(2, LoopType.Yoyo);
                                     Item t;
-                                    t = PoolingManager.Spawn(component, component.transform.position, component.transform.rotation,
+                                    Quaternion spawnRotation = Quaternion.Euler(0, 180, 0);
+
+                                    t = PoolingManager.Spawn(component, component.transform.position, spawnRotation,
                                                              GameController.Instance.Board.amountObjects[i].transform);
+                                    t.transform.localScale = t.transform.localScale * 1.1f;
                                     /*else
                                     {
                                         t = PoolingManager.Spawn(component, component.transform.position, component.transform.rotation);
@@ -143,23 +172,22 @@ namespace Game
         }
 
         private void MoveAndRotateToPosition(Transform objToMove, HolderItem targetPos)
-        {
-           GameController.Instance.Board.CurrentIndex += 1;
+        { 
+            GameController.Instance.Board.NextLine();
             float moveDuration = 0.5f;
             targetPos.IsNone = false;
-            float hight = 0.6f;
+            float high = 0.6f;
             if (objToMove.name.Contains("Can"))
             {
-                hight = 0.3f;
+                high = 0.3f;
             }
-            objToMove.DOJump(targetPos.transform.position + Vector3.up * hight, 1f, 1, moveDuration)
-                     .SetEase(Ease.Linear)
-                     .OnComplete(delegate
+            objToMove.DOJump(targetPos.transform.position + Vector3.up * high, 1f, 1, moveDuration)
+                     .SetEase(Ease.Linear).OnComplete(delegate
                      {
-                         GameController.Instance.Board.NextLine();
+                         objToMove.transform.position = targetPos.transform.position + Vector3.up * high;
                      });
 
-            /*objToMove.DORotate(new Vector3(0f, 180f, 0f), moveDuration, RotateMode.FastBeyond360)
+            /*objToMove.DORotate(new Vector3(360f, 0f, 0f), moveDuration, RotateMode.FastBeyond360)
                      .SetEase(Ease.Linear);*/
             GameController.Instance.AmountMove -= 1;
             UIController.instance.ShowButtonShop(false);

@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using ACEPlay.Bridge;
+using DG.Tweening;
 using UnityEngine;
 using pooling;
 using UnityEngine.Events;
@@ -94,8 +95,11 @@ namespace Game
                 isWin = value;
                 if (isWin)
                 {
-                    playerManager.AnimWin();
-                    UIController.instance.ShowDisplayWin(true);
+                    playerManager.PlayAnim("Win");
+                    DOVirtual.DelayedCall(0.7f, delegate
+                    {
+                        UIController.instance.ShowDisplayWin(true);
+                    });
                     pane.gameObject.SetActive(false);
                 }
             }
@@ -187,7 +191,6 @@ namespace Game
                     i++;
                 }
             }
-            AmountMove = currentLevel.amountMove;
             ShuffleList(answers);
             UIController.instance.ShowButtonShop(true);
         }
