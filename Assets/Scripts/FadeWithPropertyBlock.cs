@@ -7,13 +7,14 @@ public class FadeWithPropertyBlock : MonoBehaviour
     private Renderer objRenderer;
 
     public bool IsFade = true;
+    public bool canFade = true;
 
     void Start()
     {
         objRenderer = GetComponent<Renderer>();
         if (IsFade)
         {
-            SetOpacity(0.5f);
+            SetOpacity(0.2f);
         }
     }
 
@@ -25,6 +26,7 @@ public class FadeWithPropertyBlock : MonoBehaviour
 
     public void FadeIn(float duration)
     {
+        if(!canFade)return;
         float startAlpha = 0f;
         float targetAlpha = 1f;
 

@@ -125,6 +125,7 @@ namespace Game
         }
         private void Start()
         {
+            PlayerPrefs.DeleteAll();
             UIController.instance.SetActionOnWin(NextLevel);
             UIController.instance.SetActionSave(SaveLevelFail);
             UIController.instance.SetActionOnLose(PlayAgain);

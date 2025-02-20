@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,12 +24,34 @@ namespace Game
         [SerializeField] private Material materialNo;
         [SerializeField] private Material materialMaybe;
 
+        [Header("Setting next Board")]
+        [SerializeField] private Transform board1;
+        [SerializeField] private Transform board2;
+        [SerializeField] private Transform board3;
+        [SerializeField] private Transform board4;
+        [SerializeField] private Transform[] nextBoard;
+        public int IDNextBoard;
+
+        [SerializeField] private Vector3 target1;
+        [SerializeField] private Vector3 target2;
+        [SerializeField] private Vector3 target3;
+
+        [Header("Setting pos spawn")]
         [SerializeField] private float heightOfObjects;
 
         private int currentIndex;
 
         bool win = false;
         private List<EnumAnswer> answers;
+        private void OnValidate()
+        {
+            /*board1 = transform.GetChild(0);
+            board2 = transform.GetChild(1);
+            board3 = transform.GetChild(2);
+            target1 = board1.localPosition;
+            target2 = board2.localPosition;
+            target3 = board3.localPosition;*/
+        }
 
         private void Start()
         {
@@ -37,6 +60,9 @@ namespace Game
             {
                 SetLevel(GameController.Instance.Answers);
             });
+            /*
+            board4 = nextBoard[0];
+        */
         }
         public void SetLevel(List<EnumAnswer> answersOther)
         {
@@ -76,44 +102,46 @@ namespace Game
                                 bonus++;
                             }
                         }
-
                         index++;
                     }
                 }
-                if (GameController.Instance.IsGameTest2)
+                DOVirtual.DelayedCall(0.9f, delegate
                 {
-                    int tmp = currentIndex;
-                    for (int index = tmp - countInRow; index < tmp; index++)
+                    if (GameController.Instance.IsGameTest2)
                     {
-                        if (currentIndex + (index % countInRow) >= amountObjects.Length || index < 0) break;
-                        Debug.Log(index);
-                        if (amountObjects[index].answer == GameController.Instance.Answers[index % countInRow] && !win)
+                        int tmp = currentIndex;
+                        for (int index = tmp - countInRow; index < tmp; index++)
                         {
-                            int targetIndex = currentIndex + (index % countInRow);
-
-                            if (targetIndex < amountObjects.Length)
+                            if (currentIndex + (index % countInRow) >= amountObjects.Length || index < 0) break;
+                            if (amountObjects[index].answer == GameController.Instance.Answers[index % countInRow] && !win)
                             {
-                                amountObjects[targetIndex].answer = amountObjects[index].answer;
-                                amountObjects[targetIndex].IsNone = false;
-                                float high = 0f;
-                                if (amountObjects[index].currentItem.name.Contains("Egg"))
-                                {
-                                    high = 0.003f;
-                                }
-                                amountObjects[targetIndex].currentItem =
-                                    Instantiate(amountObjects[index].currentItem,
-                                                new Vector3(amountObjects[targetIndex].transform.position.x,
-                                                            amountObjects[targetIndex].transform.position.y,
-                                                            amountObjects[targetIndex].transform.position.z),
-                                                new Quaternion(0, 180, 0, 0),
-                                                amountObjects[targetIndex].transform);
+                                int targetIndex = currentIndex + (index % countInRow);
 
-                                amountObjects[targetIndex].currentItem.DOLocalMoveY(0.003125003f + high, 0.5f);
-                                bonus++;
+                                if (targetIndex < amountObjects.Length)
+                                {
+                                    amountObjects[targetIndex].answer = amountObjects[index].answer;
+                                    amountObjects[targetIndex].IsNone = false;
+                                    float high = 0f;
+                                    if (amountObjects[index].currentItem.name.Contains("Egg"))
+                                    {
+                                        high = 0.003f;
+                                    }
+                                    Quaternion spawnRotation = Quaternion.Euler(-11, 180, 0);
+                                    amountObjects[targetIndex].currentItem =
+                                        Instantiate(amountObjects[index].currentItem,
+                                                    new Vector3(amountObjects[targetIndex].transform.position.x,
+                                                                amountObjects[targetIndex].transform.position.y,
+                                                                amountObjects[targetIndex].transform.position.z), 
+                                                    spawnRotation,
+                                                    amountObjects[targetIndex].transform);
+
+                                    amountObjects[targetIndex].currentItem.DOLocalMoveY(0.00312f + high, 0.5f);
+                                    bonus++;
+                                }
                             }
                         }
                     }
-                }
+                });
 
                 if (currentIndex + countInRow <= amountObjects.Length - amountObjectReward && !win)
                 {
@@ -124,14 +152,37 @@ namespace Game
                     }
                     if (GameController.Instance.IsGameTest2)
                     {
-                        amountObjects[currentIndex].transform.parent.DOLocalMoveY(heightOfObjects, 1f);
+                        /*board1.DOLocalMoveX(0.2f, 0.5f).SetEase(Ease.Linear);
+                        board2.DOLocalMove(target1, 0.5f).SetEase(Ease.Linear);
+                        if (board3 != null)
+                        {
+                            board3.DOLocalMove(target2, 0.5f).SetEase(Ease.Linear);
+                        }
+                        if (board4 !=null)
+                        {
+                            board4.gameObject.SetActive(true);
+                        }
+                        board1 = board2;
+                        board2 = board3;
+                        board3 = board4;
+                        if (IDNextBoard + 1 < nextBoard.Length)
+                        {
+                            IDNextBoard += 1;
+                            board4 = nextBoard[IDNextBoard];
+                        }
+                        else
+                        {
+                            board4 = null;
+                        }*/
+                        amountObjects[currentIndex].transform.parent.DOLocalMoveY(heightOfObjects, 1f).OnComplete(delegate
+                        {
+                            currentIndex += bonus;
+                        });
                         foreach (FadeWithPropertyBlock fadeObject in amountObjects[currentIndex].transform.parent.GetComponentsInChildren<FadeWithPropertyBlock>())
                         {
-                            fadeObject.FadeIn(0.2f);
+                            fadeObject.FadeIn(0.6f);
                         }
-
                     }
-                    currentIndex += bonus;
                 }
                 if (win)
                 {
@@ -150,7 +201,7 @@ namespace Game
                 {
                     GameController.Instance.PlayerManager.PlayAnim("DoanSai");
                 }
-                DOVirtual.DelayedCall(0.5f, delegate { GameController.Instance.CanClick = true; });
+                DOVirtual.DelayedCall(1f, delegate { GameController.Instance.CanClick = true; });
             }
             else
             {
@@ -191,7 +242,6 @@ namespace Game
                     }
                 }
             }
-            
             if (GameController.Instance.IsGameTest1)
             {
                 for (int index = currentIndex - countInRow; index < currentIndex; index++)
@@ -209,7 +259,6 @@ namespace Game
                     }
                 }
             }
-
             if (GameController.Instance.IsGameTest2)
             {
                 for (int index = currentIndex - countInRow; index < currentIndex; index++)

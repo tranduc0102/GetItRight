@@ -145,11 +145,13 @@ namespace Game
                                     GameController.Instance.Board.amountObjects[i].answer = component.Answer;
                                     component.transform.DOScale(component.transform.localScale * 0.9f, 0.05f).SetLoops(2, LoopType.Yoyo);
                                     Item t;
-                                    Quaternion spawnRotation = Quaternion.Euler(0, 180, 0);
+                                    Quaternion spawnRotation = Quaternion.Euler(-11, 180, 0);
 
                                     t = PoolingManager.Spawn(component, component.transform.position, spawnRotation,
                                                              GameController.Instance.Board.amountObjects[i].transform);
+                                    /*
                                     t.transform.localScale = t.transform.localScale * 1.1f;
+                                    */
                                     /*else
                                     {
                                         t = PoolingManager.Spawn(component, component.transform.position, component.transform.rotation);
