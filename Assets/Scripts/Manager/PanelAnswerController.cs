@@ -3,7 +3,7 @@ using _Scripts.Extension;
 using DG.Tweening;
 using pooling;
 using UnityEngine;
-using Random = UnityEngine.Random;
+
 
 namespace Game
 {
@@ -149,13 +149,6 @@ namespace Game
 
                                     t = PoolingManager.Spawn(component, component.transform.position, spawnRotation,
                                                              GameController.Instance.Board.amountObjects[i].transform);
-                                    /*
-                                    t.transform.localScale = t.transform.localScale * 1.1f;
-                                    */
-                                    /*else
-                                    {
-                                        t = PoolingManager.Spawn(component, component.transform.position, component.transform.rotation);
-                                    }*/
                                     GameController.Instance.Board.amountObjects[i].currentItem = t.transform;
                                     if (!objItem.Contains(t.transform))
                                     {

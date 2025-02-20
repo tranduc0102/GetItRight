@@ -1,11 +1,9 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using _Scripts.Extension;
 using ACEPlay.Bridge;
 using DG.Tweening;
-using pooling;
 using UnityEngine;
 
 namespace Game
@@ -16,26 +14,14 @@ namespace Game
         [Header("Setting Board")]
         [SerializeField] private int countInRow;
         [SerializeField] public HolderItem[] amountObjects;
-        [SerializeField] private int amountObjectReward;
-        [SerializeField] private GameObject[] objectRewards;
+        /*[SerializeField] private int amountObjectReward;
+        [SerializeField] private GameObject[] objectRewards;*/
 
         [SerializeField] private Material materialWhite;
         [SerializeField] private Material materialYes;
         [SerializeField] private Material materialNo;
         [SerializeField] private Material materialMaybe;
-
-        [Header("Setting next Board")]
-        [SerializeField] private Transform board1;
-        [SerializeField] private Transform board2;
-        [SerializeField] private Transform board3;
-        [SerializeField] private Transform board4;
-        [SerializeField] private Transform[] nextBoard;
-        public int IDNextBoard;
-
-        [SerializeField] private Vector3 target1;
-        [SerializeField] private Vector3 target2;
-        [SerializeField] private Vector3 target3;
-
+        
         [Header("Setting pos spawn")]
         [SerializeField] private float heightOfObjects;
 
@@ -43,16 +29,7 @@ namespace Game
 
         bool win = false;
         private List<EnumAnswer> answers;
-        private void OnValidate()
-        {
-            /*board1 = transform.GetChild(0);
-            board2 = transform.GetChild(1);
-            board3 = transform.GetChild(2);
-            target1 = board1.localPosition;
-            target2 = board2.localPosition;
-            target3 = board3.localPosition;*/
-        }
-
+      
         private void Start()
         {
             currentIndex = 0;
@@ -60,9 +37,6 @@ namespace Game
             {
                 SetLevel(GameController.Instance.Answers);
             });
-            /*
-            board4 = nextBoard[0];
-        */
         }
         public void SetLevel(List<EnumAnswer> answersOther)
         {
@@ -143,7 +117,7 @@ namespace Game
                     }
                 });
 
-                if (currentIndex + countInRow <= amountObjects.Length - amountObjectReward && !win)
+                if (currentIndex + countInRow <= amountObjects.Length && !win)
                 {
                     if (GameController.Instance.IsGameTest1)
                     {
@@ -152,28 +126,6 @@ namespace Game
                     }
                     if (GameController.Instance.IsGameTest2)
                     {
-                        /*board1.DOLocalMoveX(0.2f, 0.5f).SetEase(Ease.Linear);
-                        board2.DOLocalMove(target1, 0.5f).SetEase(Ease.Linear);
-                        if (board3 != null)
-                        {
-                            board3.DOLocalMove(target2, 0.5f).SetEase(Ease.Linear);
-                        }
-                        if (board4 !=null)
-                        {
-                            board4.gameObject.SetActive(true);
-                        }
-                        board1 = board2;
-                        board2 = board3;
-                        board3 = board4;
-                        if (IDNextBoard + 1 < nextBoard.Length)
-                        {
-                            IDNextBoard += 1;
-                            board4 = nextBoard[IDNextBoard];
-                        }
-                        else
-                        {
-                            board4 = null;
-                        }*/
                         amountObjects[currentIndex].transform.parent.DOLocalMoveY(heightOfObjects, 1f).OnComplete(delegate
                         {
                             currentIndex += bonus;
