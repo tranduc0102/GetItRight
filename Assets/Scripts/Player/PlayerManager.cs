@@ -87,7 +87,6 @@ public class PlayerManager : MonoBehaviour
                 _animFace.SetState(state, anim.GetCurrentAnimatorStateInfo(0).length);
             }        } 
     }
-
     public void ResetPlayers()
     {
         DOTween.KillAll();

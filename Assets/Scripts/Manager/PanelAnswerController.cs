@@ -181,9 +181,6 @@ namespace Game
                      {
                          objToMove.transform.position = targetPos.transform.position + Vector3.up * high;
                      });
-
-            /*objToMove.DORotate(new Vector3(360f, 0f, 0f), moveDuration, RotateMode.FastBeyond360)
-                     .SetEase(Ease.Linear);*/
             GameController.Instance.AmountMove -= 1;
             UIController.instance.ShowButtonShop(false);
         }

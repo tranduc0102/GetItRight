@@ -149,10 +149,6 @@ namespace Game
                     BridgeController.instance.LogLevelFailWithParameter(PlayerPrefs.GetInt("CurrentLevel", 0));
                     yield break;
                 }
-                else
-                {
-                    GameController.Instance.PlayerManager.PlayAnim("DoanSai");
-                }
                 DOVirtual.DelayedCall(1f, delegate { GameController.Instance.CanClick = true; });
             }
             else
