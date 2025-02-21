@@ -29,6 +29,10 @@ public class BoxManager : MonoBehaviour
             case 6:
                 allBoxes[3].SetActive(true);  
                 boxes = allBoxes[3].GetComponentsInChildren<HolderBox>();
+                break; 
+            case 7:
+                allBoxes[4].SetActive(true);  
+                boxes = allBoxes[4].GetComponentsInChildren<HolderBox>();
                 break;
         }
         foreach (HolderBox box in boxes)

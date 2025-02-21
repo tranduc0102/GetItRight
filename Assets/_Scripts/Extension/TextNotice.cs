@@ -8,7 +8,7 @@ namespace _Scripts.Extension
     {
         [SerializeField] private TextMeshProUGUI txt;
 
-        public override void Awake()
+        protected override void Awake()
         {
             base.KeepAlive(false);
             base.Awake();

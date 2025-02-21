@@ -47,7 +47,7 @@ namespace Game
             napThung.localRotation = Quaternion.Euler(0f, 0f, 0f);
             canOpen = false;
             transform.localPosition += Vector3.up * 0.3f;
-            transform.DOLocalMoveY(transform.localPosition.y - 0.3f, duration).SetEase(Ease.Linear);
+            transform.DOLocalMoveY(transform.localPosition.y - 0.3f, duration).SetEase(Ease.InQuad);
         }
     }
 }

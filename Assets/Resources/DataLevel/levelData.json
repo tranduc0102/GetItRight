@@ -1,0 +1,500 @@
+{
+    "levels": [
+        {
+            "difficultyLevel": "Hard",
+            "level": 0,
+            "amountBox": 4,
+            "amountLine": 3,
+            "amountCan": 6,
+            "amountDistinct": 4
+        },
+        {
+            "difficultyLevel": "Easy",
+            "level": 1,
+            "amountBox": 4,
+            "amountLine": 3,
+            "amountCan": 6,
+            "amountDistinct": 2
+        },
+        {
+            "difficultyLevel": "Easy",
+            "level": 2,
+            "amountBox": 4,
+            "amountLine": 5,
+            "amountCan": 4,
+            "amountDistinct": 4
+        },
+        {
+            "difficultyLevel": "Easy",
+            "level": 3,
+            "amountBox": 3,
+            "amountLine": 4,
+            "amountCan": 4,
+            "amountDistinct": 3
+        },
+        {
+            "difficultyLevel": "Normal",
+            "level": 4,
+            "amountBox": 5,
+            "amountLine": 4,
+            "amountCan": 5,
+            "amountDistinct": 4
+        },
+        {
+            "difficultyLevel": "Easy",
+            "level": 4,
+            "amountBox": 5,
+            "amountLine": 4,
+            "amountCan": 5,
+            "amountDistinct": 2
+        },
+        {
+            "difficultyLevel": "Hard",
+            "level": 10,
+            "amountBox": 5,
+            "amountLine": 5,
+            "amountCan": 6,
+            "amountDistinct": 4
+        },
+        {
+            "difficultyLevel": "Easy",
+            "level": 10,
+            "amountBox": 6,
+            "amountLine": 5,
+            "amountCan": 4,
+            "amountDistinct": 4
+        },
+        {
+            "difficultyLevel": "Easy",
+            "level": 11,
+            "amountBox": 6,
+            "amountLine": 3,
+            "amountCan": 4,
+            "amountDistinct": 1
+        },
+        {
+            "difficultyLevel": "Hard",
+            "level": 12,
+            "amountBox": 5,
+            "amountLine": 3,
+            "amountCan": 4,
+            "amountDistinct": 5
+        },
+        {
+            "difficultyLevel": "Easy",
+            "level": 17,
+            "amountBox": 3,
+            "amountLine": 3,
+            "amountCan": 3,
+            "amountDistinct": 2
+        },
+        {
+            "difficultyLevel": "Normal",
+            "level": 18,
+            "amountBox": 4,
+            "amountLine": 5,
+            "amountCan": 5,
+            "amountDistinct": 3
+        },
+        {
+            "difficultyLevel": "Hard",
+            "level": 19,
+            "amountBox": 4,
+            "amountLine": 4,
+            "amountCan": 6,
+            "amountDistinct": 4
+        },
+        {
+            "difficultyLevel": "Easy",
+            "level": 20,
+            "amountBox": 5,
+            "amountLine": 4,
+            "amountCan": 3,
+            "amountDistinct": 3
+        },
+        {
+            "difficultyLevel": "Hard",
+            "level": 21,
+            "amountBox": 5,
+            "amountLine": 3,
+            "amountCan": 4,
+            "amountDistinct": 4
+        },
+        {
+            "difficultyLevel": "Normal",
+            "level": 24,
+            "amountBox": 6,
+            "amountLine": 5,
+            "amountCan": 4,
+            "amountDistinct": 3
+        },
+        {
+            "difficultyLevel": "Hard",
+            "level": 26,
+            "amountBox": 5,
+            "amountLine": 4,
+            "amountCan": 5,
+            "amountDistinct": 4
+        },
+        {
+            "difficultyLevel": "Normal",
+            "level": 27,
+            "amountBox": 5,
+            "amountLine": 5,
+            "amountCan": 4,
+            "amountDistinct": 5
+        },
+        {
+            "difficultyLevel": "Hard",
+            "level": 29,
+            "amountBox": 6,
+            "amountLine": 3,
+            "amountCan": 3,
+            "amountDistinct": 4
+        },
+        {
+            "difficultyLevel": "Hard",
+            "level": 30,
+            "amountBox": 7,
+            "amountLine": 4,
+            "amountCan": 6,
+            "amountDistinct": 5
+        },
+        {
+            "difficultyLevel": "Easy",
+            "level": 31,
+            "amountBox": 4,
+            "amountLine": 5,
+            "amountCan": 4,
+            "amountDistinct": 3
+        },
+        {
+            "difficultyLevel": "Hard",
+            "level": 32,
+            "amountBox": 7,
+            "amountLine": 5,
+            "amountCan": 6,
+            "amountDistinct": 5
+        },
+        {
+            "difficultyLevel": "Hard",
+            "level": 34,
+            "amountBox": 4,
+            "amountLine": 3,
+            "amountCan": 6,
+            "amountDistinct": 4
+        },
+        {
+            "difficultyLevel": "Easy",
+            "level": 35,
+            "amountBox": 6,
+            "amountLine": 3,
+            "amountCan": 3,
+            "amountDistinct": 6
+        },
+        {
+            "difficultyLevel": "Normal",
+            "level": 37,
+            "amountBox": 3,
+            "amountLine": 3,
+            "amountCan": 3,
+            "amountDistinct": 3
+        },
+        {
+            "difficultyLevel": "Hard",
+            "level": 40,
+            "amountBox": 6,
+            "amountLine": 4,
+            "amountCan": 6,
+            "amountDistinct": 5
+        },
+        {
+            "difficultyLevel": "Hard",
+            "level": 42,
+            "amountBox": 7,
+            "amountLine": 4,
+            "amountCan": 4,
+            "amountDistinct": 5
+        },
+        {
+            "difficultyLevel": "Normal",
+            "level": 43,
+            "amountBox": 5,
+            "amountLine": 5,
+            "amountCan": 4,
+            "amountDistinct": 3
+        },
+        {
+            "difficultyLevel": "Normal",
+            "level": 44,
+            "amountBox": 4,
+            "amountLine": 3,
+            "amountCan": 4,
+            "amountDistinct": 1
+        },
+        {
+            "difficultyLevel": "Hard",
+            "level": 45,
+            "amountBox": 7,
+            "amountLine": 4,
+            "amountCan": 3,
+            "amountDistinct": 5
+        },
+        {
+            "difficultyLevel": "Easy",
+            "level": 46,
+            "amountBox": 7,
+            "amountLine": 3,
+            "amountCan": 3,
+            "amountDistinct": 1
+        },
+        {
+            "difficultyLevel": "Normal",
+            "level": 47,
+            "amountBox": 6,
+            "amountLine": 4,
+            "amountCan": 6,
+            "amountDistinct": 6
+        },
+        {
+            "difficultyLevel": "Normal",
+            "level": 48,
+            "amountBox": 3,
+            "amountLine": 5,
+            "amountCan": 6,
+            "amountDistinct": 2
+        },
+        {
+            "difficultyLevel": "Normal",
+            "level": 49,
+            "amountBox": 6,
+            "amountLine": 5,
+            "amountCan": 5,
+            "amountDistinct": 4
+        },
+        {
+            "difficultyLevel": "Normal",
+            "level": 50,
+            "amountBox": 3,
+            "amountLine": 5,
+            "amountCan": 6,
+            "amountDistinct": 2
+        },
+        {
+            "difficultyLevel": "Normal",
+            "level": 51,
+            "amountBox": 5,
+            "amountLine": 5,
+            "amountCan": 6,
+            "amountDistinct": 5
+        },
+        {
+            "difficultyLevel": "Easy",
+            "level": 52,
+            "amountBox": 3,
+            "amountLine": 4,
+            "amountCan": 5,
+            "amountDistinct": 1
+        },
+        {
+            "difficultyLevel": "Normal",
+            "level": 53,
+            "amountBox": 6,
+            "amountLine": 4,
+            "amountCan": 6,
+            "amountDistinct": 3
+        },
+        {
+            "difficultyLevel": "Normal",
+            "level": 54,
+            "amountBox": 4,
+            "amountLine": 5,
+            "amountCan": 5,
+            "amountDistinct": 4
+        },
+        {
+            "difficultyLevel": "Easy",
+            "level": 55,
+            "amountBox": 7,
+            "amountLine": 4,
+            "amountCan": 4,
+            "amountDistinct": 4
+        },
+        {
+            "difficultyLevel": "Normal",
+            "level": 56,
+            "amountBox": 7,
+            "amountLine": 5,
+            "amountCan": 5,
+            "amountDistinct": 2
+        },
+        {
+            "difficultyLevel": "Normal",
+            "level": 57,
+            "amountBox": 6,
+            "amountLine": 5,
+            "amountCan": 6,
+            "amountDistinct": 4
+        },
+        {
+            "difficultyLevel": "Hard",
+            "level": 58,
+            "amountBox": 7,
+            "amountLine": 3,
+            "amountCan": 5,
+            "amountDistinct": 5
+        },
+        {
+            "difficultyLevel": "Normal",
+            "level": 59,
+            "amountBox": 4,
+            "amountLine": 4,
+            "amountCan": 6,
+            "amountDistinct": 4
+        },
+        {
+            "difficultyLevel": "Hard",
+            "level": 60,
+            "amountBox": 7,
+            "amountLine": 3,
+            "amountCan": 6,
+            "amountDistinct": 6
+        },
+        {
+            "difficultyLevel": "Hard",
+            "level": 61,
+            "amountBox": 6,
+            "amountLine": 5,
+            "amountCan": 5,
+            "amountDistinct": 5
+        },
+        {
+            "difficultyLevel": "Easy",
+            "level": 62,
+            "amountBox": 7,
+            "amountLine": 4,
+            "amountCan": 4,
+            "amountDistinct": 1
+        },
+        {
+            "difficultyLevel": "Normal",
+            "level": 63,
+            "amountBox": 4,
+            "amountLine": 3,
+            "amountCan": 6,
+            "amountDistinct": 1
+        },
+        {
+            "difficultyLevel": "Hard",
+            "level": 64,
+            "amountBox": 7,
+            "amountLine": 5,
+            "amountCan": 5,
+            "amountDistinct": 3
+        },
+        {
+            "difficultyLevel": "Normal",
+            "level": 65,
+            "amountBox": 6,
+            "amountLine": 5,
+            "amountCan": 6,
+            "amountDistinct": 4
+        },
+        {
+            "difficultyLevel": "Easy",
+            "level": 67,
+            "amountBox": 4,
+            "amountLine": 5,
+            "amountCan": 4,
+            "amountDistinct": 4
+        },
+        {
+            "difficultyLevel": "Easy",
+            "level": 68,
+            "amountBox": 4,
+            "amountLine": 5,
+            "amountCan": 5,
+            "amountDistinct": 4
+        },
+        {
+            "difficultyLevel": "Normal",
+            "level": 69,
+            "amountBox": 4,
+            "amountLine": 4,
+            "amountCan": 5,
+            "amountDistinct": 4
+        },
+        {
+            "difficultyLevel": "Normal",
+            "level": 70,
+            "amountBox": 6,
+            "amountLine": 4,
+            "amountCan": 5,
+            "amountDistinct": 2
+        },
+        {
+            "difficultyLevel": "Hard",
+            "level": 71,
+            "amountBox": 5,
+            "amountLine": 3,
+            "amountCan": 5,
+            "amountDistinct": 2
+        },
+        {
+            "difficultyLevel": "Easy",
+            "level": 72,
+            "amountBox": 6,
+            "amountLine": 5,
+            "amountCan": 4,
+            "amountDistinct": 4
+        },
+        {
+            "difficultyLevel": "Easy",
+            "level": 73,
+            "amountBox": 6,
+            "amountLine": 3,
+            "amountCan": 4,
+            "amountDistinct": 2
+        },
+        {
+            "difficultyLevel": "Normal",
+            "level": 74,
+            "amountBox": 4,
+            "amountLine": 3,
+            "amountCan": 4,
+            "amountDistinct": 3
+        },
+        {
+            "difficultyLevel": "Normal",
+            "level": 75,
+            "amountBox": 7,
+            "amountLine": 4,
+            "amountCan": 6,
+            "amountDistinct": 5
+        },
+        {
+            "difficultyLevel": "Easy",
+            "level": 76,
+            "amountBox": 3,
+            "amountLine": 4,
+            "amountCan": 4,
+            "amountDistinct": 3
+        },
+        {
+            "difficultyLevel": "Normal",
+            "level": 78,
+            "amountBox": 7,
+            "amountLine": 4,
+            "amountCan": 4,
+            "amountDistinct": 4
+        },
+        {
+            "difficultyLevel": "Hard",
+            "level": 79,
+            "amountBox": 4,
+            "amountLine": 3,
+            "amountCan": 5,
+            "amountDistinct": 4
+        }
+    ]
+}

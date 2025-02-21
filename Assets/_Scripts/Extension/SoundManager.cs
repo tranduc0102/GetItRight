@@ -44,7 +44,7 @@ namespace _Scripts.Extension
 		public OnMusicChanged onMusicChanged;
 
 
-		public override void Awake()
+		protected override void Awake()
 		{
 			base.KeepAlive(false);
 			asPool.Add(originAS);

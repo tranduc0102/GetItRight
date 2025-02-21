@@ -53,7 +53,7 @@ public class Singleton<T> : MonoBehaviour where T : MonoBehaviour
          DontDestroyOnLoadEnabled = alive;
      }
 
-    public virtual void Awake()
+    protected virtual void Awake()
     {
         lock (_lock)
         {

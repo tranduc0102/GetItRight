@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   levels:
   - name: Level1
-    amountSameValue: 3
-    amountAnswers: 5
+    amountSameValue: 1
+    amountAnswers: 4
   - name: Level2
     amountSameValue: 1
     amountAnswers: 4

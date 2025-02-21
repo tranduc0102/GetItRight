@@ -16,8 +16,8 @@ namespace _Scripts.Extension
             get => PlayerPrefs.GetString("sceneName", "GamePlay");
             set => PlayerPrefs.SetString("sceneName", value);
         }
-        
-        public override void Awake()
+
+        protected override void Awake()
         {
             base.KeepAlive(true);
             base.Awake();

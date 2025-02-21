@@ -1,8 +1,10 @@
+using System;
 using System.Collections.Generic;
 using _Scripts.Extension;
 using DG.Tweening;
 using pooling;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 
 namespace Game
@@ -10,40 +12,35 @@ namespace Game
     public class PanelAnswerController : MonoBehaviour
     {
         [SerializeField] private List<Transform> posObject;
-        [SerializeField] private List<Vector3> posOrigin;
         [SerializeField] private List<Transform> objItem;
         [SerializeField] private DataThemeObject dataThemeObject;
         private List<Item> themeObjects = new List<Item>();
         private List<Item> results = new List<Item>();
         private void OnEnable()
         {
-            results.Clear();
-            if (posOrigin.Count > 0)
+            DOVirtual.DelayedCall(0.2f, delegate
+            {
+                results.Clear();
+                transform.position = new Vector3(10f, transform.position.y, transform.position.z);
+                UpdateChangeTheme(GameController.Instance.CurrentTheme);
+                transform.DOLocalMoveX(0f, 1f);
+            });
+        }
+        private void OnDisable()
+        {
+            if (objItem.Count > 0)
             {
                 for (int i = 0; i < objItem.Count; i++)
                 {
                     PoolingManager.Despawn(objItem[i].gameObject);
                 }
-                posOrigin.Clear();
             }
-            DOVirtual.DelayedCall(0.1f, delegate
-            {
-                transform.position = new Vector3(10f, transform.position.y, transform.position.z);
-                UpdateChangeTheme(GameController.Instance.CurrentTheme);
-                transform.DOLocalMoveX(0f, 1f).OnComplete(delegate
-                {
-                    for (int i = 0; i < posObject.Count; i++)
-                    {
-                        posOrigin.Add(objItem[i].position);
-                    }
-                });
-            });
+            objItem.Clear();
         }
         public void UpdateChangeTheme(int id, bool enable = false)
         {
             themeObjects.Clear();
             if (id >= dataThemeObject.themeData.Count) return;
-            objItem.Clear();
             if (enable)
             {
                 foreach (Transform child in posObject)
@@ -57,60 +54,39 @@ namespace Game
                     }
                 }
             }
-
+    
             themeObjects.AddRange(dataThemeObject.themeData[id].items);
-            results.Clear();
-            if (results.Count <= 0)
+    
+            foreach (var answer in themeObjects)
             {
-                foreach (var answer in themeObjects)
+                if (GameController.Instance.Answers.Contains(answer.Answer))
                 {
-                    for (int i = 0; i < GameController.Instance.Answers.Count; i++)
-                    {
-                        if (answer.Answer == GameController.Instance.Answers[i])
-                        {
-                            if (!results.Contains(answer))
-                            {
-                                results.Add(answer);
-                                Debug.Log(GameController.Instance.Answers[i]);
-                            }
-                        }
-                    }
-                }
-                
-                foreach (var answer in themeObjects)
-                {
-                    if(results.Count < posObject.Count && !results.Contains(answer))
+                    if (!results.Contains(answer))
                     {
                         results.Add(answer);
                     }
                 }
             }
-            else
+    
+            foreach (var answer in themeObjects)
             {
-                List<Item> newResualt = new List<Item>(results);
-                results.Clear();
-                for (int i = 0; i < newResualt.Count; i++)
+                if (results.Count < posObject.Count && !results.Contains(answer))
                 {
-                    foreach (var item in newResualt)
-                    {
-                        if (themeObjects[i].Answer == item.Answer)
-                        {
-                            results.Add(themeObjects[i]);
-                        }
-                    }
+                    results.Add(answer);
                 }
             }
+    
             ShuffleList(results);
-            float high = 0;
-            if (results[^1].name.Contains("Egg"))
+    
+            float high = results.Count > 0 && results[^1].name.Contains("Egg") ? 0.2f : 0;
+    
+            for (int i = 0; i < Mathf.Min(posObject.Count, results.Count); i++)
             {
-                high = 0.2f;
+                objItem.Add(PoolingManager.Spawn(results[i].transform, posObject[i].position + Vector3.up * high, posObject[i].rotation, posObject[i].transform));
             }
-            for (int i = 0; i < posObject.Count; i++)
-            {
-                objItem.Add(PoolingManager.Spawn(results[i].transform, posObject[i].position + Vector3.up*high, posObject[i].rotation, posObject[i].transform));
-            }
+            Debug.LogWarning("Ok1");
         }
+
 
         private void ShuffleList<T>(List<T> list)
         {
@@ -150,11 +126,6 @@ namespace Game
                                     t = PoolingManager.Spawn(component, component.transform.position, spawnRotation,
                                                              GameController.Instance.Board.amountObjects[i].transform);
                                     GameController.Instance.Board.amountObjects[i].currentItem = t.transform;
-                                    if (!objItem.Contains(t.transform))
-                                    {
-                                        objItem.Add(t.transform);
-                                        posOrigin.Add(t.transform.position);
-                                    }
                                     t.CanMove = false;
                                     MoveAndRotateToPosition(t.transform, GameController.Instance.Board.amountObjects[i]);
                                     break;
@@ -181,36 +152,7 @@ namespace Game
                      {
                          objToMove.transform.position = targetPos.transform.position + Vector3.up * high;
                      });
-            GameController.Instance.AmountMove -= 1;
             UIController.instance.ShowButtonShop(false);
         }
-
-        public void ReturnPos(Transform objToMove, int i)
-        {
-            float moveDuration = 1f;
-
-            int index = objItem.IndexOf(objToMove);
-            if (index >= 0 && index < posOrigin.Count)
-            {
-                Vector3 targetPos = posOrigin[index];
-
-                objToMove.DOMove(targetPos, moveDuration).SetEase(Ease.Linear).OnComplete(() =>
-                {
-                    objToMove.localEulerAngles = Vector3.zero;
-
-                    GameController.Instance.CanClick = true;
-
-                    objToMove.GetComponent<Item>().CanMove = true;
-                    GameController.Instance.Board.amountObjects[i].answer = EnumAnswer.None;
-                    GameController.Instance.Board.amountObjects[i].IsNone = true;
-                    PoolingManager.Despawn(objToMove.gameObject);
-                });
-            }
-            else
-            {
-                Debug.LogWarning("Không tìm thấy vị trí gốc cho object: " + objToMove.name);
-            }
-        }
-
     }
 }
