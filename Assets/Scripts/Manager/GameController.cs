@@ -7,11 +7,13 @@ using pooling;
 using UnityEngine.Events;
 using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
+
 namespace Game
 {
     public class GameController : MonoBehaviour
     {
         public static GameController Instance;
+
         [Space]
         [Header("DataGame")]
         [SerializeField] private LevelData currentLevel;
@@ -20,21 +22,23 @@ namespace Game
             get => PlayerPrefs.GetInt("CurrentThem", 0);
             set
             {
-                if(value < 0) return;
+                if (value < 0) return;
                 PlayerPrefs.SetInt("CurrentThem", value);
                 currentPanel.UpdateChangeTheme(value, true);
             }
         }
         public LevelData CurrentLevelGame => currentLevel;
+
         [FormerlySerializedAs("_answers")] [SerializeField] private List<EnumAnswer> answers;
         public List<EnumAnswer> Answers => answers;
-        
+
         [Space]
         [Header("InGame")]
         [SerializeField] private Transform inGame;
+
         [Space]
         [Header("Player")]
-        [SerializeField] private PlayerManager playerManager; 
+        [SerializeField] private PlayerManager playerManager;
         public PlayerManager PlayerManager => playerManager;
         [FormerlySerializedAs("PlayerMoved")] public bool playerMoved = true;
 
@@ -48,28 +52,28 @@ namespace Game
         [Space]
         [Header("Board Game")]
         [SerializeField] private Transform table;
-        [Header("Board 3")]
+
+        [Header("Boards")]
         [SerializeField] private Board[] boards3;
-        [Header("Board 4")]
         [SerializeField] private Board[] boards4;
-        [Header("Board 5")]
         [SerializeField] private Board[] boards5;
-        [Header("Board 6")]
         [SerializeField] private Board[] boards6;
-        [Header("Board 7")]
         [SerializeField] private Board[] boards7;
+
         [SerializeField] private Board currentBoard;
         public Board Board => currentBoard;
-        public bool IsTest1;
-        public bool IsGameTest1;
-        public bool IsGameTest2;
-        
+
+        [FormerlySerializedAs("IsTest1")] public bool isTest1;
+        [FormerlySerializedAs("IsGameTest1")] public bool isGameTest1;
+        [FormerlySerializedAs("IsGameTest2")] public bool isGameTest2;
+
         [SerializeField] private bool canClick = true;
         public bool CanClick
         {
             get => canClick;
             set => canClick = value;
         }
+
         private int IndexCurrentLevel
         {
             set
@@ -79,7 +83,6 @@ namespace Game
             }
             get => PlayerPrefs.GetInt("CurrentLevel", 0);
         }
-
 
         private bool isWin;
         public bool IsWin
@@ -99,16 +102,19 @@ namespace Game
                 }
             }
         }
-        
+
         [Space]
         [Header("Box Answer")]
         [SerializeField] private BoxManager boxManager;
         public BoxManager BoxManager => boxManager;
-        
+
         [Space]
-        [Header("EffectCoin")]
+        [Header("Effect")]
         [SerializeField] private EffectRewardCoin effectCoin;
+        public ParticleSystem[] effectYesAnswer;
+        [FormerlySerializedAs("effectNOAnswer")] public ParticleSystem[] effectNoAnswer;
         public EffectRewardCoin EffectCoin => effectCoin;
+
         private void Awake()
         {
             if (Instance == null)
@@ -118,20 +124,27 @@ namespace Game
             }
             Destroy(this);
         }
+
         private void Start()
+        {
+            InitializeGame();
+        }
+
+        private void InitializeGame()
         {
             UIController.instance.SetActionOnWin(NextLevel);
             UIController.instance.SetActionSave(SaveLevelFail);
             UIController.instance.SetActionOnLose(PlayAgain);
-            currentLevel = CreateLevel.instance.GetLevelData(PlayerPrefs.GetInt("CurrentLevel", 0));
+
+            currentLevel = CreateLevel.instance.GetLevelData(PlayerPrefs.GetInt("CurrentLevel", 1));
             GetAnswers(currentLevel.amountDistinct);
             SpawnBoard();
             SpawnPanel();
             boxManager.NextLevelOrReplay(currentLevel.amountBox);
             playerManager.MoveToTarget();
-            BridgeController.instance.LogLevelStartWithParameter(PlayerPrefs.GetInt("CurrentLevel", 0));
-
+            BridgeController.instance.LogLevelStartWithParameter(PlayerPrefs.GetInt("CurrentLevel", 1));
         }
+
         private void SaveLevelFail()
         {
             if (BridgeController.instance.IsRewardReady())
@@ -141,10 +154,12 @@ namespace Game
                 {
                     IsWin = false;
                     canClick = true;
+                    currentBoard.SaveMeBoard();
                 });
                 BridgeController.instance.ShowRewarded("SaveMe", e);
             }
         }
+
         private void PlayAgain()
         {
             currentPanel.gameObject.SetActive(false);
@@ -156,13 +171,12 @@ namespace Game
             SpawnPanel();
             boxManager.NextLevelOrReplay(currentLevel.amountBox);
         }
+
         public void NextLevel()
         {
             IsWin = false;
-            /*
-            BridgeController.instance.LogLevelCompleteWithParameter(PlayerPrefs.GetInt("CurrentLevel", 0));
-            */
-            currentLevel = CreateLevel.instance.GenerateRandomLevel(IndexCurrentLevel + 1);
+            IndexCurrentLevel += 1;
+            currentLevel = CreateLevel.instance.GetLevelData(IndexCurrentLevel);
             canClick = true;
             GetAnswers(currentLevel.amountDistinct);
             Destroy(currentBoard.gameObject);
@@ -170,6 +184,7 @@ namespace Game
             DOVirtual.DelayedCall(0.1f, SpawnPanel);
             boxManager.NextLevelOrReplay(currentLevel.amountBox);
         }
+
         private void GetAnswers(int amountDistinct)
         {
             answers.Clear();
@@ -189,6 +204,7 @@ namespace Game
             Debug.LogWarning("Ok2");
             UIController.instance.ShowButtonShop(true);
         }
+
         private void ShuffleList<T>(List<T> list)
         {
             System.Random rng = new System.Random();
@@ -200,9 +216,10 @@ namespace Game
                 (list[k], list[n]) = (list[n], list[k]);
             }
         }
+
         private void SpawnBoard()
         {
-            if(IsTest1) return;
+            if (isTest1) return;
             int typeBoard = currentLevel.amountBox;
             int line = currentLevel.amountLine;
 
@@ -216,7 +233,7 @@ namespace Game
                     break;
                 case 5:
                     GetBoard(line, boards5);
-                    break; 
+                    break;
                 case 6:
                     GetBoard(line, boards6);
                     break;
@@ -225,74 +242,73 @@ namespace Game
                     break;
             }
         }
-        private const float distanceInGame1 = -4f;
-        private const float distancePanel1 = -7f;
-        private const float distanceInGame2 = -2f;
-        private const float distancePanel2 = -9f;
-        private const float distanceInGame3 = 0f;
-        private const float distancePanel3 = -11f;
+
+        private const float DistanceInGame1 = -4f;
+        private const float DistancePanel1 = -7f;
+        private const float DistanceInGame2 = -2f;
+        private const float DistancePanel2 = -9f;
+        private const float DistanceInGame3 = 0f;
+        private const float DistancePanel3 = -11f;
+
         private void GetBoard(int id, Board[] boards)
         {
             switch (id)
             {
                 case 3:
-                    currentBoard = currentBoard = PoolingManager.Spawn(boards[0], table.position, Quaternion.identity, table);
-                    inGame.position = new Vector3(0f, 0f, distanceInGame1);
-                    parentPanel.localPosition = new Vector3(0f, parentPanel.localPosition.y, distancePanel1);
+                    currentBoard = PoolingManager.Spawn(boards[0], table.position, Quaternion.identity, table);
+                    inGame.position = new Vector3(0f, 0f, DistanceInGame1);
+                    parentPanel.localPosition = new Vector3(0f, parentPanel.localPosition.y, DistancePanel1);
                     break;
                 case 4:
-                    currentBoard = currentBoard = PoolingManager.Spawn(boards[1], table.position, Quaternion.identity, table);
-                    inGame.position = new Vector3(0f, 0f, distanceInGame2);
-                    parentPanel.localPosition = new Vector3(0f, parentPanel.localPosition.y, distancePanel2);
+                    currentBoard = PoolingManager.Spawn(boards[1], table.position, Quaternion.identity, table);
+                    inGame.position = new Vector3(0f, 0f, DistanceInGame2);
+                    parentPanel.localPosition = new Vector3(0f, parentPanel.localPosition.y, DistancePanel2);
                     break;
                 case 5:
-                    currentBoard = currentBoard = PoolingManager.Spawn(boards[2], table.position, Quaternion.identity, table);
-                    inGame.position = new Vector3(0f, 0f, distanceInGame3);
-                    parentPanel.localPosition = new Vector3(0f, parentPanel.localPosition.y, distancePanel3);
+                    currentBoard = PoolingManager.Spawn(boards[2], table.position, Quaternion.identity, table);
+                    inGame.position = new Vector3(0f, 0f, DistanceInGame3);
+                    parentPanel.localPosition = new Vector3(0f, parentPanel.localPosition.y, DistancePanel3);
                     break;
             }
         }
+
         private void SpawnPanel()
         {
             int id = currentLevel.amountCan;
             switch (id)
             {
                 case 3:
-                    currentPanel = panelAnswers[0];
-                    panelAnswers[1].gameObject.SetActive(false);
-                    panelAnswers[2].gameObject.SetActive(false);
-                    panelAnswers[3].gameObject.SetActive(false);
-                    currentPanel.gameObject.SetActive(true);
+                    SetActivePanel(0);
                     break;
                 case 4:
-                    currentPanel = panelAnswers[1];
-                    panelAnswers[0].gameObject.SetActive(false);
-                    panelAnswers[2].gameObject.SetActive(false);
-                    panelAnswers[3].gameObject.SetActive(false);
-                    currentPanel.gameObject.SetActive(true);
-                    break; 
+                    SetActivePanel(1);
+                    break;
                 case 5:
-                    currentPanel = panelAnswers[2];
-                    panelAnswers[1].gameObject.SetActive(false);
-                    panelAnswers[0].gameObject.SetActive(false);
-                    panelAnswers[3].gameObject.SetActive(false);
-                    currentPanel.gameObject.SetActive(true);
+                    SetActivePanel(2);
                     break;
                 case 6:
-                    currentPanel = panelAnswers[3];
-                    panelAnswers[1].gameObject.SetActive(false);
-                    panelAnswers[2].gameObject.SetActive(false);
-                    panelAnswers[0].gameObject.SetActive(false);
-                    currentPanel.gameObject.SetActive(true);
+                    SetActivePanel(3);
                     break;
             }
         }
+
+        private void SetActivePanel(int index)
+        {
+            for (int i = 0; i < panelAnswers.Length; i++)
+            {
+                panelAnswers[i].gameObject.SetActive(i == index);
+            }
+            currentPanel = panelAnswers[index];
+            currentPanel.gameObject.SetActive(true);
+        }
+
         public void Save(string levelName)
         {
             IndexCurrentLevel++;
-            CreateLevel.instance.SaveData(levelName, currentLevel);
+            /*CreateLevel.instance.SaveData(levelName, currentLevel);*/
             Debug.Log(PlayerPrefs.GetInt("CurrentLevel", 0));
         }
+
         public void Load()
         {
             IsWin = false;

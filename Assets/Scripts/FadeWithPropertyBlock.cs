@@ -9,7 +9,7 @@ public class FadeWithPropertyBlock : MonoBehaviour
     public bool IsFade = true;
     public bool canFade = true;
 
-    void Start()
+    void OnEnable()
     {
         objRenderer = GetComponent<Renderer>();
         if (IsFade)

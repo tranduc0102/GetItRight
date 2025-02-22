@@ -14,10 +14,11 @@ namespace Game
         public Transform napThung;
         private bool canOpen;
         [SerializeField] private float duration;
-        public void ShowBox(Transform answer)
+        public bool ShowBox(Transform answer)
         {
-            if(canOpen)return;
+            if(canOpen) return false;
             GameController.Instance.PlayerManager.PlayAnim("DoanDung");
+            GameController.Instance.effectYesAnswer[Random.Range(0, GameController.Instance.effectYesAnswer.Length)].Play();
             canOpen = true;
             napThung.DOLocalRotate(new Vector3(-180f, 0f, 0f), 0.8f).OnComplete(delegate
             {
@@ -33,6 +34,7 @@ namespace Game
                 });
                 napThung.gameObject.SetActive(false);
             });
+            return true;
         }
         public void ResetBox()
         {

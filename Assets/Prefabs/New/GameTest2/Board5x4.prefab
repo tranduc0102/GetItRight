@@ -4317,7 +4317,7 @@ MonoBehaviour:
   - {fileID: 8110606792617731255}
   - {fileID: 2081178074033902999}
   - {fileID: 7256148061647461467}
-  materialWhite: {fileID: 2100000, guid: c4dab12b6ad08384ba8a3ce2f7eba5f7, type: 2}
+  materialWhite: {fileID: 2100000, guid: 4e2897038ba100243b16326a47cbf2a0, type: 2}
   materialYes: {fileID: 2100000, guid: 252ade55dc1ffdb47af8f2e6801513ad, type: 2}
   materialNo: {fileID: 2100000, guid: 5e72cca0cdabdff49be7cb12d6696b3e, type: 2}
   materialMaybe: {fileID: 2100000, guid: 89b1e3f2231d37d46af715800056d5a5, type: 2}

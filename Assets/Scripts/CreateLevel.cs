@@ -1,8 +1,5 @@
-using System;
 using System.Collections.Generic;
-using System.IO;
 using UnityEngine;
-using Random = UnityEngine.Random;
 
 [System.Serializable]
 public class LevelData
@@ -23,44 +20,44 @@ public class LevelCollection
 
 public class CreateLevel : Singleton<CreateLevel>
 {
+    /*
     private string filePath;
+    */
     private LevelCollection levelCollection = new LevelCollection();
 
     protected override void Awake()
     {
         base.Awake();
-        filePath = Path.Combine(Application.persistentDataPath, "levelData.json");
-        Debug.Log("File Path: " + filePath);
+        /*filePath = Path.Combine(Application.persistentDataPath, "levelData.json");
+        Debug.Log("File Path: " + filePath);*/
         LoadData();
     }
     private void LoadData()
     {
-        if (File.Exists(filePath))
+        /*if (File.Exists(filePath))
         {
             string json = File.ReadAllText(filePath);
             levelCollection = JsonUtility.FromJson<LevelCollection>(json);
             Debug.Log("Data Loaded from persistentDataPath: " + json);
         }
         else
+        {*/
+        TextAsset jsonFile = Resources.Load<TextAsset>("DataLevel/levelData");
+        if (jsonFile != null)
         {
-            TextAsset jsonFile = Resources.Load<TextAsset>("DataLevel/levelData");
-            if (jsonFile != null)
-            {
-                levelCollection = JsonUtility.FromJson<LevelCollection>(jsonFile.text);
-                Debug.Log("Data Loaded from Resources: " + jsonFile.text);
-
-                File.WriteAllText(filePath, jsonFile.text);
-                Debug.Log("Copied levelData.json to persistentDataPath for future modifications.");
-            }
-            else
-            {
-                Debug.LogError("Failed to load levelData.json from Resources!");
-                levelCollection = new LevelCollection();
-            }
+            levelCollection = JsonUtility.FromJson<LevelCollection>(jsonFile.text);
+            Debug.Log("Data Loaded from Resources: " + jsonFile.text);
         }
+        else
+        {
+            Debug.LogError("Failed to load levelData.json from Resources!");
+            levelCollection = new LevelCollection();
+        }
+        /*}*/
     }
 
-    public void SaveData(string difficultyLevel, LevelData levelData)
+    /*
+    private void SaveData(string difficultyLevel, LevelData)
     {
         if (levelData == null)
         {
@@ -93,17 +90,19 @@ public class CreateLevel : Singleton<CreateLevel>
             Debug.LogError("Failed to save data: " + ex.Message);
         }
     }
+    */
     public LevelData GetLevelData(int levelID)
     {
         Debug.Log("GetLevelData: " + levelID);
         return levelCollection.levels.Find(l => l.level == levelID);
     }
-    public LevelData GenerateRandomLevel(int levelID)
+    /*
+    private LevelData GenerateRandomLevel(int levelID)
     {
         int amountBox = Random.Range(3, 8);
         int amountLine = Random.Range(3, 6);
-        int amountDistinct = Random.Range(1, amountBox + 1);
-        int amountCan = Random.Range(Mathf.Max(amountDistinct,3), 7);
+        int amountDistinct = Random.Range(2, amountBox + 1);
+        int amountCan = Random.Range(Math.Max(amountDistinct,3), 7);
         Debug.LogWarning(amountDistinct);
         LevelData newLevel = new LevelData
         {
@@ -116,7 +115,9 @@ public class CreateLevel : Singleton<CreateLevel>
 
         return newLevel;
     }
-    public void DeleteData()
+    */
+    /*
+    private void DeleteData()
     {
         if (File.Exists(filePath))
         {
@@ -124,7 +125,8 @@ public class CreateLevel : Singleton<CreateLevel>
             Debug.Log("Data file deleted.");
         }
 
-        levelCollection = new LevelCollection(); // Xóa dữ liệu trong bộ nhớ
+        levelCollection = new LevelCollection();
     }
+    */
 
 }
