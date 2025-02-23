@@ -1,29 +1,46 @@
 using UnityEngine;
 
-public class CameraFitter : MonoBehaviour
+public class CameraFit : MonoBehaviour
 {
     public float referenceWidth = 1080f; 
-    public float referenceFOV = 60f;    
-    public float maxFOV = 111f;          
+    public float referenceHeight = 1920f; 
+    public float referenceOrthoSize = 5f;
 
     private Camera cam;
 
     void Start()
     {
-        cam = Camera.main;
-        AdjustCameraFOV();
+        cam = GetComponent<Camera>();
+        AdjustCamera();
     }
 
-    void AdjustCameraFOV()
+    void AdjustCamera()
     {
-        float screenWidth = Screen.width;
-        float screenHeight = Screen.height;
+        float referenceAspectRatio = referenceWidth / referenceHeight;
+        float currentAspectRatio = (float)Screen.width / Screen.height;
 
-        float aspectRatio = screenWidth / screenHeight;
+        if (cam.orthographic)
+        { 
+            cam.orthographicSize = referenceOrthoSize * (referenceAspectRatio / currentAspectRatio);
+        }
+        else
+        {
+            float targetFOV = CalculateFOV(currentAspectRatio);
+            cam.fieldOfView = targetFOV;
+        }
+    }
 
-        float horizontalFOV = referenceFOV * (referenceWidth / screenWidth);
-        float verticalFOV = 2f * Mathf.Atan(Mathf.Tan(horizontalFOV * Mathf.Deg2Rad / 2f) / aspectRatio) * Mathf.Rad2Deg;
-        
-        cam.fieldOfView = Mathf.Max(verticalFOV, maxFOV);
+    float CalculateFOV(float currentAspectRatio)
+    {
+        float referenceAspectRatio = referenceWidth / referenceHeight;
+
+        if (currentAspectRatio > referenceAspectRatio)
+        {
+            return cam.fieldOfView;
+        }
+        else
+        {
+            return cam.fieldOfView * (referenceAspectRatio / currentAspectRatio);
+        }
     }
 }
