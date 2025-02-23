@@ -28,6 +28,7 @@ namespace _Scripts
         void Start()
         {
             SetMuteSounds();
+            SetMuteMusic();
         }
 
         public void PlaySoundClickObject()
@@ -39,8 +40,6 @@ namespace _Scripts
         {
             PlaySfx(soundConnect[index]);
         }
-
-        private bool isMuteMusic;
         public void SetMuteSounds()
         {
             if (UIController.instance.UISetting.IsMuteSound)
@@ -49,6 +48,15 @@ namespace _Scripts
                 return;
             }
             soundSource.mute = false;
+        }
+        public void SetMuteMusic()
+        {
+            if (UIController.instance.UISetting.IsMuteMusic)
+            {
+                musicSource.mute = true;
+                return;
+            }
+            musicSource.mute = false;
         }
 
         public void SetVolume(float volume)

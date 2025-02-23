@@ -242,9 +242,9 @@ namespace Game
             }
         }
 
-        private const float DistanceInGame1 = -4f;
+        private const float DistanceInGame1 = -3f;
         private const float DistancePanel1 = -7f;
-        private const float DistanceInGame2 = -2f;
+        private const float DistanceInGame2 = -1f;
         private const float DistancePanel2 = -9f;
         private const float DistanceInGame3 = 0f;
         private const float DistancePanel3 = -11f;
