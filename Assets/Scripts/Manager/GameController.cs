@@ -127,15 +127,14 @@ namespace Game
 
         private void Start()
         {
+            UIController.instance.SetActionOnWin(NextLevel);
+            UIController.instance.SetActionSave(SaveLevelFail);
+            UIController.instance.SetActionOnLose(PlayAgain);
             InitializeGame();
         }
 
         private void InitializeGame()
         {
-            UIController.instance.SetActionOnWin(NextLevel);
-            UIController.instance.SetActionSave(SaveLevelFail);
-            UIController.instance.SetActionOnLose(PlayAgain);
-
             currentLevel = CreateLevel.instance.GetLevelData(PlayerPrefs.GetInt("CurrentLevel", 1));
             GetAnswers(currentLevel.amountDistinct);
             SpawnBoard();
@@ -312,8 +311,8 @@ namespace Game
         public void Load()
         {
             IsWin = false;
-            BridgeController.instance.LogLevelCompleteWithParameter(PlayerPrefs.GetInt("CurrentLevel", 0));
-            currentLevel = CreateLevel.instance.GetLevelData(PlayerPrefs.GetInt("CurrentLevel", 0));
+            BridgeController.instance.LogLevelCompleteWithParameter(PlayerPrefs.GetInt("CurrentLevel", 1));
+            currentLevel = CreateLevel.instance.GetLevelData(PlayerPrefs.GetInt("CurrentLevel", 1));
             canClick = true;
             GetAnswers(currentLevel.amountDistinct);
             Destroy(currentBoard.gameObject);

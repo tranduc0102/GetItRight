@@ -30,7 +30,7 @@ public class AnimFace : MonoBehaviour
     private int currentFrame = 0;
     private int frameDirection = 1;
 
-    private StateFace State;
+    [SerializeField] private StateFace State;
     public void SetState(StateFace state, float duration)
     {
         this.State = state;
@@ -40,12 +40,13 @@ public class AnimFace : MonoBehaviour
     private IEnumerator ResetStateAfterDelay(float delay, StateFace state)
     {
         yield return new WaitForSeconds(delay);
+        Debug.Log(delay);
         Debug.Log("Reset State After Delay");
         this.State = StateFace.Idle;
     }
     private void Update()
     {
-        if(canStop) return;
+        if(canStop && State == StateFace.Idle) return;
         elapsedTime += Time.deltaTime;
         if (elapsedTime >= frameDuration + Time.deltaTime * 2)
         {
@@ -75,7 +76,7 @@ public class AnimFace : MonoBehaviour
                 {
                     frameDirection = 1;
                     counter += 1;
-                    if (counter == 1)
+                    if (counter >= 1 && State == StateFace.Idle)
                     {
                         canStop = true;
                         DOVirtual.DelayedCall(frameDelayDuration, delegate

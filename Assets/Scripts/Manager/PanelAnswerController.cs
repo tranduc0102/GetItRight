@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using _Scripts;
 using _Scripts.Extension;
 using DG.Tweening;
 using Lean.Touch;
@@ -152,7 +153,7 @@ namespace Game
                     Item t = PoolingManager.Spawn(component, component.transform.position, spawnRotation, GameController.Instance.Board.amountObjects[i].transform);
                     GameController.Instance.Board.amountObjects[i].currentItem = t.transform;
                     t.CanMove = false;
-
+                    AudioManager.instance.PlaySoundClickObject();
                     MoveAndRotateToPosition(t.transform, GameController.Instance.Board.amountObjects[i]);
                     break;
                 }

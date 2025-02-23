@@ -1,6 +1,8 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using _Scripts;
 using _Scripts.Extension;
 using ACEPlay.Bridge;
 using DG.Tweening;
@@ -173,7 +175,7 @@ namespace Game
         {
             GameController.Instance.PlayerManager.PlayAnim("ThatBai");
             UIController.instance.ShowDisplayLevelFail(true);
-            BridgeController.instance.LogLevelFailWithParameter(PlayerPrefs.GetInt("CurrentLevel", 0));
+            BridgeController.instance.LogLevelFailWithParameter(PlayerPrefs.GetInt("CurrentLevel", 1));
         }
 
         private IEnumerator CheckAnswerInLine()
@@ -253,6 +255,7 @@ namespace Game
 
         private IEnumerator HandleMaterialChangeForGameTest2(Material[] tempMaterials)
         {
+            int idSound = 0;
             showBox = false;
             for (int index = currentIndex - countInRow; index < currentIndex; index++)
             {
@@ -263,6 +266,8 @@ namespace Game
 
                     if (tempMaterials[index % countInRow] == materialYes)
                     {
+                        AudioManager.instance.PlaySoundConnect(idSound);
+                        idSound += 1;
                         if (GameController.Instance.BoxManager.Boxes[index % countInRow].ShowBox(amountObjects[index].currentItem))
                         {
                             showBox = true;
