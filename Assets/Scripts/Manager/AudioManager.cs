@@ -1,9 +1,16 @@
+using System;
 using _Scripts.Extension;
 using DG.Tweening;
 using UnityEngine;
 
 namespace _Scripts
 {
+    [Serializable]
+    public class SoundAndEffect
+    {
+        public ParticleSystem effect;
+        public AudioClip audioClip;
+    }
     public class AudioManager : Singleton<AudioManager>
     {
         [Header("Audio Souce")]
@@ -18,6 +25,11 @@ namespace _Scripts
         [Space] [Header("Audio in Game")] 
         [SerializeField] private AudioClip soundClickCan;
         [SerializeField] private AudioClip[] soundConnect;
+        [Space]
+        [Header("Audio awsome")]
+        [SerializeField] SoundAndEffect[] soundAndEffectAwsomes;
+        [Header("Audio no awsome")]
+        [SerializeField] SoundAndEffect[] soundAndEffectNoAwsomes;
         
         protected override void Awake()
         {
@@ -39,6 +51,35 @@ namespace _Scripts
         public void PlaySoundConnect(int index)
         {
             PlaySfx(soundConnect[index]);
+        }
+        private bool canPlayMusic = true;
+        public void PlaySoundDoanDung()
+        {
+            int randomIndex = UnityEngine.Random.Range(0, soundAndEffectAwsomes.Length);
+            var selectedSound = soundAndEffectAwsomes[randomIndex];
+
+            if (!selectedSound.effect.isPlaying && canPlayMusic)
+            {
+                selectedSound.effect.Play();
+                PlaySfx(selectedSound.audioClip);
+                canPlayMusic = false;
+                DOVirtual.DelayedCall(selectedSound.audioClip.length + 0.3f, () => canPlayMusic = true);
+            }
+        }
+        public void PlaySoundDoanSai()
+        {
+            int randomIndex = UnityEngine.Random.Range(0, soundAndEffectNoAwsomes.Length);
+            var selectedSound = soundAndEffectNoAwsomes[randomIndex];
+
+            if (!selectedSound.effect.isPlaying && !IsAudioPlaying(selectedSound.audioClip))
+            {
+                selectedSound.effect.Play();
+                PlaySfx(selectedSound.audioClip);
+            }
+        }
+        private bool IsAudioPlaying(AudioClip clip)
+        {
+            return soundSource.isPlaying && soundSource.clip == clip;
         }
         public void SetMuteSounds()
         {

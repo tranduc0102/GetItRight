@@ -1,7 +1,10 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using _Scripts.Extension;
 using ACEPlay.Bridge;
 using DG.Tweening;
+using Lean.Touch;
 using UnityEngine;
 using pooling;
 using UnityEngine.Events;
@@ -17,19 +20,17 @@ namespace Game
         [Space]
         [Header("DataGame")]
         [SerializeField] private LevelData currentLevel;
-        public int CurrentTheme
+        public int CurrentSkin
         {
             get => PlayerPrefs.GetInt("CurrentThem", 0);
             set
             {
                 if (value < 0) return;
-                PlayerPrefs.SetInt("CurrentThem", value);
-                currentPanel.UpdateChangeTheme(value, true);
+                PlayerPrefs.SetInt("CurrentSkin", value);
             }
         }
         public LevelData CurrentLevelGame => currentLevel;
-
-        [FormerlySerializedAs("_answers")] [SerializeField] private List<EnumAnswer> answers;
+        [SerializeField] private List<EnumAnswer> answers;
         public List<EnumAnswer> Answers => answers;
 
         [Space]
@@ -64,8 +65,8 @@ namespace Game
         public Board Board => currentBoard;
 
         [FormerlySerializedAs("IsTest1")] public bool isTest1;
-        [FormerlySerializedAs("IsGameTest1")] public bool isGameTest1;
-        [FormerlySerializedAs("IsGameTest2")] public bool isGameTest2;
+        [FormerlySerializedAs("InGame2")] public bool inGame2;
+        [FormerlySerializedAs("InGame1")] public bool inGame1;
 
         [SerializeField] private bool canClick = true;
         public bool CanClick
@@ -111,9 +112,9 @@ namespace Game
         [Space]
         [Header("Effect")]
         [SerializeField] private EffectRewardCoin effectCoin;
-        public ParticleSystem[] effectYesAnswer;
-        [FormerlySerializedAs("effectNOAnswer")] public ParticleSystem[] effectNoAnswer;
         public EffectRewardCoin EffectCoin => effectCoin;
+
+        private bool isPlay;
 
         private void Awake()
         {
@@ -130,7 +131,6 @@ namespace Game
             UIController.instance.SetActionOnWin(NextLevel);
             UIController.instance.SetActionSave(SaveLevelFail);
             UIController.instance.SetActionOnLose(PlayAgain);
-            InitializeGame();
         }
 
         private void InitializeGame()
@@ -142,6 +142,20 @@ namespace Game
             boxManager.NextLevelOrReplay(currentLevel.amountBox);
             playerManager.MoveToTarget();
             BridgeController.instance.LogLevelStartWithParameter(PlayerPrefs.GetInt("CurrentLevel", 1));
+        }
+        private void OnEnable()
+        {
+            LeanTouch.OnFingerDown += StartGame;
+        }
+        private void OnDisable()
+        {
+            LeanTouch.OnFingerDown -= StartGame;
+        }
+        private void StartGame(LeanFinger leanFinger)
+        {
+            if(UIDetection.IsPointerOverUIObject() || isPlay)return;
+            isPlay = true;
+            InitializeGame();
         }
 
         private void SaveLevelFail()
@@ -255,18 +269,29 @@ namespace Game
             {
                 case 3:
                     currentBoard = PoolingManager.Spawn(boards[0], table.position, Quaternion.identity, table);
+                    /*
                     inGame.position = new Vector3(0f, 0f, DistanceInGame1);
+                    */
+                    /*
                     parentPanel.localPosition = new Vector3(0f, parentPanel.localPosition.y, DistancePanel1);
+                    */
+                    currentBoard.transform.localPosition = new Vector3(0f, 0f, -3f);
                     break;
                 case 4:
                     currentBoard = PoolingManager.Spawn(boards[1], table.position, Quaternion.identity, table);
+                    /*
                     inGame.position = new Vector3(0f, 0f, DistanceInGame2);
-                    parentPanel.localPosition = new Vector3(0f, parentPanel.localPosition.y, DistancePanel2);
+                    */
+                    currentBoard.transform.localPosition = new Vector3(0f, 0f, -1.5f);
                     break;
                 case 5:
                     currentBoard = PoolingManager.Spawn(boards[2], table.position, Quaternion.identity, table);
+                    /*
                     inGame.position = new Vector3(0f, 0f, DistanceInGame3);
+                    */
+                    /*
                     parentPanel.localPosition = new Vector3(0f, parentPanel.localPosition.y, DistancePanel3);
+                    */
                     break;
             }
         }

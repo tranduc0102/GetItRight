@@ -92,11 +92,11 @@ namespace Game
         private int HandleBonusLogic()
         {
             int bonus = 0;
-            if (GameController.Instance.isGameTest1)
+            if (GameController.Instance.inGame2)
             {
                 bonus = HandleBonusForGameTest1();
             }
-            if (GameController.Instance.isGameTest2)
+            if (GameController.Instance.inGame1)
             {
                 bonus = HandleBonusForGameTest2();
             }
@@ -140,10 +140,10 @@ namespace Game
                         amountObjects[targetIndex].answer = amountObjects[index].answer;
                         amountObjects[targetIndex].IsNone = false;
                         float high = amountObjects[index].currentItem.name.Contains("Egg") ? 0.003f : 0f;
-                        Quaternion spawnRotation = Quaternion.Euler(-11, 180, 0);
+                        Quaternion spawnRotation = Quaternion.Euler(0f, 180, 0);
                         amountObjects[targetIndex].currentItem = Instantiate(amountObjects[index].currentItem,
                             amountObjects[targetIndex].transform.position, spawnRotation, amountObjects[targetIndex].transform);
-                        amountObjects[targetIndex].currentItem.DOLocalMoveY(0.00312f + high, 0.5f);
+                        amountObjects[targetIndex].currentItem.DOLocalMoveY(0.0008f + high, 0.5f);
                         bonus++;
                     }
                 }
@@ -155,18 +155,19 @@ namespace Game
         {
             if (currentIndex + countInRow <= amountObjects.Length && !win)
             {
-                if (GameController.Instance.isGameTest1)
+                if (GameController.Instance.inGame2)
                 {
                     amountObjects[currentIndex - 1].transform.parent.DOLocalMoveX(0.2f, 1f);
                     amountObjects[currentIndex].transform.parent.DOLocalMoveY(heightOfObjects, 1f);
                 }
-                if (GameController.Instance.isGameTest2)
+                if (GameController.Instance.inGame1)
                 {
+                    amountObjects[currentIndex].transform.parent.gameObject.SetActive(true);
                     amountObjects[currentIndex].transform.parent.DOLocalMoveY(heightOfObjects, 1f).OnComplete(() => currentIndex += bonus);
-                    foreach (var fadeObject in amountObjects[currentIndex].transform.parent.GetComponentsInChildren<FadeWithPropertyBlock>())
+                    /*foreach (var fadeObject in amountObjects[currentIndex].transform.parent.GetComponentsInChildren<FadeWithPropertyBlock>())
                     {
                         fadeObject.FadeIn(0.6f);
-                    }
+                    }*/
                 }
             }
         }
@@ -213,11 +214,11 @@ namespace Game
                 }
             }
 
-            if (GameController.Instance.isGameTest1)
+            if (GameController.Instance.inGame2)
             {
                 yield return HandleMaterialChangeForGameTest1(tempMaterials);
             }
-            if (GameController.Instance.isGameTest2)
+            if (GameController.Instance.inGame1)
             {
                 yield return HandleMaterialChangeForGameTest2(tempMaterials);
             }
@@ -231,7 +232,7 @@ namespace Game
             if (!showBox)
             {
                 GameController.Instance.PlayerManager.PlayAnim("DoanSai");
-                GameController.Instance.effectNoAnswer[0].Play();
+                AudioManager.instance.PlaySoundDoanSai();
             }
         }
 
@@ -312,7 +313,7 @@ namespace Game
         {
             amountObjects[index].answer = amountObjects[targetIndex].answer;
             amountObjects[index].IsNone = false;
-            Quaternion spawnRotation = Quaternion.Euler(-11, 180, 0);
+            Quaternion spawnRotation = Quaternion.Euler(0f, 180, 0);
             amountObjects[index].currentItem = PoolingManager.Spawn(amountObjects[targetIndex].currentItem,
                 amountObjects[index].transform.position, spawnRotation, amountObjects[index].transform);
             amountObjects[index].currentItem.DOLocalMoveY(0.00312f, 0.5f);
@@ -329,7 +330,6 @@ namespace Game
                 amountObjects[index].transform.parent.localPosition = new Vector3(0f, 1.9f, amountObjects[index].transform.parent.localPosition.z);
                 amountObjects[index].GetComponent<MeshRenderer>().material = materialWhite;
                 amountObjects[index].transform.parent.gameObject.SetActive(false);
-                amountObjects[index].transform.parent.gameObject.SetActive(true);
             }
         }
     }

@@ -15,6 +15,7 @@ public class FadeWithPropertyBlock : MonoBehaviour
         if (IsFade)
         {
             SetOpacity(0.2f);
+            Debug.Log("Ok");
         }
     }
 

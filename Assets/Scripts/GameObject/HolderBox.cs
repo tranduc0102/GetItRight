@@ -1,4 +1,5 @@
 using System;
+using _Scripts;
 using DG.Tweening;
 using pooling;
 using UnityEngine;
@@ -18,7 +19,7 @@ namespace Game
         {
             if(canOpen) return false;
             GameController.Instance.PlayerManager.PlayAnim("DoanDung");
-            GameController.Instance.effectYesAnswer[Random.Range(0, GameController.Instance.effectYesAnswer.Length)].Play();
+            AudioManager.instance.PlaySoundDoanDung();
             canOpen = true;
             napThung.DOLocalRotate(new Vector3(-180f, 0f, 0f), 0.8f).OnComplete(delegate
             {

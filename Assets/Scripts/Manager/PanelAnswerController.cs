@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using _Scripts;
 using _Scripts.Extension;
@@ -16,24 +17,27 @@ namespace Game
 
         private List<Item> themeObjects = new List<Item>();
         private List<Item> results = new List<Item>();
+        [SerializeField] private Camera cam;
+        private void OnValidate()
+        {
+            cam = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
+        }
 
         private void OnEnable()
         {
             DOVirtual.DelayedCall(0.2f, InitializePanel);
-            LeanTouch.OnFingerDown += HandleMouseClick;
         }
 
         private void OnDisable()
         {
             ClearPanel();
-            LeanTouch.OnFingerDown -= HandleMouseClick;
         }
 
         private void InitializePanel()
         {
             results.Clear();
             transform.position = new Vector3(10f, transform.position.y, transform.position.z);
-            UpdateChangeTheme(GameController.Instance.CurrentTheme);
+            UpdateChangeTheme(GameController.Instance.CurrentSkin);
             transform.DOLocalMoveX(0f, 1f);
         }
 
@@ -77,7 +81,6 @@ namespace Game
                 }
             }
         }
-
         private void FilterAndShuffleResults()
         {
             results.Clear();
@@ -102,7 +105,7 @@ namespace Game
 
         private void SpawnResults()
         {
-            float high = results.Count > 0 && results[^1].name.Contains("Egg") ? 0.2f : 0;
+            float high = results.Count > 0 && results[^1].name.Contains("Egg") ? 1f : 0;
 
             for (int i = 0; i < Mathf.Min(posObject.Count, results.Count); i++)
             {
@@ -122,14 +125,20 @@ namespace Game
                 (list[k], list[n]) = (list[n], list[k]);
             }
         }
-        private void HandleMouseClick(LeanFinger leanFinger)
+        private void Update()
         {
-            if (GameController.Instance.playerMoved || UIDetection.IsPointerOverUIObject() || !GameController.Instance.CanClick) return;
-
-            if (Camera.main != null)
+            if (Input.GetMouseButtonDown(0))
             {
-                Ray ray = Camera.main.ScreenPointToRay(leanFinger.LastScreenPosition);
+                HandleClick();
+            }
+        }
+        private void HandleClick()
+        {
+            if (GameController.Instance.playerMoved || !GameController.Instance.CanClick) return;
 
+            if (cam != null)
+            {
+                Ray ray = cam.ScreenPointToRay(Input.mousePosition);
                 if (Physics.Raycast(ray, out RaycastHit hit))
                 {
                     if (hit.transform.TryGetComponent(out Item component) && component.CanMove)
@@ -149,11 +158,12 @@ namespace Game
                     GameController.Instance.Board.amountObjects[i].answer = component.Answer;
                     component.transform.DOScale(component.transform.localScale * 0.9f, 0.05f).SetLoops(2, LoopType.Yoyo);
 
-                    Quaternion spawnRotation = Quaternion.Euler(-11, 180, 0);
+                    Quaternion spawnRotation = Quaternion.Euler(0, 180, 0);
                     Item t = PoolingManager.Spawn(component, component.transform.position, spawnRotation, GameController.Instance.Board.amountObjects[i].transform);
                     GameController.Instance.Board.amountObjects[i].currentItem = t.transform;
                     t.CanMove = false;
                     AudioManager.instance.PlaySoundClickObject();
+                    t.transform.localScale = t.transform.localScale * 1.2f;
                     MoveAndRotateToPosition(t.transform, GameController.Instance.Board.amountObjects[i]);
                     break;
                 }
@@ -164,13 +174,13 @@ namespace Game
         {
             GameController.Instance.Board.NextLine();
             targetPos.IsNone = false;
-            float high = objToMove.name.Contains("Can") ? 0.3f : 0.6f;
-
-            objToMove.DOJump(targetPos.transform.position + Vector3.up * high, jumpPower: 0.5f, numJumps: 1, duration: 0.5f)
+            float high = objToMove.name.Contains("Can") ? 0.14f : 0.6f;
+            float distance = 0.15f;
+            objToMove.DOJump(targetPos.transform.position + new Vector3(0f, 1 * high, -distance), jumpPower: 0.5f, numJumps: 1, duration: 0.5f)
                 .SetEase(Ease.OutQuad)
                 .OnComplete(delegate
                 {
-                    objToMove.transform.position = targetPos.transform.position + Vector3.up * high;
+                    objToMove.transform.position = targetPos.transform.position + new Vector3(0f, 1 * high, -distance);
                 });
             UIController.instance.ShowButtonShop(false);
         }

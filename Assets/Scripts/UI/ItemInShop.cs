@@ -46,7 +46,7 @@ namespace Game
             if(!UnLock)return;
             if (type == TypeItemInShop.Theme)
             {
-                GameController.Instance.CurrentTheme = ID;
+                GameController.Instance.CurrentSkin = ID;
             }
             else
             {
