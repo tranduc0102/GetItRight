@@ -5,6 +5,7 @@ using _Scripts.Extension;
 using DG.Tweening;
 using Lean.Touch;
 using pooling;
+using TMPro;
 using UnityEngine;
 
 namespace Game
@@ -26,11 +27,13 @@ namespace Game
         private void OnEnable()
         {
             DOVirtual.DelayedCall(0.2f, InitializePanel);
+            LeanTouch.OnFingerDown += HandleClick;
         }
 
         private void OnDisable()
         {
             ClearPanel();
+            LeanTouch.OnFingerDown -= HandleClick;
         }
 
         private void InitializePanel()
@@ -105,11 +108,11 @@ namespace Game
 
         private void SpawnResults()
         {
-            float high = results.Count > 0 && results[^1].name.Contains("Egg") ? 1f : 0;
-
+            float high = results.Count > 0 && results[^1].name.Contains("Can") ? 0.1f : 1f;
+            
             for (int i = 0; i < Mathf.Min(posObject.Count, results.Count); i++)
             {
-                objItem.Add(PoolingManager.Spawn(results[i].transform, posObject[i].position + Vector3.up * high, posObject[i].rotation, posObject[i].transform));
+                objItem.Add(PoolingManager.Spawn(results[i].transform, posObject[i].position + Vector3.up * high, results[i].transform.rotation, posObject[i].transform));
             }
             Debug.LogWarning("Ok1");
         }
@@ -125,20 +128,17 @@ namespace Game
                 (list[k], list[n]) = (list[n], list[k]);
             }
         }
-        private void Update()
+        private void HandleClick(LeanFinger leanFinger)
         {
-            if (Input.GetMouseButtonDown(0))
+            if (!GameController.Instance.CanClick)
             {
-                HandleClick();
+                return;
             }
-        }
-        private void HandleClick()
-        {
-            if (GameController.Instance.playerMoved || !GameController.Instance.CanClick) return;
 
             if (cam != null)
             {
-                Ray ray = cam.ScreenPointToRay(Input.mousePosition);
+                Ray ray = cam.ScreenPointToRay(leanFinger.StartScreenPosition);
+
                 if (Physics.Raycast(ray, out RaycastHit hit))
                 {
                     if (hit.transform.TryGetComponent(out Item component) && component.CanMove)
@@ -158,12 +158,11 @@ namespace Game
                     GameController.Instance.Board.amountObjects[i].answer = component.Answer;
                     component.transform.DOScale(component.transform.localScale * 0.9f, 0.05f).SetLoops(2, LoopType.Yoyo);
 
-                    Quaternion spawnRotation = Quaternion.Euler(0, 180, 0);
-                    Item t = PoolingManager.Spawn(component, component.transform.position, spawnRotation, GameController.Instance.Board.amountObjects[i].transform);
+                    Item t = PoolingManager.Spawn(component, component.transform.position, component.transform.rotation, GameController.Instance.Board.amountObjects[i].transform);
                     GameController.Instance.Board.amountObjects[i].currentItem = t.transform;
                     t.CanMove = false;
                     AudioManager.instance.PlaySoundClickObject();
-                    t.transform.localScale = t.transform.localScale * 1.2f;
+                    t.transform.localScale = Vector3.one * 1.2f;
                     MoveAndRotateToPosition(t.transform, GameController.Instance.Board.amountObjects[i]);
                     break;
                 }

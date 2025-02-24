@@ -35,6 +35,8 @@ namespace Game
         private void Start()
         {
             InitializeBoard();
+            win = false;
+            showBox = false;
         }
 
         private void InitializeBoard()
@@ -66,14 +68,15 @@ namespace Game
                 yield return StartCoroutine(CheckAnswerInLine());
                 yield return new WaitForSeconds(0.5f);
 
-                int bonus = HandleBonusLogic();
-                HandleBoardMovement(bonus);
-
                 if (win)
                 {
-                    GameController.Instance.IsWin = true;
+                    
                     yield break;
                 }
+              
+                
+                int bonus = HandleBonusLogic();
+                HandleBoardMovement(bonus);
 
                 if (!win && currentIndex >= amountObjects.Length)
                 {
@@ -139,10 +142,9 @@ namespace Game
                     {
                         amountObjects[targetIndex].answer = amountObjects[index].answer;
                         amountObjects[targetIndex].IsNone = false;
-                        float high = amountObjects[index].currentItem.name.Contains("Egg") ? 0.003f : 0f;
-                        Quaternion spawnRotation = Quaternion.Euler(0f, 180, 0);
-                        amountObjects[targetIndex].currentItem = Instantiate(amountObjects[index].currentItem,
-                            amountObjects[targetIndex].transform.position, spawnRotation, amountObjects[targetIndex].transform);
+                        float high = amountObjects[index].currentItem.name.Contains("can") ? 0f : 0.003f;
+                        amountObjects[targetIndex].currentItem = PoolingManager.Spawn(amountObjects[index].currentItem,
+                            amountObjects[targetIndex].transform.position, amountObjects[index].currentItem.rotation, amountObjects[targetIndex].transform);
                         amountObjects[targetIndex].currentItem.DOLocalMoveY(0.0008f + high, 0.5f);
                         bonus++;
                     }
@@ -164,10 +166,6 @@ namespace Game
                 {
                     amountObjects[currentIndex].transform.parent.gameObject.SetActive(true);
                     amountObjects[currentIndex].transform.parent.DOLocalMoveY(heightOfObjects, 1f).OnComplete(() => currentIndex += bonus);
-                    /*foreach (var fadeObject in amountObjects[currentIndex].transform.parent.GetComponentsInChildren<FadeWithPropertyBlock>())
-                    {
-                        fadeObject.FadeIn(0.6f);
-                    }*/
                 }
             }
         }
@@ -226,10 +224,11 @@ namespace Game
             if (!tempMaterials.Contains(materialMaybe) && !tempMaterials.Contains(materialNo))
             {
                 win = true;
+                DOVirtual.DelayedCall(0.5f, () =>   GameController.Instance.IsWin = true);
                 Vibration.Vibrate();
             }
 
-            if (!showBox)
+            if (!showBox && !win)
             {
                 GameController.Instance.PlayerManager.PlayAnim("DoanSai");
                 AudioManager.instance.PlaySoundDoanSai();
@@ -316,7 +315,7 @@ namespace Game
             Quaternion spawnRotation = Quaternion.Euler(0f, 180, 0);
             amountObjects[index].currentItem = PoolingManager.Spawn(amountObjects[targetIndex].currentItem,
                 amountObjects[index].transform.position, spawnRotation, amountObjects[index].transform);
-            amountObjects[index].currentItem.DOLocalMoveY(0.00312f, 0.5f);
+            amountObjects[index].currentItem.DOLocalMoveY(0.0008f, 0.5f);
         }
 
         private void ResetRemainingItems()

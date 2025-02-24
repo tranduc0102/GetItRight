@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using _Scripts;
 using DG.Tweening;
 using TMPro;
 using UnityEngine;
@@ -67,6 +68,7 @@ public class UIController : Singleton<UIController>
         {
             uiLevelFail.SetActive(false);
             uiLose.SetActive(true);
+            AudioManager.instance.PlaySoundLose();
         });
         btnSave.onClick.AddListener(delegate
         {
@@ -87,6 +89,10 @@ public class UIController : Singleton<UIController>
     public void ShowDisplayWin(bool enable)
     {
         uiWin.SetActive(enable);
+        if(enable)
+        {
+            AudioManager.instance.PlaySoundWin();
+        }
     }
     public void ShowDisplayLose(bool enable)
     {

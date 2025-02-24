@@ -23,14 +23,14 @@ namespace Game
             canOpen = true;
             napThung.DOLocalRotate(new Vector3(-180f, 0f, 0f), 0.8f).OnComplete(delegate
             {
-                float high = 0f;
-                if (answer.name.Contains("Egg"))
+                float high = 0.004f;
+                if (answer.name.Contains("Can"))
                 {
-                    high = 0.004f;
+                    high = 0;
                 }
                 effectOpen.Play();
                 DOVirtual.DelayedCall(0.2f, delegate {
-                    Transform t = PoolingManager.Spawn(answer, holderAnswer.position, Quaternion.Euler(-11.2f, 180f, 0f), holderAnswer);
+                    Transform t = PoolingManager.Spawn(answer, holderAnswer.position, answer.rotation, holderAnswer);
                     t.DOLocalMoveY(0.006f + high, .2f).SetEase(Ease.OutBack); 
                 });
                 napThung.gameObject.SetActive(false);

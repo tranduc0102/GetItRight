@@ -9,12 +9,12 @@ public class UISetting : MonoBehaviour
     public bool IsMuteMusic
     {
         get => PlayerPrefs.GetInt("IsMuteMusic", 0) == 1;
-        set => PlayerPrefs.SetInt("IsMuteMusic", value ? 0 : 1);
+        set => PlayerPrefs.SetInt("IsMuteMusic", value ? 1 : 0);
     }
     public bool IsMuteSound
     {
         get => PlayerPrefs.GetInt("IsMuteSound", 0) == 1;
-        set => PlayerPrefs.SetInt("IsMuteSound", value ? 0 : 1);
+        set => PlayerPrefs.SetInt("IsMuteSound", value ? 1 : 0);
     }
     public bool IsOffVibration
     {
@@ -53,8 +53,8 @@ public class UISetting : MonoBehaviour
     
     private void LoadSettings()
     {
-        _spriteIconMusic.sprite = IsMuteMusic ? _spritesIconMusic[0] : _spritesIconMusic[1];
-        _spriteIconSound.sprite = IsMuteSound ? _spritesIconSound[0] : _spritesIconSound[1];
+        _spriteIconMusic.sprite = IsMuteMusic ? _spritesIconMusic[1] : _spritesIconMusic[0];
+        _spriteIconSound.sprite = IsMuteSound ? _spritesIconSound[1] : _spritesIconSound[0];
         _spriteIconVibration.sprite = IsOffVibration ? _spritesIconVibration[1] : _spritesIconVibration[0];
     }
     

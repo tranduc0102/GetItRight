@@ -1,12 +1,14 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using _Scripts;
 using _Scripts.Extension;
 using ACEPlay.Bridge;
 using DG.Tweening;
 using Lean.Touch;
 using UnityEngine;
 using pooling;
+using TMPro;
 using UnityEngine.Events;
 using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
@@ -22,7 +24,7 @@ namespace Game
         [SerializeField] private LevelData currentLevel;
         public int CurrentSkin
         {
-            get => PlayerPrefs.GetInt("CurrentThem", 0);
+            get => PlayerPrefs.GetInt("CurrentSkin", 0);
             set
             {
                 if (value < 0) return;
@@ -128,9 +130,14 @@ namespace Game
 
         private void Start()
         {
+            CurrentSkin = 1;
             UIController.instance.SetActionOnWin(NextLevel);
             UIController.instance.SetActionSave(SaveLevelFail);
             UIController.instance.SetActionOnLose(PlayAgain);
+            IsWin = false;
+            canClick = true;
+            inGame1 = true;
+            
         }
 
         private void InitializeGame()
@@ -141,6 +148,7 @@ namespace Game
             SpawnPanel();
             boxManager.NextLevelOrReplay(currentLevel.amountBox);
             playerManager.MoveToTarget();
+            AudioManager.instance.StopMusic();
             BridgeController.instance.LogLevelStartWithParameter(PlayerPrefs.GetInt("CurrentLevel", 1));
         }
         private void OnEnable()

@@ -25,6 +25,8 @@ namespace _Scripts
         [Space] [Header("Audio in Game")] 
         [SerializeField] private AudioClip soundClickCan;
         [SerializeField] private AudioClip[] soundConnect;
+        [SerializeField] private AudioClip soundWin;
+        [SerializeField] private AudioClip soundLose;
         [Space]
         [Header("Audio awsome")]
         [SerializeField] SoundAndEffect[] soundAndEffectAwsomes;
@@ -183,15 +185,17 @@ namespace _Scripts
         }
         public void PlaySoundWin()
         {
+            PlaySfx(soundWin);
         }
 
         public void PlaySoundWinWithFireWork()
         {
+            
         }
 
         public void PlaySoundLose()
         {
-           
+            PlaySfx(soundLose);
         }
     }
 }

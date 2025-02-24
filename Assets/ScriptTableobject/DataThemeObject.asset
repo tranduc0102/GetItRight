@@ -29,3 +29,11 @@ MonoBehaviour:
     - {fileID: 4299807062384424597, guid: cdff7e6a8fbec10429660cd67fb2791c, type: 3}
     - {fileID: 1817101864288101989, guid: b4064c5074d884349893d4c6ac6658aa, type: 3}
     - {fileID: 6298815008608179862, guid: cdc4b3e07103fea4b9615e3559c3760a, type: 3}
+  - name: Bida
+    items:
+    - {fileID: 8035509680526697812, guid: 87e115c0c4a80864cad0dbb04ee720f0, type: 3}
+    - {fileID: 4927870843553822810, guid: 1001be9aa6871d84aad26b29d33c54af, type: 3}
+    - {fileID: 3002075381216546069, guid: e588b0535123125459a12a5de1b77c49, type: 3}
+    - {fileID: 4663695807856501989, guid: 56b35aca43821de4db3c9b4c92065930, type: 3}
+    - {fileID: 1032386999502269488, guid: a0035c931f3c0444cb7089787ea1ac2c, type: 3}
+    - {fileID: 1537818128958170553, guid: f1f9e6a7e89e33b429b3cb183b9ecd2a, type: 3}
