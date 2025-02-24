@@ -1,3 +1,4 @@
+using _Scripts;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -5,15 +6,15 @@ public class UISetting : MonoBehaviour
 {
     [SerializeField] private GameObject panelSetting;
 
-    private bool CanMusic
+    public bool IsMuteMusic
     {
-        get => PlayerPrefs.GetInt("CanMusic", 1) == 1;
-        set => PlayerPrefs.SetInt("CanMusic", value ? 1 : 0);
+        get => PlayerPrefs.GetInt("IsMuteMusic", 0) == 1;
+        set => PlayerPrefs.SetInt("IsMuteMusic", value ? 0 : 1);
     }
-    private bool CanSound
+    public bool IsMuteSound
     {
-        get => PlayerPrefs.GetInt("CanSound", 1) == 1;
-        set => PlayerPrefs.SetInt("CanSound", value ? 1 : 0);
+        get => PlayerPrefs.GetInt("IsMuteSound", 0) == 1;
+        set => PlayerPrefs.SetInt("IsMuteSound", value ? 0 : 1);
     }
     public bool IsOffVibration
     {
@@ -52,23 +53,25 @@ public class UISetting : MonoBehaviour
     
     private void LoadSettings()
     {
-        _spriteIconMusic.sprite = CanMusic ? _spritesIconMusic[0] : _spritesIconMusic[1];
-        _spriteIconSound.sprite = CanSound ? _spritesIconSound[0] : _spritesIconSound[1];
+        _spriteIconMusic.sprite = IsMuteMusic ? _spritesIconMusic[0] : _spritesIconMusic[1];
+        _spriteIconSound.sprite = IsMuteSound ? _spritesIconSound[0] : _spritesIconSound[1];
         _spriteIconVibration.sprite = IsOffVibration ? _spritesIconVibration[1] : _spritesIconVibration[0];
     }
     
     private void ButtonMusicClick()
     {
-        CanMusic = !CanMusic;
-        _spriteIconMusic.sprite = CanMusic ? _spritesIconMusic[0] : _spritesIconMusic[1];
+        IsMuteMusic = !IsMuteMusic;
+        _spriteIconMusic.sprite = IsMuteMusic ? _spritesIconMusic[1] : _spritesIconMusic[0];
         _spriteIconMusic.SetNativeSize();
+        AudioManager.instance.SetMuteMusic();
     }
     
     private void ButtonSoundClick()
     {
-        CanSound = !CanSound;
-        _spriteIconSound.sprite = CanSound ? _spritesIconSound[0] : _spritesIconSound[1];
+        IsMuteSound = !IsMuteSound;
+        _spriteIconSound.sprite = IsMuteSound ? _spritesIconSound[1] : _spritesIconSound[0];
         _spriteIconSound.SetNativeSize();
+        AudioManager.instance.SetMuteSounds();
     }
     
     private void ButtonVibrationClick()

@@ -82,10 +82,18 @@ public class PlayerManager : MonoBehaviour
         if (!anim.GetCurrentAnimatorStateInfo(0).IsName(animName))
         {
             anim.SetTrigger(animName);
-            if (Enum.TryParse(animName, out StateFace state))
-            {
-                _animFace.SetState(state, anim.GetCurrentAnimatorStateInfo(0).length);
-            }        } 
+            StartCoroutine(WaitForAnimationStart(anim, animName));
+        }
+    }
+
+    private IEnumerator WaitForAnimationStart(Animator anim, string animName)
+    {
+        yield return new WaitUntil(() => anim.GetCurrentAnimatorStateInfo(0).IsName(animName));
+        float animLength = anim.GetCurrentAnimatorStateInfo(0).length;
+        if (Enum.TryParse(animName, out StateFace state))
+        {
+            _animFace.SetState(state, animLength);
+        }
     }
     public void ResetPlayers()
     {
