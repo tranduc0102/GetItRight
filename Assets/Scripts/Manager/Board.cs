@@ -66,24 +66,17 @@ namespace Game
             {
                 yield return new WaitForSeconds(0.5f);
                 yield return StartCoroutine(CheckAnswerInLine());
-                yield return new WaitForSeconds(0.5f);
-
                 if (win)
                 {
-                    
                     yield break;
                 }
-              
-                
-                int bonus = HandleBonusLogic();
-                HandleBoardMovement(bonus);
-
                 if (!win && currentIndex >= amountObjects.Length)
                 {
                     HandleLevelFail();
                     yield break;
                 }
-
+                int bonus = HandleBonusLogic();
+                HandleBoardMovement(bonus);
                 DOVirtual.DelayedCall(1f, () => GameController.Instance.CanClick = true);
             }
             else
@@ -142,10 +135,11 @@ namespace Game
                     {
                         amountObjects[targetIndex].answer = amountObjects[index].answer;
                         amountObjects[targetIndex].IsNone = false;
-                        float high = amountObjects[index].currentItem.name.Contains("can") ? 0f : 0.003f;
                         amountObjects[targetIndex].currentItem = PoolingManager.Spawn(amountObjects[index].currentItem,
                             amountObjects[targetIndex].transform.position, amountObjects[index].currentItem.rotation, amountObjects[targetIndex].transform);
-                        amountObjects[targetIndex].currentItem.DOLocalMoveY(0.0008f + high, 0.5f);
+
+                        amountObjects[targetIndex].currentItem.localPosition = new Vector3(  amountObjects[targetIndex].currentItem.localPosition.x, amountObjects[targetIndex].currentItem.localPosition.y, amountObjects[index].currentItem.transform.localPosition.z);
+                        amountObjects[targetIndex].currentItem.DOLocalMoveY(amountObjects[index].currentItem.transform.localPosition.y, 0.5f);
                         bonus++;
                     }
                 }
@@ -172,7 +166,7 @@ namespace Game
 
         private void HandleLevelFail()
         {
-            GameController.Instance.PlayerManager.PlayAnim("ThatBai");
+            GameController.Instance.PlayerManager.PlayAnim(StateFace.ThatBai);
             UIController.instance.ShowDisplayLevelFail(true);
             BridgeController.instance.LogLevelFailWithParameter(PlayerPrefs.GetInt("CurrentLevel", 1));
         }
@@ -214,11 +208,11 @@ namespace Game
 
             if (GameController.Instance.inGame2)
             {
-                yield return HandleMaterialChangeForGameTest1(tempMaterials);
+                yield return HandleMaterialChangeForInGame2(tempMaterials);
             }
             if (GameController.Instance.inGame1)
             {
-                yield return HandleMaterialChangeForGameTest2(tempMaterials);
+                yield return HandleMaterialChangeForInGame1(tempMaterials);
             }
 
             if (!tempMaterials.Contains(materialMaybe) && !tempMaterials.Contains(materialNo))
@@ -230,12 +224,15 @@ namespace Game
 
             if (!showBox && !win)
             {
-                GameController.Instance.PlayerManager.PlayAnim("DoanSai");
                 AudioManager.instance.PlaySoundDoanSai();
+                if (currentIndex < amountObjects.Length - 1)
+                {
+                    GameController.Instance.PlayerManager.PlayAnim(StateFace.DoanSai);
+                }
             }
         }
 
-        private IEnumerator HandleMaterialChangeForGameTest1(Material[] tempMaterials)
+        private IEnumerator HandleMaterialChangeForInGame2(Material[] tempMaterials)
         {
             for (int index = currentIndex - countInRow; index < currentIndex; index++)
             {
@@ -253,7 +250,7 @@ namespace Game
             }
         }
 
-        private IEnumerator HandleMaterialChangeForGameTest2(Material[] tempMaterials)
+        private IEnumerator HandleMaterialChangeForInGame1(Material[] tempMaterials)
         {
             int idSound = 0;
             showBox = false;
@@ -312,10 +309,11 @@ namespace Game
         {
             amountObjects[index].answer = amountObjects[targetIndex].answer;
             amountObjects[index].IsNone = false;
-            Quaternion spawnRotation = Quaternion.Euler(0f, 180, 0);
             amountObjects[index].currentItem = PoolingManager.Spawn(amountObjects[targetIndex].currentItem,
-                amountObjects[index].transform.position, spawnRotation, amountObjects[index].transform);
-            amountObjects[index].currentItem.DOLocalMoveY(0.0008f, 0.5f);
+                amountObjects[targetIndex].transform.position, amountObjects[targetIndex].currentItem.rotation, amountObjects[index].transform);
+            
+            amountObjects[index].currentItem.DOLocalMoveZ(amountObjects[targetIndex].currentItem.transform.localPosition.z, 0.05f);
+            amountObjects[index].currentItem.DOLocalMoveY(amountObjects[targetIndex].currentItem.transform.localPosition.y, 0.5f);
         }
 
         private void ResetRemainingItems()

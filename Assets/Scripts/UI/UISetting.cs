@@ -48,6 +48,7 @@ public class UISetting : MonoBehaviour
     
     public void ShowDisplay(bool enable = false)
     {
+        AudioManager.instance.PlaySoundButtonClick();
         panelSetting.SetActive(enable);
     }
     
@@ -60,6 +61,7 @@ public class UISetting : MonoBehaviour
     
     private void ButtonMusicClick()
     {
+        AudioManager.instance.PlaySoundButtonClick();
         IsMuteMusic = !IsMuteMusic;
         _spriteIconMusic.sprite = IsMuteMusic ? _spritesIconMusic[1] : _spritesIconMusic[0];
         _spriteIconMusic.SetNativeSize();
@@ -68,6 +70,7 @@ public class UISetting : MonoBehaviour
     
     private void ButtonSoundClick()
     {
+        AudioManager.instance.PlaySoundButtonClick();
         IsMuteSound = !IsMuteSound;
         _spriteIconSound.sprite = IsMuteSound ? _spritesIconSound[1] : _spritesIconSound[0];
         _spriteIconSound.SetNativeSize();
@@ -76,6 +79,7 @@ public class UISetting : MonoBehaviour
     
     private void ButtonVibrationClick()
     {
+        AudioManager.instance.PlaySoundButtonClick();
         IsOffVibration = !IsOffVibration;
         _spriteIconVibration.sprite = IsOffVibration ? _spritesIconVibration[1] : _spritesIconVibration[0];
         _spriteIconVibration.SetNativeSize();

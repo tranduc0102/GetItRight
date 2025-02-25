@@ -1,9 +1,11 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using _Scripts;
 using UnityEngine;
 using DG.Tweening;
 using Game;
+using pooling;
 
 public class PlayerManager : MonoBehaviour
 {
@@ -51,14 +53,14 @@ public class PlayerManager : MonoBehaviour
 
         Transform player = players[currentIndex];
 
-        player.DORotate(new Vector3(-15.354f, 180, 0), 1f)
+        /*player.DORotate(new Vector3(-15.354f, 180, 0), 1f)
               .OnComplete(() =>
               {
                   player.DOLocalMove(positionTarget, durations[currentIndex]).OnComplete(() =>
                   {
                       GameController.Instance.playerMoved = false;
                   });
-              });
+              });*/
     }
 
     public void NextPlayerMovement()
@@ -76,24 +78,26 @@ public class PlayerManager : MonoBehaviour
                         });
               });
     }
-    public void PlayAnim(string animName)
+    public void PlayAnim(StateFace animName)
     {
         Animator anim = players[currentIndex].GetComponent<Animator>();
-        if (!anim.GetCurrentAnimatorStateInfo(0).IsName(animName))
+        if (!anim.GetCurrentAnimatorStateInfo(0).IsName(animName.ToString()))
         {
-            anim.SetTrigger(animName);
+            anim.SetTrigger(animName.ToString());
             StartCoroutine(WaitForAnimationStart(anim, animName));
         }
     }
 
-    private IEnumerator WaitForAnimationStart(Animator anim, string animName)
+    private IEnumerator WaitForAnimationStart(Animator anim, StateFace animName)
     {
-        yield return new WaitUntil(() => anim.GetCurrentAnimatorStateInfo(0).IsName(animName));
+        yield return new WaitUntil(() => anim.GetCurrentAnimatorStateInfo(0).IsName(animName.ToString()));
         float animLength = anim.GetCurrentAnimatorStateInfo(0).length;
-        if (Enum.TryParse(animName, out StateFace state))
+        if (animName == StateFace.DoanSai)
         {
-            _animFace.SetState(state, animLength);
+            AudioManager.instance.PlaySoundAngry();
         }
+        if (!_animFace) yield break;
+        _animFace.SetState(animName, animLength);
     }
     public void ResetPlayers()
     {
@@ -105,5 +109,37 @@ public class PlayerManager : MonoBehaviour
             players[i].rotation = Quaternion.Euler(0, 360, 0);
         }
         currentIndex = 0;
+    }
+    public Transform player1;
+    public Transform player2;
+    public Transform player3;
+    public Transform player4;
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.A))
+        {
+            ChangePlayer(player1);
+        }
+        if (Input.GetKeyDown(KeyCode.S))
+        {
+            ChangePlayer(player2);
+        }
+        if (Input.GetKeyDown(KeyCode.D))
+        {
+            ChangePlayer(player3);
+        }
+        if (Input.GetKeyDown(KeyCode.F))
+        {
+            ChangePlayer(player4);
+        }
+    }
+    public void ChangePlayer(Transform player)
+    {
+        PoolingManager.Despawn(players[0].gameObject);
+        players[0] = PoolingManager.Spawn(player, transform.position + player.position, player.rotation, transform);
+        if (!players[0].gameObject.TryGetComponent(out _animFace))
+        {
+            Debug.LogWarning("Character mới không có animface");
+        }    
     }
 }

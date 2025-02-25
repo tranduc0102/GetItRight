@@ -14,8 +14,7 @@ public class FadeWithPropertyBlock : MonoBehaviour
         objRenderer = GetComponent<Renderer>();
         if (IsFade)
         {
-            SetOpacity(0.2f);
-            Debug.Log("Ok");
+            SetOpacity(0.3f);
         }
     }
 

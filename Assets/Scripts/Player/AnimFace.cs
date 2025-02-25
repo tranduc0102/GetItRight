@@ -15,8 +15,8 @@ public enum StateFace
 public class AnimFace : MonoBehaviour
 {
     [SerializeField] private Material spriteMaterial;
-    [SerializeField] private float frameDuration = 0.1f;
-    [SerializeField] private float frameDelayDuration = 0.1f;
+    [SerializeField] private float frameDuration = 0.08f;
+    [SerializeField] private float frameDelayDuration = 1.8f;
     private int counter = 0;
     private bool canStop;
     private const float frameOffsetX = 0.1793f;
@@ -34,73 +34,104 @@ public class AnimFace : MonoBehaviour
     public void SetState(StateFace state, float duration)
     {
         this.State = state;
+        counter = 0;
+        currentFrame = 0;
+        elapsedTime = 0;
+        canStop = false;
+        switch (State)
+        {
+            case StateFace.DoanDung:
+                spriteMaterial.mainTextureOffset = new Vector2(frameOffsetX * currentFrame, frameHappyOffsetY);
+                break;
+            case StateFace.DoanSai:
+                spriteMaterial.mainTextureOffset = new Vector2(frameOffsetX * currentFrame, frameAngryOffsetY);
+                break;
+            case StateFace.Win:
+                spriteMaterial.mainTextureOffset = new Vector2(frameOffsetX * currentFrame, frameWinOffsetY);
+                break;
+            case StateFace.ThatBai:
+                spriteMaterial.mainTextureOffset = new Vector2(frameOffsetX * currentFrame, frameLoseOffsetY);
+                break;
+        }
         StartCoroutine(ResetStateAfterDelay(duration, state));
     }
 
     private IEnumerator ResetStateAfterDelay(float delay, StateFace state)
     {
-        yield return new WaitForSeconds(delay);
-        Debug.Log(delay);
-        Debug.Log("Reset State After Delay");
+        yield return new WaitForSeconds(delay - delay * 0.15f);
+        if(state == StateFace.Win || state == StateFace.ThatBai) yield break;
+        counter = 0;
+        currentFrame = 0;
+        elapsedTime = 0;
+        canStop = false;
         this.State = StateFace.Idle;
     }
-    private void Update()
+   private Tween _delayTween;
+
+private void Update()
+{
+    if (canStop) return;
+    
+    elapsedTime += Time.deltaTime;
+    if (elapsedTime >= frameDuration + Time.deltaTime * 2)
     {
-        if(canStop && State == StateFace.Idle) return;
-        elapsedTime += Time.deltaTime;
-        if (elapsedTime >= frameDuration + Time.deltaTime * 2)
+        if (State != StateFace.ThatBai)
         {
-            if (State != StateFace.ThatBai)
+            switch (State)
             {
-                if (State == StateFace.Idle)
-                {
+                case StateFace.Idle:
                     spriteMaterial.mainTextureOffset = new Vector2(frameOffsetX * currentFrame, frameIdleOffsetY);
-                }  
-                if (State == StateFace.DoanDung)
-                {
+                    break;
+                case StateFace.DoanDung:
                     spriteMaterial.mainTextureOffset = new Vector2(frameOffsetX * currentFrame, frameHappyOffsetY);
-                }
-                if (State == StateFace.DoanSai)
-                {
+                    break;
+                case StateFace.DoanSai:
                     spriteMaterial.mainTextureOffset = new Vector2(frameOffsetX * currentFrame, frameAngryOffsetY);
-                }  
-                if (State == StateFace.Win)
-                {
+                    break;
+                case StateFace.Win:
                     spriteMaterial.mainTextureOffset = new Vector2(frameOffsetX * currentFrame, frameWinOffsetY);
-                } 
-                if (currentFrame >= 4)
-                {
-                    frameDirection = -1;
-                }
-                if (currentFrame <= 0)
-                {
-                    frameDirection = 1;
-                    counter += 1;
-                    if (counter >= 1 && State == StateFace.Idle)
-                    {
-                        canStop = true;
-                        DOVirtual.DelayedCall(frameDelayDuration, delegate
-                        {
-                            canStop = false;
-                            counter = 0;
-                        });   
-                    }
-                }
+                    break;
             }
-            else
+
+            if (currentFrame >= 4) 
             {
-                spriteMaterial.mainTextureOffset = new Vector2(frameOffsetX * currentFrame, frameLoseOffsetY);
-                if (currentFrame >= 2)
+                frameDirection = -1;
+            }
+        }
+        else 
+        {
+            spriteMaterial.mainTextureOffset = new Vector2(frameOffsetX * currentFrame, frameLoseOffsetY);
+            if (currentFrame >= 2)
+            {
+                frameDirection = -1;
+            }
+        }
+        if (currentFrame <= 0 && frameDirection == -1) 
+        {
+            frameDirection = 1;
+
+            if (State != StateFace.DoanSai) 
+            {
+                counter++;
+
+                if (counter >= 1) 
                 {
-                    frameDirection = -1;
-                }
-                if (currentFrame <= 0)
-                {
-                    frameDirection = 1;
+                    canStop = true;
+
+                    _delayTween?.Kill();
+
+                    _delayTween = DOVirtual.DelayedCall(frameDelayDuration, () =>
+                    {
+                        canStop = false;
+                        counter = 0;
+                    });
                 }
             }
-            currentFrame += frameDirection;
-            elapsedTime -= frameDuration;
         }
+
+        currentFrame += frameDirection;
+        elapsedTime -= frameDuration;
     }
+}
+
 }

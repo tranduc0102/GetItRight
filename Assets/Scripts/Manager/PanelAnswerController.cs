@@ -108,11 +108,9 @@ namespace Game
 
         private void SpawnResults()
         {
-            float high = results.Count > 0 && results[^1].name.Contains("Can") ? 0.1f : 1f;
-            
             for (int i = 0; i < Mathf.Min(posObject.Count, results.Count); i++)
             {
-                objItem.Add(PoolingManager.Spawn(results[i].transform, posObject[i].position + Vector3.up * high, results[i].transform.rotation, posObject[i].transform));
+                objItem.Add(PoolingManager.Spawn(results[i].transform, posObject[i].position + Vector3.up, results[i].transform.rotation, posObject[i].transform));
             }
             Debug.LogWarning("Ok1");
         }
@@ -173,8 +171,8 @@ namespace Game
         {
             GameController.Instance.Board.NextLine();
             targetPos.IsNone = false;
-            float high = objToMove.name.Contains("Can") ? 0.14f : 0.6f;
-            float distance = 0.15f;
+            float high = 0.75f;
+            float distance = 0f;
             objToMove.DOJump(targetPos.transform.position + new Vector3(0f, 1 * high, -distance), jumpPower: 0.5f, numJumps: 1, duration: 0.5f)
                 .SetEase(Ease.OutQuad)
                 .OnComplete(delegate

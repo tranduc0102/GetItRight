@@ -23,10 +23,14 @@ namespace _Scripts
         [SerializeField] private AudioClip toggleClickOff;
 
         [Space] [Header("Audio in Game")] 
+        [SerializeField] private AudioClip musicInGame;
         [SerializeField] private AudioClip soundClickCan;
         [SerializeField] private AudioClip[] soundConnect;
         [SerializeField] private AudioClip soundWin;
+        [SerializeField] private AudioClip soundFail;
         [SerializeField] private AudioClip soundLose;
+        [SerializeField] private AudioClip soundAngry;
+        [SerializeField] private AudioClip soundBoxFall;
         [Space]
         [Header("Audio awsome")]
         [SerializeField] SoundAndEffect[] soundAndEffectAwsomes;
@@ -44,7 +48,7 @@ namespace _Scripts
             SetMuteSounds();
             SetMuteMusic();
         }
-
+        
         public void PlaySoundClickObject()
         {
             PlaySfx(soundClickCan);
@@ -125,13 +129,33 @@ namespace _Scripts
             PlaySfx(toggleClickOff);
             Vibration.Vibrate(28);
         }
-        public void PlayInGameMusic(AudioClip audioClip)
+        public void PlaySoundWin()
+        {
+            PlaySfx(soundWin);
+        }
+        public void PlaySoundlevelFail()
+        {
+            PlaySfx(soundFail);
+        }
+        public void PlaySoundLose()
+        {
+            PlaySfx(soundLose);
+        }
+        public void PlaySoundAngry()
+        {
+            PlaySfx(soundAngry);
+        }
+        public void PlaySoundBoxFall()
+        {
+            PlaySfx(soundBoxFall);
+        }
+        public void PlayInGameMusic()
         {
             if (!musicSource.isPlaying)
             {
-                if (audioClip != null)
+                if (musicInGame != null)
                 {
-                    musicSource.clip = audioClip;
+                    musicSource.clip = musicInGame;
                     musicSource.DOFade(1f, 0.5f).OnPlay(() =>
                     {
                         musicSource.Play();
@@ -182,20 +206,6 @@ namespace _Scripts
                 }
 
             }
-        }
-        public void PlaySoundWin()
-        {
-            PlaySfx(soundWin);
-        }
-
-        public void PlaySoundWinWithFireWork()
-        {
-            
-        }
-
-        public void PlaySoundLose()
-        {
-            PlaySfx(soundLose);
         }
     }
 }

@@ -49,15 +49,18 @@ public class UIController : Singleton<UIController>
         btnNext.onClick.AddListener(delegate
         {
             uiWin.SetActive(false);
+            AudioManager.instance.PlaySoundButtonClick();
             actionNext?.Invoke();
         });
         btnPlayAgain.onClick.AddListener(delegate
         {
             uiLose.SetActive(false);
+            AudioManager.instance.PlaySoundButtonClick();
             actionAgain?.Invoke();
         });
         btnShop.onClick.AddListener(delegate
         {
+            AudioManager.instance.PlaySoundButtonClick();
             objShop.SetActive(true);
         });
         btnBackShop.onClick.AddListener(delegate
@@ -66,12 +69,14 @@ public class UIController : Singleton<UIController>
         });
         btnNoThanks.onClick.AddListener(delegate
         {
+            AudioManager.instance.PlaySoundButtonClick();
             uiLevelFail.SetActive(false);
             uiLose.SetActive(true);
             AudioManager.instance.PlaySoundLose();
         });
         btnSave.onClick.AddListener(delegate
         {
+            AudioManager.instance.PlaySoundButtonClick();
             uiLevelFail.SetActive(false);
             actionSave?.Invoke();
         });
@@ -101,6 +106,7 @@ public class UIController : Singleton<UIController>
     public void ShowDisplayLevelFail(bool enable)
     {
         uiLevelFail.SetActive(enable);
+        AudioManager.instance.PlaySoundlevelFail();
     }
     public void SetActionOnWin(UnityAction action)
     {

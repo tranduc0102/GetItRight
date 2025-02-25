@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using _Scripts;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -44,9 +45,11 @@ namespace Game
         private void ActionClick()
         {
             if(!UnLock)return;
+            AudioManager.instance.PlaySoundButtonClick();
             if (type == TypeItemInShop.Theme)
             {
                 GameController.Instance.CurrentSkin = ID;
+                Debug.Log("OK");
             }
             else
             {

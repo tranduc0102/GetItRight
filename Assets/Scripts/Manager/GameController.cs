@@ -29,6 +29,10 @@ namespace Game
             {
                 if (value < 0) return;
                 PlayerPrefs.SetInt("CurrentSkin", value);
+                if (currentPanel)
+                {
+                    currentPanel.UpdateChangeTheme(value,true);
+                }
             }
         }
         public LevelData CurrentLevelGame => currentLevel;
@@ -96,7 +100,7 @@ namespace Game
                 isWin = value;
                 if (isWin)
                 {
-                    playerManager.PlayAnim("Win");
+                    playerManager.PlayAnim(StateFace.Win);
                     DOVirtual.DelayedCall(0.7f, delegate
                     {
                         UIController.instance.ShowDisplayWin(true);
@@ -130,7 +134,7 @@ namespace Game
 
         private void Start()
         {
-            CurrentSkin = 1;
+            CurrentSkin = 3;
             UIController.instance.SetActionOnWin(NextLevel);
             UIController.instance.SetActionSave(SaveLevelFail);
             UIController.instance.SetActionOnLose(PlayAgain);
@@ -149,6 +153,10 @@ namespace Game
             boxManager.NextLevelOrReplay(currentLevel.amountBox);
             playerManager.MoveToTarget();
             AudioManager.instance.StopMusic();
+            DOVirtual.DelayedCall(0.5f, delegate
+            {
+                AudioManager.instance.PlayInGameMusic();
+            });
             BridgeController.instance.LogLevelStartWithParameter(PlayerPrefs.GetInt("CurrentLevel", 1));
         }
         private void OnEnable()
@@ -175,6 +183,7 @@ namespace Game
                 {
                     IsWin = false;
                     canClick = true;
+                    playerManager.PlayAnim(StateFace.Idle);
                     currentBoard.SaveMeBoard();
                 });
                 BridgeController.instance.ShowRewarded("SaveMe", e);
@@ -184,6 +193,7 @@ namespace Game
         private void PlayAgain()
         {
             currentPanel.gameObject.SetActive(false);
+            playerManager.PlayAnim(StateFace.Idle);
             IsWin = false;
             canClick = true;
             GetAnswers(currentLevel.amountDistinct);
@@ -196,6 +206,7 @@ namespace Game
         public void NextLevel()
         {
             IsWin = false;
+            playerManager.PlayAnim(StateFace.Idle);
             IndexCurrentLevel += 1;
             currentLevel = CreateLevel.instance.GetLevelData(IndexCurrentLevel);
             canClick = true;
@@ -277,29 +288,14 @@ namespace Game
             {
                 case 3:
                     currentBoard = PoolingManager.Spawn(boards[0], table.position, Quaternion.identity, table);
-                    /*
-                    inGame.position = new Vector3(0f, 0f, DistanceInGame1);
-                    */
-                    /*
-                    parentPanel.localPosition = new Vector3(0f, parentPanel.localPosition.y, DistancePanel1);
-                    */
                     currentBoard.transform.localPosition = new Vector3(0f, 0f, -3f);
                     break;
                 case 4:
                     currentBoard = PoolingManager.Spawn(boards[1], table.position, Quaternion.identity, table);
-                    /*
-                    inGame.position = new Vector3(0f, 0f, DistanceInGame2);
-                    */
                     currentBoard.transform.localPosition = new Vector3(0f, 0f, -1.5f);
                     break;
                 case 5:
                     currentBoard = PoolingManager.Spawn(boards[2], table.position, Quaternion.identity, table);
-                    /*
-                    inGame.position = new Vector3(0f, 0f, DistanceInGame3);
-                    */
-                    /*
-                    parentPanel.localPosition = new Vector3(0f, parentPanel.localPosition.y, DistancePanel3);
-                    */
                     break;
             }
         }

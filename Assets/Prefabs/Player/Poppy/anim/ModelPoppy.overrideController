@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!221 &22100000
+AnimatorOverrideController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: ModelPoppy
+  m_Controller: {fileID: 9100000, guid: a63ce8986bef7fd4b8ea50f16a6dbfc8, type: 2}
+  m_Clips:
+  - m_OriginalClip: {fileID: 1827226128182048838, guid: 8431f6f7510a6b340ae7e7bae6d3d61c, type: 3}
+    m_OverrideClip: {fileID: 1827226128182048838, guid: 62d788891b69ad3468a6672b62323b4d, type: 3}
+  - m_OriginalClip: {fileID: 1827226128182048838, guid: 07f03e7e693c0e449bf22c5ae1ff2a13, type: 3}
+    m_OverrideClip: {fileID: 1827226128182048838, guid: e22f5a64603703c4982fe5e7ca9c22ca, type: 3}
+  - m_OriginalClip: {fileID: 1827226128182048838, guid: e783e7c5e4db65142a254d311ba399d3, type: 3}
+    m_OverrideClip: {fileID: 1827226128182048838, guid: 453c57f3b7bbf7a4d849770d26402f93, type: 3}
+  - m_OriginalClip: {fileID: 1827226128182048838, guid: 709fc86297898e447bbe635fc7bc7b76, type: 3}
+    m_OverrideClip: {fileID: 1827226128182048838, guid: 7203ec2c6951c1c4d93b95525b3f5bc2, type: 3}

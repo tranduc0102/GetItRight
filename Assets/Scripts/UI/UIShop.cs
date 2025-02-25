@@ -1,3 +1,4 @@
+using _Scripts;
 using ACEPlay.Bridge;
 using DG.Tweening;
 using Game;
@@ -32,6 +33,7 @@ public class UIShop : MonoBehaviour
         var imgSkin = btnSkin.GetComponent<Image>();
         btnTheme.onClick.AddListener(delegate
         {
+            AudioManager.instance.PlaySoundButtonClick();
             isTheme = true;
             imgTheme.sprite = sprites[0];
             imgSkin.sprite = sprites[1];
@@ -44,6 +46,7 @@ public class UIShop : MonoBehaviour
         });
         btnSkin.onClick.AddListener(delegate
         {
+            AudioManager.instance.PlaySoundButtonClick();
             isTheme = false;
             imgSkin.sprite = sprites[0];
             imgTheme.sprite = sprites[1];
@@ -60,6 +63,7 @@ public class UIShop : MonoBehaviour
 
     private void BuyNew()
     {
+        AudioManager.instance.PlaySoundButtonClick();
         if (PlayerPrefs.GetInt("AmountCoin", 0) >= 500)
         {
             if (isTheme)
@@ -91,6 +95,7 @@ public class UIShop : MonoBehaviour
     }
     private void RewardCoin()
     {
+        AudioManager.instance.PlaySoundButtonClick();
         if (BridgeController.instance.IsRewardReady())
         {
             UnityEvent e = new UnityEvent();
