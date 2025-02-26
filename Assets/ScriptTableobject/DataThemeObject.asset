@@ -23,7 +23,7 @@ MonoBehaviour:
     - {fileID: 4780275546310043661, guid: ceb9d37ac15803843bd00c077d491186, type: 3}
   - name: Egg
     items:
-    - {fileID: 3922081890107983965, guid: c1010233a8a0e52419ea3c2a7094df61, type: 3}
+    - {fileID: 6287309215084424320, guid: c1010233a8a0e52419ea3c2a7094df61, type: 3}
     - {fileID: 775874474419907303, guid: 2bc039d7667c06d4cb9ec70ffbffa5e6, type: 3}
     - {fileID: 8602511247324645449, guid: 8035c6e597dc3c14abf9d2d799a15b62, type: 3}
     - {fileID: 4299807062384424597, guid: cdff7e6a8fbec10429660cd67fb2791c, type: 3}
@@ -39,7 +39,7 @@ MonoBehaviour:
     - {fileID: 1537818128958170553, guid: f1f9e6a7e89e33b429b3cb183b9ecd2a, type: 3}
   - name: Animal
     items:
-    - {fileID: 3652797611686126062, guid: 32a20398efb351f4b9dfbf6c3bf8d1e9, type: 3}
+    - {fileID: 3903683628114378246, guid: 8a8fa6d894c047142a0dc89dfb9b3857, type: 3}
     - {fileID: 8903377375904632426, guid: 0037122a91d013e49812f3f0b9571b2d, type: 3}
     - {fileID: 1059222782040975268, guid: d95950e409e151147a0251990fb2f6ce, type: 3}
     - {fileID: 1015547536545657415, guid: 023a56e678d27d546952917a420433da, type: 3}

@@ -268,7 +268,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f57981c34f15cde45a2073557a548d8d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spriteMaterial: {fileID: 2100000, guid: c8fefe1e6e6d0204488bcb753ce7e14f, type: 2}
+  spriteMaterial: {fileID: 2100000, guid: 79bab76051bb9374588b7bbf3525e269, type: 2}
   frameDuration: 0.08
   frameDelayDuration: 1.8
   State: 0
@@ -377,7 +377,7 @@ SkinnedMeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: c8fefe1e6e6d0204488bcb753ce7e14f, type: 2}
+  - {fileID: 2100000, guid: 79bab76051bb9374588b7bbf3525e269, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

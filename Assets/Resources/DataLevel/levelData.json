@@ -5,7 +5,7 @@
             "level": 1,
             "amountBox": 3,
             "amountLine": 3,
-            "amountCan": 5,
+            "amountCan": 3,
             "amountDistinct": 3
         },
         {
@@ -277,7 +277,7 @@
             "level": 35,
             "amountBox": 7,
             "amountLine": 4,
-            "amountCan": 5,
+            "amountCan": 6,
             "amountDistinct": 5
         },
         {

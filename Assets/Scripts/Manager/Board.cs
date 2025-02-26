@@ -159,7 +159,20 @@ namespace Game
                 if (GameController.Instance.inGame1)
                 {
                     amountObjects[currentIndex].transform.parent.gameObject.SetActive(true);
-                    amountObjects[currentIndex].transform.parent.DOLocalMoveY(heightOfObjects, 1f).OnComplete(() => currentIndex += bonus);
+                    amountObjects[currentIndex].transform.parent.DOLocalMoveY(heightOfObjects, 1f).OnComplete(() =>
+                    {
+                        currentIndex += bonus;
+                        if (GameController.Instance.IsFirstPlayGame)
+                        {
+                            if (currentIndex > 2 && currentIndex < 5)
+                            {
+                                GameController.Instance.UpdateStepsTutorial(5);
+                            }else if (currentIndex >= 5)
+                            {
+                                GameController.Instance.UpdateStepsTutorial(7);
+                            }
+                        }
+                    });
                 }
             }
         }
@@ -268,6 +281,21 @@ namespace Game
                         if (GameController.Instance.BoxManager.Boxes[index % countInRow].ShowBox(amountObjects[index].currentItem))
                         {
                             showBox = true;
+                        }
+                    }
+                    if (GameController.Instance.IsFirstPlayGame)
+                    {
+                        if (tempMaterials[index % countInRow] == materialYes)
+                        {
+                            GameController.Instance.UpdateTextConnect(0);
+                        }
+                        else if (tempMaterials[index % countInRow] == materialMaybe)
+                        {
+                            GameController.Instance.UpdateTextConnect(1);
+                        }
+                        else
+                        {
+                            GameController.Instance.UpdateTextConnect(2);
                         }
                     }
                     yield return new WaitForSeconds(0.5f);

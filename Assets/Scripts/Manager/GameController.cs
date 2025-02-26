@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using _Scripts;
@@ -8,7 +7,6 @@ using DG.Tweening;
 using Lean.Touch;
 using UnityEngine;
 using pooling;
-using TMPro;
 using UnityEngine.Events;
 using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
@@ -121,7 +119,7 @@ namespace Game
         public EffectRewardCoin EffectCoin => effectCoin;
 
         private bool isPlay;
-
+        
         private void Awake()
         {
             if (Instance == null)
@@ -134,7 +132,6 @@ namespace Game
 
         private void Start()
         {
-            CurrentSkin = 3;
             UIController.instance.SetActionOnWin(NextLevel);
             UIController.instance.SetActionSave(SaveLevelFail);
             UIController.instance.SetActionOnLose(PlayAgain);
@@ -147,9 +144,25 @@ namespace Game
         private void InitializeGame()
         {
             currentLevel = CreateLevel.instance.GetLevelData(PlayerPrefs.GetInt("CurrentLevel", 1));
-            GetAnswers(currentLevel.amountDistinct);
-            SpawnBoard();
-            SpawnPanel();
+            if (PlayerPrefs.GetInt("CurrentLevel", 1) == 1 && IsFirstPlayGame)
+            {
+                answers.Clear();
+                answers = new List<EnumAnswer>(3)
+                {
+                    EnumAnswer.Zero,
+                    EnumAnswer.Zero,
+                    EnumAnswer.One,
+                };
+                currentBoard = tutorial.GetComponentInChildren<Board>();
+                currentPanel = tutorial.GetComponentInChildren<PanelAnswerController>();
+                tutorial.SetActive(true);
+            }
+            else
+            {
+                GetAnswers(currentLevel.amountDistinct);
+                SpawnBoard();
+                SpawnPanel();
+            }
             boxManager.NextLevelOrReplay(currentLevel.amountBox);
             playerManager.MoveToTarget();
             AudioManager.instance.StopMusic();
@@ -205,6 +218,12 @@ namespace Game
 
         public void NextLevel()
         {
+            if (IsFirstPlayGame && !IsFinishTutorial)
+            {
+                IsFirstPlayGame = false;
+                IsFinishTutorial = true;
+                tutorial.SetActive(false);
+            }
             IsWin = false;
             playerManager.PlayAnim(StateFace.Idle);
             IndexCurrentLevel += 1;
@@ -274,14 +293,6 @@ namespace Game
                     break;
             }
         }
-
-        private const float DistanceInGame1 = -3f;
-        private const float DistancePanel1 = -7f;
-        private const float DistanceInGame2 = -1f;
-        private const float DistancePanel2 = -9f;
-        private const float DistanceInGame3 = 0f;
-        private const float DistancePanel3 = -11f;
-
         private void GetBoard(int id, Board[] boards)
         {
             switch (id)
@@ -349,5 +360,65 @@ namespace Game
             SpawnPanel();
             boxManager.NextLevelOrReplay(currentLevel.amountBox);
         }
+    #region Tutorial
+        [Header("Tutorial")]
+        [SerializeField] private GameObject tutorial;
+        [SerializeField] private SpriteRenderer[] hand;
+        [SerializeField] private GameObject[] TextConnect;
+        public int IDCanClick = 0;
+        public bool IsFirstPlayGame
+        {
+            get => PlayerPrefs.GetInt("IsFirstPlayGame", 1) == 1;
+            set => PlayerPrefs.SetInt("IsFirstPlayGame", value ? 1 : 0);
+        }
+        public bool IsFinishTutorial
+        {
+            get => PlayerPrefs.GetInt("IsFinishTutorial", 0) == 1;
+            set => PlayerPrefs.SetInt("IsFinishTutorial", value ? 1 : 0);
+        }
+        public void UpdateStepsTutorial(int step)
+        {
+            switch (step)
+            {
+                case 1:
+                    hand[IDCanClick].DOFade(1, 0.5f);
+                    break;
+                case 2:
+                    ActivateCurrentHand(1);
+                    break;
+                case 3:
+                    ActivateCurrentHand(2);
+                    break;
+                case 4:
+                    ActivateCurrentHand(-1);
+                    break;
+                case 5:
+                    ActivateCurrentHand(0);
+                    break;
+                case 6:
+                    ActivateCurrentHand(-1);
+                    break;
+                case 7:
+                    ActivateCurrentHand(1);
+                    break;
+            }
+        }
+        public void UpdateTextConnect(int id)
+        {
+            if (TextConnect.Any(t => !t.activeSelf))
+            {
+                TextConnect[id].SetActive(true);
+            }
+        }
+        private void ActivateCurrentHand(int id)
+        {
+            hand[IDCanClick].DOFade(0, 0.1f).OnComplete(delegate
+            {
+                if(id < 0) return;
+                IDCanClick = id;
+                hand[IDCanClick].DOFade(1, 0.5f);
+            });
+        }
+    #endregion
     }
 }

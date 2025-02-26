@@ -19,6 +19,7 @@ namespace Game
         private List<Item> themeObjects = new List<Item>();
         private List<Item> results = new List<Item>();
         [SerializeField] private Camera cam;
+        
         private void OnValidate()
         {
             cam = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
@@ -40,8 +41,31 @@ namespace Game
         {
             results.Clear();
             transform.position = new Vector3(10f, transform.position.y, transform.position.z);
-            UpdateChangeTheme(GameController.Instance.CurrentSkin);
-            transform.DOLocalMoveX(0f, 1f);
+            if (GameController.Instance.IsFirstPlayGame && !GameController.Instance.IsFinishTutorial && PlayerPrefs.GetInt("CurrentLevel",1) == 1)
+            {
+                results.Clear();
+                themeObjects.Clear();
+                themeObjects.AddRange(dataThemeObject.themeData[0].items);
+                results = new List<Item>(3)
+                {
+                    themeObjects[2],
+                    themeObjects[1],
+                    themeObjects[0]
+                };
+                SpawnResults();
+                objItem.Reverse();
+            }
+            else
+            {
+                UpdateChangeTheme(GameController.Instance.CurrentSkin);
+            }
+            transform.DOLocalMoveX(0f, 1f).OnComplete(delegate
+            {
+                if (!GameController.Instance.IsFinishTutorial)
+                {
+                    GameController.Instance.UpdateStepsTutorial(1);
+                }
+            });
         }
 
         private void ClearPanel()
@@ -126,6 +150,7 @@ namespace Game
                 (list[k], list[n]) = (list[n], list[k]);
             }
         }
+        private int indexTutorial = 0;
         private void HandleClick(LeanFinger leanFinger)
         {
             if (!GameController.Instance.CanClick)
@@ -137,11 +162,52 @@ namespace Game
             {
                 Ray ray = cam.ScreenPointToRay(leanFinger.StartScreenPosition);
 
+                if (GameController.Instance.IsFirstPlayGame && !GameController.Instance.IsFinishTutorial)
+                {
+                    for (int i = 0; i < objItem.Count; i++)
+                    {
+                        if (i == GameController.Instance.IDCanClick)
+                        {
+                            objItem[i].GetComponent<Item>().CanMove = true;
+                        }
+                        else
+                        {
+                            objItem[i].GetComponent<Item>().CanMove = false;
+                        }
+                    }
+                }
                 if (Physics.Raycast(ray, out RaycastHit hit))
                 {
-                    if (hit.transform.TryGetComponent(out Item component) && component.CanMove)
+                    if (hit.transform.parent.TryGetComponent(out Item componentParent) && componentParent.CanMove)
                     {
-                        HandleItemSelection(component);
+                        HandleItemSelection(componentParent);
+                        if (!GameController.Instance.IsFinishTutorial)
+                        {
+                            if (indexTutorial == 0)
+                            {
+                                GameController.Instance.UpdateStepsTutorial(2);
+                            }
+                            else if (indexTutorial == 1)
+                            {
+                                GameController.Instance.UpdateStepsTutorial(3);
+                            }
+                            else if (indexTutorial == 2)
+                            {
+                                GameController.Instance.UpdateStepsTutorial(4);
+                            } else if (indexTutorial == 3)
+                            {
+                                GameController.Instance.UpdateStepsTutorial(5);
+                            }
+                            else if (indexTutorial == 4)
+                            {
+                                GameController.Instance.UpdateStepsTutorial(6);
+                            }
+                            else if (indexTutorial == 5)
+                            {
+                                GameController.Instance.UpdateStepsTutorial(6);
+                            }
+                            indexTutorial += 1;
+                        }
                     }
                 }
             }
