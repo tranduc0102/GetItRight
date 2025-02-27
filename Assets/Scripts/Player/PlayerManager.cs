@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -108,7 +109,6 @@ public class PlayerManager : MonoBehaviour
         }
         if (_animFace[index] == null) yield break;
         _animFace[index].SetState(animName, animLength);
-        Debug.Log(animName.ToString());
     }
     public void ResetPlayers()
     {
@@ -134,5 +134,23 @@ public class PlayerManager : MonoBehaviour
         {
             Debug.LogWarning("Character mới không có animface");
         }    
+    }
+    public void AnimRun(Action onFinish)
+    {
+        Animator anim1 = players[0].GetComponent<Animator>();
+        Sequence sequence = DOTween.Sequence();
+        sequence.Append(players[0].DOLocalRotate(Quaternion.Euler(15.35f, 0f, 0f).eulerAngles, 0.5f).OnComplete(delegate
+        {
+            anim1.SetTrigger("run");
+            onFinish?.Invoke();
+        }));
+        sequence.Append(DOVirtual.DelayedCall(2.6f, delegate
+        {
+            anim1.SetTrigger("Idle");
+        }));
+        sequence.Append(DOVirtual.DelayedCall(.3f, delegate
+        {
+            players[0].DOLocalRotate(Quaternion.Euler(15.35f, -180f, 0f).eulerAngles * -1f, 1f);
+        }));
     }
 }

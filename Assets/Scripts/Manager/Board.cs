@@ -31,6 +31,10 @@ namespace Game
         [SerializeField] private int currentIndex;
         public int CurrentIndex => currentIndex;
         private bool win;
+        // 0,2,-1
+        // 10,0,0
+        // 0, 16.3  -18.3
+        //43
         private List<EnumAnswer> answers;
 
         private void Start()

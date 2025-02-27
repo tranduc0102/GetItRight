@@ -259,10 +259,10 @@
         {
             "difficultyLevel": "Hard",
             "level": 33,
-            "amountBox": 7,
+            "amountBox": 5,
             "amountLine": 3,
             "amountCan": 6,
-            "amountDistinct": 6
+            "amountDistinct": 3
         },
         {
             "difficultyLevel": "Normal",
@@ -573,7 +573,7 @@
             "level": 72,
             "amountBox": 5,
             "amountLine": 3,
-            "amountCan": 5,
+            "amountCan": 6,
             "amountDistinct": 5
         },
         {
@@ -2254,7 +2254,7 @@
             "amountBox": 4,
             "amountLine": 3,
             "amountCan": 4,
-            "amountDistinct": 4
+            "amountDistinct": 2
         },
         {
             "difficultyLevel": "Easy",
@@ -2310,7 +2310,7 @@
             "amountBox": 6,
             "amountLine": 3,
             "amountCan": 6,
-            "amountDistinct": 4
+            "amountDistinct": 3
         },
         {
             "difficultyLevel": "Normal",
@@ -2318,7 +2318,7 @@
             "amountBox": 4,
             "amountLine": 3,
             "amountCan": 4,
-            "amountDistinct": 4
+            "amountDistinct": 2
         },
         {
             "difficultyLevel": "Hard",

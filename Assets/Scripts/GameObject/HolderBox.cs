@@ -27,6 +27,7 @@ namespace Game
                 effectOpen.Play();
                 DOVirtual.DelayedCall(0.2f, delegate {
                     Transform t = PoolingManager.Spawn(answer, holderAnswer.position, answer.rotation, holderAnswer);
+                    t.localScale = Vector3.one * 1.2f;
                     t.DOLocalMoveY(0.006f + high, .2f).SetEase(Ease.OutBack); 
                 });
                 napThung.gameObject.SetActive(false);

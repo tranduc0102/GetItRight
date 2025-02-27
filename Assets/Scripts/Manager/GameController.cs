@@ -118,6 +118,9 @@ namespace Game
         [Header("Effect")]
         [SerializeField] private EffectRewardCoin effectCoin;
         public EffectRewardCoin EffectCoin => effectCoin;
+        [Space]
+        [Header("Camera")]
+        [SerializeField] SmoothCameraController cameraController;
 
         private bool isPlay;
         
@@ -153,7 +156,9 @@ namespace Game
         {
             if(UIDetection.IsPointerOverUIObject() || isPlay)return;
             isPlay = true;
-            InitializeGame();
+           
+            playerManager.AnimRun( cameraController.MoveAndRotateTo);
+            DOVirtual.DelayedCall(3.1f, InitializeGame);
         }
         private void InitializeGame()
         {
@@ -255,6 +260,7 @@ namespace Game
             IndexCurrentLevel += 1;
             currentLevel = CreateLevel.instance.GetLevelData(IndexCurrentLevel);
             canClick = true;
+            
             GetAnswers(currentLevel.amountDistinct);
             Destroy(currentBoard.gameObject);
             SpawnBoard();
