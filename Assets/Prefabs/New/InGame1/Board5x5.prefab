@@ -4773,7 +4773,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   startPosition: {x: 0, y: 0, z: 0}
-  direction: -11
+  direction: 11
   duration: 1
 --- !u!1 &5903202179978065063
 GameObject:
@@ -5829,7 +5829,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   startPosition: {x: 0, y: 0, z: 0}
-  direction: -11
+  direction: 11
   duration: 1
 --- !u!1 &6676012489519156919
 GameObject:
@@ -6642,6 +6642,7 @@ MonoBehaviour:
   materialNo: {fileID: 2100000, guid: 5e72cca0cdabdff49be7cb12d6696b3e, type: 2}
   materialMaybe: {fileID: 2100000, guid: 89b1e3f2231d37d46af715800056d5a5, type: 2}
   heightOfObjects: 2.45
+  currentIndex: 0
 --- !u!1 &8007490718816972857
 GameObject:
   m_ObjectHideFlags: 0

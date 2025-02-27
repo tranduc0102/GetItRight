@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using _Scripts;
@@ -68,9 +69,9 @@ namespace Game
         [SerializeField] private Board currentBoard;
         public Board Board => currentBoard;
 
-        [FormerlySerializedAs("IsTest1")] public bool isTest1;
-        [FormerlySerializedAs("InGame2")] public bool inGame2;
         [FormerlySerializedAs("InGame1")] public bool inGame1;
+        [FormerlySerializedAs("InGame2")] public bool inGame2;
+
 
         [SerializeField] private bool canClick = true;
         public bool CanClick
@@ -140,9 +141,24 @@ namespace Game
             inGame1 = true;
             
         }
-
+        private void OnEnable()
+        {
+            LeanTouch.OnFingerDown += StartGame;
+        }
+        private void OnDisable()
+        {
+            LeanTouch.OnFingerDown -= StartGame;
+        }
+        private void StartGame(LeanFinger leanFinger)
+        {
+            if(UIDetection.IsPointerOverUIObject() || isPlay)return;
+            isPlay = true;
+            InitializeGame();
+        }
         private void InitializeGame()
         {
+            inGame2 = false;
+            inGame1 = true;
             currentLevel = CreateLevel.instance.GetLevelData(PlayerPrefs.GetInt("CurrentLevel", 1));
             if (PlayerPrefs.GetInt("CurrentLevel", 1) == 1 && IsFirstPlayGame)
             {
@@ -164,7 +180,6 @@ namespace Game
                 SpawnPanel();
             }
             boxManager.NextLevelOrReplay(currentLevel.amountBox);
-            playerManager.MoveToTarget();
             AudioManager.instance.StopMusic();
             DOVirtual.DelayedCall(0.5f, delegate
             {
@@ -172,21 +187,6 @@ namespace Game
             });
             BridgeController.instance.LogLevelStartWithParameter(PlayerPrefs.GetInt("CurrentLevel", 1));
         }
-        private void OnEnable()
-        {
-            LeanTouch.OnFingerDown += StartGame;
-        }
-        private void OnDisable()
-        {
-            LeanTouch.OnFingerDown -= StartGame;
-        }
-        private void StartGame(LeanFinger leanFinger)
-        {
-            if(UIDetection.IsPointerOverUIObject() || isPlay)return;
-            isPlay = true;
-            InitializeGame();
-        }
-
         private void SaveLevelFail()
         {
             if (BridgeController.instance.IsRewardReady())
@@ -201,6 +201,32 @@ namespace Game
                 });
                 BridgeController.instance.ShowRewarded("SaveMe", e);
             }
+        }
+        public void PlayOtherInGame()
+        {
+            inGame2 = true;
+            inGame1 = false;
+            IsWin = false;
+            canClick = true;
+            playerManager.PlayAnim(StateFace.Idle);
+            int amountBox = Random.Range(3, 7);
+            int amountLine = Random.Range(3, 6);
+            int amountDistinct = Random.Range(2, amountBox + 1);
+            int amountCan = Random.Range(Math.Max(amountDistinct,3), 7);
+            currentLevel = new LevelData{
+                amountBox = amountBox,
+                amountLine = amountLine,
+                amountCan = amountCan,
+                amountDistinct = amountDistinct
+            };
+            GetAnswers(currentLevel.amountDistinct);
+            if (currentBoard)
+            {
+                Destroy(currentBoard.gameObject);
+            }
+            SpawnBoard();
+            SpawnPanel();
+            boxManager.NextLevelOrReplay(currentLevel.amountBox);
         }
 
         private void PlayAgain()
@@ -270,44 +296,85 @@ namespace Game
 
         private void SpawnBoard()
         {
-            if (isTest1) return;
             int typeBoard = currentLevel.amountBox;
             int line = currentLevel.amountLine;
-
-            switch (typeBoard)
+            if (inGame1 && !inGame2)
             {
-                case 3:
-                    GetBoard(line, boards3);
-                    break;
-                case 4:
-                    GetBoard(line, boards4);
-                    break;
-                case 5:
-                    GetBoard(line, boards5);
-                    break;
-                case 6:
-                    GetBoard(line, boards6);
-                    break;
-                case 7:
-                    GetBoard(line, boards7);
-                    break;
+                switch (typeBoard)
+                {
+                    case 3:
+                        GetBoard(line, boards3);
+                        break;
+                    case 4:
+                        GetBoard(line, boards4);
+                        break;
+                    case 5:
+                        GetBoard(line, boards5);
+                        break;
+                    case 6:
+                        GetBoard(line, boards6);
+                        break;
+                    case 7:
+                        GetBoard(line, boards7);
+                        break;
+                }   
+            }
+
+            if (inGame2 && !inGame1)
+            {
+                switch (typeBoard)
+                {
+                    case 3:
+                        GetBoard(line, boards3);
+                        break;
+                    case 4:
+                        GetBoard(line, boards4);
+                        break;
+                    case 5:
+                        GetBoard(line, boards5);
+                        break;
+                    case 6:
+                        GetBoard(line, boards6);
+                        break;
+                }
             }
         }
         private void GetBoard(int id, Board[] boards)
         {
-            switch (id)
+            if (inGame1 && !inGame2)
             {
-                case 3:
-                    currentBoard = PoolingManager.Spawn(boards[0], table.position, Quaternion.identity, table);
-                    currentBoard.transform.localPosition = new Vector3(0f, 0f, -3f);
-                    break;
-                case 4:
-                    currentBoard = PoolingManager.Spawn(boards[1], table.position, Quaternion.identity, table);
-                    currentBoard.transform.localPosition = new Vector3(0f, 0f, -1.5f);
-                    break;
-                case 5:
-                    currentBoard = PoolingManager.Spawn(boards[2], table.position, Quaternion.identity, table);
-                    break;
+                switch (id)
+                {
+                    case 3:
+                        currentBoard = PoolingManager.Spawn(boards[0], table.position, Quaternion.identity, table);
+                        currentBoard.transform.localPosition = new Vector3(0f, 0f, -3f);
+                        break;
+                    case 4:
+                        currentBoard = PoolingManager.Spawn(boards[1], table.position, Quaternion.identity, table);
+                        currentBoard.transform.localPosition = new Vector3(0f, 0f, -1.5f);
+                        break;
+                    case 5:
+                        currentBoard = PoolingManager.Spawn(boards[2], table.position, Quaternion.identity, table);
+                        break;
+                }
+            }
+            if (inGame2 && !inGame1)
+            {
+                switch (id)
+                {
+                    case 3:
+                        currentBoard = PoolingManager.Spawn(boards[3], table.position, Quaternion.identity, table);
+                        currentBoard.transform.localPosition = new Vector3(0f, -2f, 2f);
+                        break;
+                    case 4:
+                        currentBoard = PoolingManager.Spawn(boards[4], table.position, Quaternion.identity, table);
+                        currentBoard.transform.localPosition = new Vector3(0f, -2f, 2f);
+                        break;
+                    case 5:
+                        currentBoard = PoolingManager.Spawn(boards[5], table.position, Quaternion.identity, table);
+                        currentBoard.transform.localPosition = new Vector3(0f, -2f, 2f);
+                        break;
+                }
             }
         }
 
@@ -412,11 +479,13 @@ namespace Game
         }
         private void ActivateCurrentHand(int id)
         {
-            hand[IDCanClick].DOFade(0, 0.1f).OnComplete(delegate
+            hand[IDCanClick].DOFade(0, 0.05f).OnComplete(delegate
             {
                 if(id < 0) return;
+                hand[IDCanClick].gameObject.SetActive(false);
                 IDCanClick = id;
-                hand[IDCanClick].DOFade(1, 0.5f);
+                hand[IDCanClick].gameObject.SetActive(true);
+                hand[IDCanClick].DOFade(1, 0.2f);
             });
         }
     #endregion

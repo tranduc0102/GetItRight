@@ -379,7 +379,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   startPosition: {x: 0, y: 0, z: 0}
-  direction: -11
+  direction: 11
   duration: 1
 --- !u!1 &1381665693083175002
 GameObject:
@@ -3087,11 +3087,11 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 1304114961652386063}
-  - {fileID: 2155387344999477755}
   - {fileID: 2111919971026347752}
   - {fileID: 2948065578966242134}
+  - {fileID: 1304114961652386063}
   - {fileID: 7576729702183963907}
+  - {fileID: 2155387344999477755}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &6393261440048927883
@@ -3125,6 +3125,7 @@ MonoBehaviour:
   materialNo: {fileID: 2100000, guid: 5e72cca0cdabdff49be7cb12d6696b3e, type: 2}
   materialMaybe: {fileID: 2100000, guid: 89b1e3f2231d37d46af715800056d5a5, type: 2}
   heightOfObjects: 2.45
+  currentIndex: 0
 --- !u!1 &6391937959427696429
 GameObject:
   m_ObjectHideFlags: 0

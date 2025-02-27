@@ -10,7 +10,8 @@ public enum StateFace
     DoanDung,
     DoanSai,
     Win,
-    ThatBai
+    ThatBai,
+    Smile
 }
 public class AnimFace : MonoBehaviour
 {
@@ -52,6 +53,9 @@ public class AnimFace : MonoBehaviour
             case StateFace.ThatBai:
                 spriteMaterial.mainTextureOffset = new Vector2(frameOffsetX * currentFrame, frameLoseOffsetY);
                 break;
+            case StateFace.Smile:
+                spriteMaterial.mainTextureOffset = new Vector2(frameOffsetX * currentFrame, frameOffsetY);
+                break;
         }
         StartCoroutine(ResetStateAfterDelay(duration, state));
     }
@@ -59,7 +63,7 @@ public class AnimFace : MonoBehaviour
     private IEnumerator ResetStateAfterDelay(float delay, StateFace state)
     {
         yield return new WaitForSeconds(delay - delay * 0.15f);
-        if(state == StateFace.Win || state == StateFace.ThatBai) yield break;
+        if(State == StateFace.Win || State == StateFace.ThatBai) yield break;
         counter = 0;
         currentFrame = 0;
         elapsedTime = 0;
@@ -90,6 +94,9 @@ private void Update()
                     break;
                 case StateFace.Win:
                     spriteMaterial.mainTextureOffset = new Vector2(frameOffsetX * currentFrame, frameWinOffsetY);
+                    break; 
+                case StateFace.Smile:
+                    spriteMaterial.mainTextureOffset = new Vector2(frameOffsetX * currentFrame, frameOffsetY);
                     break;
             }
 

@@ -1,6 +1,6 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using _Scripts;
 using UnityEngine;
 using DG.Tweening;
@@ -9,129 +9,122 @@ using pooling;
 
 public class PlayerManager : MonoBehaviour
 {
+    private static readonly int DoanDung = Animator.StringToHash("DoanDung");
+    private static readonly int Win = Animator.StringToHash("Win");
     [SerializeField] private List<Transform> players;
-    [SerializeField] private Vector3 positionTarget;
     [SerializeField] private float speed;
-    [SerializeField] private AnimFace _animFace;
-    private Vector3[] initialPositions;
+    [SerializeField] private AnimFace[] _animFace;
+    [SerializeField] private Vector3[] posSpawnOtherPlayer;
     private int currentIndex = 0;
-    private List<float> durations = new List<float>();
+    public bool isBot;
 
-    private void OnValidate()
+   
+    private void NextPlayerMovement()
     {
-        initialPositions = new Vector3[players.Count];
-        for (int i = 0; i < players.Count; i++)
+        Transform player = players[currentIndex];           
+        int nextIndex = (currentIndex + 1) % players.Count;
+        Transform nextPlayer = players[nextIndex];        
+        Vector3 originalPos = player.localPosition;           
+
+        Sequence sequence = DOTween.Sequence();
+
+        sequence.Append(player.DOLocalRotate(Quaternion.Euler(15.35f, 0f, 0f).eulerAngles, 0.5f));
+
+        sequence.Append(player.DOLocalMove(nextPlayer.localPosition, 1));
+
+        sequence.Append(player.DOLocalRotate(Quaternion.Euler(15.35f, -180f, 0f).eulerAngles * -1f, 0.5f));
+
+        nextPlayer.DOLocalMove(originalPos, 2f);
+
+        sequence.OnComplete(() =>
         {
-            initialPositions[i] = players[i].position;
-            durations.Add(Vector3.Distance(players[i].localPosition, positionTarget) / speed);
-        }
-    }
-    public void SetNumberPlayer(int number, bool active)
-    {
-        if (!active)
-        {
-            for (int i = players.Count - 1; i >= players.Count - number; i--)
+            currentIndex = nextIndex;
+            if ((isBot && currentIndex == 0) || !isBot)
             {
-                players[i].gameObject.SetActive(false);
-            }   
-        }
-        else
-        {
-            for (int i = 0; i < number; i++)
+                GameController.Instance.CanClick = true;
+            }
+            else
             {
-                players[i].gameObject.SetActive(true);
-            }  
-        }
+                StartCoroutine(BotClick());
+            }
+        });
     }
-
-    public void MoveToTarget()
+    private IEnumerator BotClick()
     {
-        if (currentIndex >= players.Count)
+        int index = GameController.Instance.Board.CurrentIndex % GameController.Instance.CurrentLevelGame.amountBox;
+        while (index < GameController.Instance.CurrentLevelGame.amountBox)
         {
-            currentIndex = 0;
+            GameController.Instance.PanelAnswerController.BotClickRandom();
+            index++;
+            yield return new WaitForSeconds(0.5f);
         }
-
-        Transform player = players[currentIndex];
-
-        /*player.DORotate(new Vector3(-15.354f, 180, 0), 1f)
-              .OnComplete(() =>
-              {
-                  player.DOLocalMove(positionTarget, durations[currentIndex]).OnComplete(() =>
-                  {
-                      GameController.Instance.playerMoved = false;
-                  });
-              });*/
     }
 
-    public void NextPlayerMovement()
-    {
-        Transform player = players[currentIndex];
-
-        player.DORotate(new Vector3(0, 360, 0), 1f)
-              .OnComplete(() =>
-              {
-                  player.DOMove(initialPositions[currentIndex], durations[currentIndex])
-                        .OnComplete(() =>
-                        {
-                            currentIndex++;
-                            MoveToTarget();
-                        });
-              });
-    }
+    // ReSharper disable Unity.PerformanceAnalysis
     public void PlayAnim(StateFace animName)
     {
         Animator anim = players[currentIndex].GetComponent<Animator>();
         if (!anim.GetCurrentAnimatorStateInfo(0).IsName(animName.ToString()))
         {
             anim.SetTrigger(animName.ToString());
-            StartCoroutine(WaitForAnimationStart(anim, animName));
+            StartCoroutine(WaitForAnimationStart(currentIndex, anim, animName));
+        }
+        if (players.Count > 1 && animName == StateFace.DoanSai)
+        {
+            for (int i = 0; i < players.Count; i++)
+            {
+                if (i != currentIndex)
+                {
+                    Animator anim1 = players[i].GetComponent<Animator>();
+                    anim1.SetTrigger(DoanDung);
+                    StartCoroutine(WaitForAnimationStart(i, anim1, StateFace.Smile, true));
+                }
+            }
+            DOVirtual.DelayedCall(1f + Time.deltaTime, () => GameController.Instance.CanClick = false);
+            DOVirtual.DelayedCall(2f, NextPlayerMovement);
+        }else if (players.Count > 1 && animName == StateFace.ThatBai)
+        {
+            for (int i = 0; i < players.Count; i++)
+            {
+                if (i != currentIndex)
+                {
+                    Animator anim1 = players[i].GetComponent<Animator>();
+                    anim1.SetTrigger(Win);
+                    StartCoroutine(WaitForAnimationStart(i, anim1, StateFace.Win));
+                }
+            }
         }
     }
 
-    private IEnumerator WaitForAnimationStart(Animator anim, StateFace animName)
+    // ReSharper disable Unity.PerformanceAnalysis
+    private IEnumerator WaitForAnimationStart(int index, Animator anim, StateFace animName, bool isSmile = false)
     {
-        yield return new WaitUntil(() => anim.GetCurrentAnimatorStateInfo(0).IsName(animName.ToString()));
+        if(!isSmile) yield return new WaitUntil(() => anim.GetCurrentAnimatorStateInfo(0).IsName(animName.ToString()));
+        else yield return new WaitUntil(() => anim.GetCurrentAnimatorStateInfo(0).IsName("DoanDung"));
         float animLength = anim.GetCurrentAnimatorStateInfo(0).length;
         if (animName == StateFace.DoanSai)
         {
             AudioManager.instance.PlaySoundAngry();
         }
-        if (!_animFace) yield break;
-        _animFace.SetState(animName, animLength);
+        if (_animFace[index] == null) yield break;
+        _animFace[index].SetState(animName, animLength);
+        Debug.Log(animName.ToString());
     }
     public void ResetPlayers()
     {
-        DOTween.KillAll();
-
-        for (int i = 0; i < players.Count; i++)
-        {
-            players[i].position = initialPositions[i];
-            players[i].rotation = Quaternion.Euler(0, 360, 0);
-        }
         currentIndex = 0;
+        foreach (var player in players.ToList())
+        {
+            if (player != players[currentIndex])
+            {
+                PoolingManager.Despawn(player.gameObject);
+                players.Remove(player);
+            }
+        }
     }
-    public Transform player1;
-    public Transform player2;
-    public Transform player3;
-    public Transform player4;
-    private void Update()
+    public void SpawnOtherPlayer()
     {
-        if (Input.GetKeyDown(KeyCode.A))
-        {
-            ChangePlayer(player1);
-        }
-        if (Input.GetKeyDown(KeyCode.S))
-        {
-            ChangePlayer(player2);
-        }
-        if (Input.GetKeyDown(KeyCode.D))
-        {
-            ChangePlayer(player3);
-        }
-        if (Input.GetKeyDown(KeyCode.F))
-        {
-            ChangePlayer(player4);
-        }
+        
     }
     public void ChangePlayer(Transform player)
     {

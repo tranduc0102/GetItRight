@@ -28,7 +28,8 @@ namespace Game
         [Header("Setting pos spawn")]
         [SerializeField] private float heightOfObjects;
 
-        private int currentIndex;
+        [SerializeField] private int currentIndex;
+        public int CurrentIndex => currentIndex;
         private bool win;
         private List<EnumAnswer> answers;
 
@@ -88,18 +89,11 @@ namespace Game
         private int HandleBonusLogic()
         {
             int bonus = 0;
-            if (GameController.Instance.inGame2)
-            {
-                bonus = HandleBonusForGameTest1();
-            }
-            if (GameController.Instance.inGame1)
-            {
-                bonus = HandleBonusForGameTest2();
-            }
+            bonus = HandleBonusForInGame1();
             return bonus;
         }
 
-        private int HandleBonusForGameTest1()
+        private int HandleBonusForInGame2()
         {
             int bonus = 0;
             int index = currentIndex - countInRow;
@@ -121,7 +115,7 @@ namespace Game
             return bonus;
         }
 
-        private int HandleBonusForGameTest2()
+        private int HandleBonusForInGame1()
         {
             int bonus = 0;
             int tmp = currentIndex;
@@ -153,8 +147,12 @@ namespace Game
             {
                 if (GameController.Instance.inGame2)
                 {
-                    amountObjects[currentIndex - 1].transform.parent.DOLocalMoveX(0.2f, 1f);
-                    amountObjects[currentIndex].transform.parent.DOLocalMoveY(heightOfObjects, 1f);
+                    amountObjects[currentIndex - 1].transform.parent.DOLocalMoveX(20f, 1f);
+                    for (int i = currentIndex; i < amountObjects.Length; i+= countInRow)
+                    {
+                        amountObjects[i].transform.parent.DOLocalMoveY(amountObjects[i].transform.parent.localPosition.y + 0.7f, 0.5f);
+                    }
+                    currentIndex += bonus;
                 }
                 if (GameController.Instance.inGame1)
                 {
@@ -219,14 +217,7 @@ namespace Game
                 }
             }
 
-            if (GameController.Instance.inGame2)
-            {
-                yield return HandleMaterialChangeForInGame2(tempMaterials);
-            }
-            if (GameController.Instance.inGame1)
-            {
-                yield return HandleMaterialChangeForInGame1(tempMaterials);
-            }
+            yield return HandleMaterialChangeForInGame1(tempMaterials);
 
             if (!tempMaterials.Contains(materialMaybe) && !tempMaterials.Contains(materialNo))
             {
@@ -308,7 +299,10 @@ namespace Game
             currentIndex = 0;
             win = false;
             int bonus = 0;
-
+            if (GameController.Instance.inGame2)
+            {
+                amountObjects[0].transform.parent.localPosition = new Vector3(0f, 5f, 0f);
+            }
             for (int index = 0; index < countInRow; index++)
             {
                 ResetHolderItem(index);
@@ -321,7 +315,14 @@ namespace Game
             }
 
             currentIndex += bonus;
-            ResetRemainingItems();
+            if (GameController.Instance.inGame1)
+            {
+                ResetRemainingItemsInGame1();
+            }
+            else
+            {
+                ResetRemainingItemsInGame2();
+            }
         }
 
         private void ResetHolderItem(int index)
@@ -344,7 +345,7 @@ namespace Game
             amountObjects[index].currentItem.DOLocalMoveY(amountObjects[targetIndex].currentItem.transform.localPosition.y, 0.5f);
         }
 
-        private void ResetRemainingItems()
+        private void ResetRemainingItemsInGame1()
         {
             for (int index = countInRow; index < amountObjects.Length; index++)
             {
@@ -355,6 +356,23 @@ namespace Game
                 amountObjects[index].transform.parent.localPosition = new Vector3(0f, 1.9f, amountObjects[index].transform.parent.localPosition.z);
                 amountObjects[index].GetComponent<MeshRenderer>().material = materialWhite;
                 amountObjects[index].transform.parent.gameObject.SetActive(false);
+            }
+        }
+        private void ResetRemainingItemsInGame2()
+        {
+            float posYOrigin = 5f;
+            for (int index = countInRow; index < amountObjects.Length; index ++)
+            {
+                amountObjects[index].answer = EnumAnswer.None;
+                amountObjects[index].IsNone = true;
+                PoolingManager.Despawn(amountObjects[index].currentItem.gameObject);
+                amountObjects[index].currentItem = null;
+                amountObjects[index].transform.parent.localPosition = new Vector3(0f, posYOrigin, 0f);
+                amountObjects[index].GetComponent<MeshRenderer>().material = materialWhite;
+                if ((index % countInRow) == 0)
+                {
+                    posYOrigin -= 0.7f;
+                }
             }
         }
     }

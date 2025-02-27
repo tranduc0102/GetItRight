@@ -6,6 +6,7 @@ using DG.Tweening;
 using Lean.Touch;
 using pooling;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 
 namespace Game
@@ -27,6 +28,7 @@ namespace Game
 
         private void OnEnable()
         {
+            transform.position = new Vector3(10f, transform.position.y, transform.position.z);
             DOVirtual.DelayedCall(0.2f, InitializePanel);
             LeanTouch.OnFingerDown += HandleClick;
         }
@@ -40,7 +42,6 @@ namespace Game
         private void InitializePanel()
         {
             results.Clear();
-            transform.position = new Vector3(10f, transform.position.y, transform.position.z);
             if (GameController.Instance.IsFirstPlayGame && !GameController.Instance.IsFinishTutorial && PlayerPrefs.GetInt("CurrentLevel",1) == 1)
             {
                 results.Clear();
@@ -183,34 +184,37 @@ namespace Game
                         HandleItemSelection(componentParent);
                         if (!GameController.Instance.IsFinishTutorial)
                         {
-                            if (indexTutorial == 0)
+                            switch (indexTutorial)
                             {
-                                GameController.Instance.UpdateStepsTutorial(2);
-                            }
-                            else if (indexTutorial == 1)
-                            {
-                                GameController.Instance.UpdateStepsTutorial(3);
-                            }
-                            else if (indexTutorial == 2)
-                            {
-                                GameController.Instance.UpdateStepsTutorial(4);
-                            } else if (indexTutorial == 3)
-                            {
-                                GameController.Instance.UpdateStepsTutorial(5);
-                            }
-                            else if (indexTutorial == 4)
-                            {
-                                GameController.Instance.UpdateStepsTutorial(6);
-                            }
-                            else if (indexTutorial == 5)
-                            {
-                                GameController.Instance.UpdateStepsTutorial(6);
+                                case 0:
+                                    GameController.Instance.UpdateStepsTutorial(2);
+                                    break;
+                                case 1:
+                                    GameController.Instance.UpdateStepsTutorial(3);
+                                    break;
+                                case 2:
+                                    GameController.Instance.UpdateStepsTutorial(4);
+                                    break;
+                                case 3:
+                                    GameController.Instance.UpdateStepsTutorial(5);
+                                    break;
+                                case 4:
+                                    GameController.Instance.UpdateStepsTutorial(6);
+                                    break;
+                                case 5:
+                                    GameController.Instance.UpdateStepsTutorial(6);
+                                    break;
                             }
                             indexTutorial += 1;
                         }
                     }
                 }
             }
+        }
+        public void BotClickRandom()
+        {
+            int index = UnityEngine.Random.Range(0, objItem.Count);
+            HandleItemSelection(objItem[index].GetComponent<Item>());
         }
 
         private void HandleItemSelection(Item component)
@@ -241,6 +245,13 @@ namespace Game
             float distance = 0f;
             objToMove.DOJump(targetPos.transform.position + new Vector3(0f, 1 * high, -distance), jumpPower: 0.5f, numJumps: 1, duration: 0.5f)
                 .SetEase(Ease.OutQuad)
+                .OnUpdate(delegate
+                {
+                    if (objToMove.TryGetComponent(out LookAtCamera look))
+                    {
+                        look.LookAt();
+                    }
+                })
                 .OnComplete(delegate
                 {
                     objToMove.transform.position = targetPos.transform.position + new Vector3(0f, 1 * high, -distance);

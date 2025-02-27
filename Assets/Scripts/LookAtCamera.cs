@@ -7,8 +7,19 @@ public class LookAtCamera : MonoBehaviour
     private void Start()
     {
         cam = Camera.main;
+        if (cam)
+        {
+            LookAt();
+        }
     }
-    void Update()
+    private void OnEnable()
+    {
+        if (cam)
+        {
+            LookAt();
+        }
+    }
+    public void LookAt()
     {
         Vector3 lookAtPos = cam.transform.position;
         lookAtPos.x = transform.position.x;
