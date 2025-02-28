@@ -12,30 +12,41 @@ public class PlayerManager : MonoBehaviour
 {
     private static readonly int DoanDung = Animator.StringToHash("DoanDung");
     private static readonly int Win = Animator.StringToHash("Win");
-    [SerializeField] private List<Transform> players;
-    [SerializeField] private float speed;
-    [SerializeField] private AnimFace[] _animFace;
+    private static readonly int Run = Animator.StringToHash("run");
+    private static readonly int Idle = Animator.StringToHash("Idle");
+    private static readonly int TurnLeft = Animator.StringToHash("TurnLeft");
+    [SerializeField] private List<Transform> players = new List<Transform>(3);
+    [SerializeField] private Transform currentPlayer;
+    [SerializeField] private List<AnimFace> _animFaces = new List<AnimFace>(3);
     [SerializeField] private Vector3[] posSpawnOtherPlayer;
     private int currentIndex = 0;
     public bool isBot;
 
-   
     private void NextPlayerMovement()
     {
         Transform player = players[currentIndex];           
         int nextIndex = (currentIndex + 1) % players.Count;
         Transform nextPlayer = players[nextIndex];        
         Vector3 originalPos = player.localPosition;           
-
+        
+        Animator animator = player.GetComponentInChildren<Animator>();
         Sequence sequence = DOTween.Sequence();
-
+        
+        animator.SetTrigger(Run);
         sequence.Append(player.DOLocalRotate(Quaternion.Euler(15.35f, 0f, 0f).eulerAngles, 0.5f));
-
         sequence.Append(player.DOLocalMove(nextPlayer.localPosition, 1));
 
-        sequence.Append(player.DOLocalRotate(Quaternion.Euler(15.35f, -180f, 0f).eulerAngles * -1f, 0.5f));
+        sequence.Append(player.DOLocalRotate(Quaternion.Euler(15.35f, -180f, 0f).eulerAngles * -1f, 0.5f).OnComplete(delegate
+        {
+            animator.SetTrigger(Idle);
+        }));
 
-        nextPlayer.DOLocalMove(originalPos, 2f);
+        Animator animator2 = nextPlayer.GetComponentInChildren<Animator>();
+        animator2.SetTrigger(Run);
+        nextPlayer.DOLocalMove(originalPos, 2f).OnComplete(delegate
+        {
+            animator2.SetTrigger(Idle);
+        });
 
         sequence.OnComplete(() =>
         {
@@ -44,27 +55,12 @@ public class PlayerManager : MonoBehaviour
             {
                 GameController.Instance.CanClick = true;
             }
-            else
-            {
-                StartCoroutine(BotClick());
-            }
         });
     }
-    private IEnumerator BotClick()
-    {
-        int index = GameController.Instance.Board.CurrentIndex % GameController.Instance.CurrentLevelGame.amountBox;
-        while (index < GameController.Instance.CurrentLevelGame.amountBox)
-        {
-            GameController.Instance.PanelAnswerController.BotClickRandom();
-            index++;
-            yield return new WaitForSeconds(0.5f);
-        }
-    }
-
     // ReSharper disable Unity.PerformanceAnalysis
     public void PlayAnim(StateFace animName)
     {
-        Animator anim = players[currentIndex].GetComponent<Animator>();
+        Animator anim = players[currentIndex].GetComponentInChildren<Animator>();
         if (!anim.GetCurrentAnimatorStateInfo(0).IsName(animName.ToString()))
         {
             anim.SetTrigger(animName.ToString());
@@ -76,7 +72,7 @@ public class PlayerManager : MonoBehaviour
             {
                 if (i != currentIndex)
                 {
-                    Animator anim1 = players[i].GetComponent<Animator>();
+                    Animator anim1 = players[i].GetComponentInChildren<Animator>();
                     anim1.SetTrigger(DoanDung);
                     StartCoroutine(WaitForAnimationStart(i, anim1, StateFace.Smile, true));
                 }
@@ -89,7 +85,7 @@ public class PlayerManager : MonoBehaviour
             {
                 if (i != currentIndex)
                 {
-                    Animator anim1 = players[i].GetComponent<Animator>();
+                    Animator anim1 = players[i].GetComponentInChildren<Animator>();
                     anim1.SetTrigger(Win);
                     StartCoroutine(WaitForAnimationStart(i, anim1, StateFace.Win));
                 }
@@ -107,8 +103,8 @@ public class PlayerManager : MonoBehaviour
         {
             AudioManager.instance.PlaySoundAngry();
         }
-        if (_animFace[index] == null) yield break;
-        _animFace[index].SetState(animName, animLength);
+        if (_animFaces[0] == null) yield break;
+        _animFaces[0].SetState(animName, animLength);
     }
     public void ResetPlayers()
     {
@@ -122,35 +118,69 @@ public class PlayerManager : MonoBehaviour
             }
         }
     }
-    public void SpawnOtherPlayer()
+    private void SpawnOtherPlayers()
     {
-        
+        var characters = GameController.Instance.DataCharacter.characters;
+        int currentPlayer = PlayerPrefs.GetInt(USESTRING.CURRENT_PLAYER, 0);
+
+        int random1 = GetUniqueRandomIndex(characters.Count, currentPlayer);
+        int random2 = GetUniqueRandomIndex(characters.Count, currentPlayer, random1);
+
+        SpawnCharacter(random1, posSpawnOtherPlayer[0]);
+        SpawnCharacter(random2, posSpawnOtherPlayer[1]);
     }
-    public void ChangePlayer(Transform player)
+
+    private int GetUniqueRandomIndex(int max, params int[] exclude)
     {
-        PoolingManager.Despawn(players[0].gameObject);
-        players[0] = PoolingManager.Spawn(player, transform.position + player.position, player.rotation, transform);
-        if (!players[0].gameObject.TryGetComponent(out _animFace))
+        int random;
+        do
+        {
+            random = UnityEngine.Random.Range(0, max);
+        } while (exclude.Contains(random));
+        return random;
+    }
+    private void SpawnCharacter(int index, Vector3 spawnPos)
+    {
+        var characters = GameController.Instance.DataCharacter.characters;
+        Transform t = PoolingManager.Spawn(characters[index], transform.position, characters[index].rotation, transform);
+        t.localPosition = spawnPos;
+        players.Add(t);
+    
+        if (t.TryGetComponent(out AnimFace animFace))
+        {
+            _animFaces.Add(animFace);
+        }
+    }
+    public void ChangePlayer(Transform player, bool canChange)
+    {
+        if (canChange && players[0] != null)
+        {
+            PoolingManager.Despawn(players[0].gameObject);
+        }
+        players.Add(PoolingManager.Spawn(player, transform.position + player.position, player.rotation, transform));
+        if (!players[0].TryGetComponent(out AnimFace _animFace))
         {
             Debug.LogWarning("Character mới không có animface");
-        }    
+        }
+        else
+        {
+            _animFaces.Add(_animFace);
+        }
     }
-    public void AnimRun(Action onFinish)
+    public IEnumerator AnimRun(Action onFinish1, Action onFinish2)
     {
-        Animator anim1 = players[0].GetComponent<Animator>();
-        Sequence sequence = DOTween.Sequence();
-        sequence.Append(players[0].DOLocalRotate(Quaternion.Euler(15.35f, 0f, 0f).eulerAngles, 0.5f).OnComplete(delegate
+        currentPlayer = players[0];
+        Animator anim1 = currentPlayer.GetComponentInChildren<Animator>();
+        anim1.SetTrigger(TurnLeft);
+        currentPlayer.DOLocalRotate(Quaternion.Euler(0f, 0f, 0f).eulerAngles, 0.5f).OnComplete(delegate
         {
-            anim1.SetTrigger("run");
-            onFinish?.Invoke();
-        }));
-        sequence.Append(DOVirtual.DelayedCall(2.6f, delegate
-        {
-            anim1.SetTrigger("Idle");
-        }));
-        sequence.Append(DOVirtual.DelayedCall(.3f, delegate
-        {
-            players[0].DOLocalRotate(Quaternion.Euler(15.35f, -180f, 0f).eulerAngles * -1f, 1f);
-        }));
+            anim1.SetTrigger(Run);
+            onFinish1?.Invoke();
+        });
+        yield return new WaitForSeconds(1.95f);
+        anim1.SetTrigger(Idle);
+        onFinish2?.Invoke();
+        yield return new WaitForSeconds(0.5f);
+        currentPlayer.DOLocalRotate(Quaternion.Euler(15.35f, -180f, 0f).eulerAngles * -1f, 1f);
     }
 }

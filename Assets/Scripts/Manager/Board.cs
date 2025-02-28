@@ -37,7 +37,7 @@ namespace Game
         //43
         private List<EnumAnswer> answers;
 
-        private void Start()
+        private void OnEnable()
         {
             InitializeBoard();
             win = false;
@@ -96,29 +96,6 @@ namespace Game
             bonus = HandleBonusForInGame1();
             return bonus;
         }
-
-        private int HandleBonusForInGame2()
-        {
-            int bonus = 0;
-            int index = currentIndex - countInRow;
-            while (index < currentIndex)
-            {
-                if (currentIndex + index % countInRow >= amountObjects.Length) break;
-                if (amountObjects[index].answer == GameController.Instance.Answers[index % countInRow] && !win && amountObjects[currentIndex + index % countInRow].IsNone)
-                {
-                    if (currentIndex + index % countInRow < amountObjects.Length)
-                    {
-                        amountObjects[currentIndex + index % countInRow].answer = amountObjects[index].answer;
-                        amountObjects[currentIndex + index % countInRow].IsNone = false;
-                        amountObjects[currentIndex + index % countInRow].gameObject.SetActive(false);
-                        bonus++;
-                    }
-                }
-                index++;
-            }
-            return bonus;
-        }
-
         private int HandleBonusForInGame1()
         {
             int bonus = 0;
@@ -183,7 +160,7 @@ namespace Game
         {
             GameController.Instance.PlayerManager.PlayAnim(StateFace.ThatBai);
             UIController.instance.ShowDisplayLevelFail(true);
-            BridgeController.instance.LogLevelFailWithParameter(PlayerPrefs.GetInt("CurrentLevel", 1));
+            BridgeController.instance.LogLevelFailWithParameter(PlayerPrefs.GetInt(USESTRING.CURRENT_LEVEL, 1));
         }
 
         private IEnumerator CheckAnswerInLine()
@@ -239,25 +216,6 @@ namespace Game
                 }
             }
         }
-
-        private IEnumerator HandleMaterialChangeForInGame2(Material[] tempMaterials)
-        {
-            for (int index = currentIndex - countInRow; index < currentIndex; index++)
-            {
-                var meshRenderer = amountObjects[index].GetComponent<MeshRenderer>();
-                if (meshRenderer.sharedMaterial != materialYes && amountObjects[index].gameObject.activeSelf)
-                {
-                    meshRenderer.sharedMaterial = tempMaterials[index % countInRow];
-
-                    if (tempMaterials[index % countInRow] == materialYes)
-                    {
-                        GameController.Instance.BoxManager.Boxes[index % countInRow].ShowBox(amountObjects[index].currentItem);
-                    }
-                    yield return new WaitForSeconds(0.5f);
-                }
-            }
-        }
-
         private IEnumerator HandleMaterialChangeForInGame1(Material[] tempMaterials)
         {
             int idSound = 0;

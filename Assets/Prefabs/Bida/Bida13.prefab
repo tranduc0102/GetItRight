@@ -57,7 +57,7 @@ GameObject:
   - component: {fileID: 1770765261954044866}
   - component: {fileID: 9126786835237181413}
   - component: {fileID: 6321188448484054801}
-  - component: {fileID: 6684121709141498001}
+  - component: {fileID: 8322804698908429829}
   m_Layer: 0
   m_Name: Bida13
   m_TagString: Untagged
@@ -130,8 +130,8 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &6684121709141498001
-MeshCollider:
+--- !u!136 &8322804698908429829
+CapsuleCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -148,7 +148,8 @@ MeshCollider:
   m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 1
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 6893510682513364785, guid: 99aa2c92d7a462b478bd7cbc2100d4d5, type: 3}
+  serializedVersion: 2
+  m_Radius: 0.0051238504
+  m_Height: 0.0102477055
+  m_Direction: 1
+  m_Center: {x: -0.00011885632, y: 0.00059784396, z: 0.00016144897}

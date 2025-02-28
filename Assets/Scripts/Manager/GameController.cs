@@ -21,20 +21,35 @@ namespace Game
         [Space]
         [Header("DataGame")]
         [SerializeField] private LevelData currentLevel;
+        [SerializeField] private DataCharacter dataCharacter;
         public int CurrentSkin
         {
-            get => PlayerPrefs.GetInt("CurrentSkin", 0);
+            get => PlayerPrefs.GetInt(USESTRING.CURRENT_SKIN, 0);
             set
             {
                 if (value < 0) return;
-                PlayerPrefs.SetInt("CurrentSkin", value);
+                PlayerPrefs.SetInt(USESTRING.CURRENT_SKIN, value);
                 if (currentPanel)
                 {
                     currentPanel.UpdateChangeTheme(value,true);
                 }
             }
         }
+        public int CurrentPlayer
+        {
+            get => PlayerPrefs.GetInt(USESTRING.CURRENT_PLAYER, 0);
+            set
+            {
+                if (value < 0 || value > dataCharacter.characters.Count) return;
+                PlayerPrefs.SetInt(USESTRING.CURRENT_PLAYER, value);
+                if (currentPanel)
+                {
+                    playerManager.ChangePlayer(dataCharacter.characters[value], true);
+                }
+            }
+        }
         public LevelData CurrentLevelGame => currentLevel;
+        public DataCharacter DataCharacter => dataCharacter;
         [SerializeField] private List<EnumAnswer> answers;
         public List<EnumAnswer> Answers => answers;
 
@@ -84,10 +99,10 @@ namespace Game
         {
             set
             {
-                PlayerPrefs.SetInt("CurrentLevel", value);
+                PlayerPrefs.SetInt(USESTRING.CURRENT_LEVEL, value);
                 UIController.instance.UpdateTextedLevel(value + 1);
             }
-            get => PlayerPrefs.GetInt("CurrentLevel", 0);
+            get => PlayerPrefs.GetInt(USESTRING.CURRENT_LEVEL, 0);
         }
 
         private bool isWin;
@@ -141,8 +156,11 @@ namespace Game
             UIController.instance.SetActionOnLose(PlayAgain);
             IsWin = false;
             canClick = true;
+            playerManager.ChangePlayer(dataCharacter.characters[CurrentPlayer], false);
+            inGame2 = false;
             inGame1 = true;
-            
+            currentLevel = CreateLevel.instance.GetLevelData(PlayerPrefs.GetInt(USESTRING.CURRENT_LEVEL, 1));
+            GetAnswers(currentLevel.amountDistinct);
         }
         private void OnEnable()
         {
@@ -156,16 +174,12 @@ namespace Game
         {
             if(UIDetection.IsPointerOverUIObject() || isPlay)return;
             isPlay = true;
-           
-            playerManager.AnimRun( cameraController.MoveAndRotateTo);
-            DOVirtual.DelayedCall(3.1f, InitializeGame);
+            StartCoroutine(playerManager.AnimRun(cameraController.MoveAndRotateTo, InitializeGame)); 
+            BridgeController.instance.LogLevelStartWithParameter(PlayerPrefs.GetInt(USESTRING.CURRENT_LEVEL, 1));
         }
         private void InitializeGame()
         {
-            inGame2 = false;
-            inGame1 = true;
-            currentLevel = CreateLevel.instance.GetLevelData(PlayerPrefs.GetInt("CurrentLevel", 1));
-            if (PlayerPrefs.GetInt("CurrentLevel", 1) == 1 && IsFirstPlayGame)
+            if (PlayerPrefs.GetInt(USESTRING.CURRENT_LEVEL, 1) == 1 && IsFirstPlayGame)
             {
                 answers.Clear();
                 answers = new List<EnumAnswer>(3)
@@ -180,9 +194,8 @@ namespace Game
             }
             else
             {
-                GetAnswers(currentLevel.amountDistinct);
                 SpawnBoard();
-                SpawnPanel();
+                DOVirtual.DelayedCall(0.1f, SpawnPanel);
             }
             boxManager.NextLevelOrReplay(currentLevel.amountBox);
             AudioManager.instance.StopMusic();
@@ -190,7 +203,6 @@ namespace Game
             {
                 AudioManager.instance.PlayInGameMusic();
             });
-            BridgeController.instance.LogLevelStartWithParameter(PlayerPrefs.GetInt("CurrentLevel", 1));
         }
         private void SaveLevelFail()
         {
@@ -245,6 +257,7 @@ namespace Game
             SpawnBoard();
             SpawnPanel();
             boxManager.NextLevelOrReplay(currentLevel.amountBox);
+            BridgeController.instance.LogLevelFailWithParameter(PlayerPrefs.GetInt(USESTRING.CURRENT_LEVEL, 1));
         }
 
         public void NextLevel()
@@ -257,7 +270,7 @@ namespace Game
             }
             IsWin = false;
             playerManager.PlayAnim(StateFace.Idle);
-            IndexCurrentLevel += 1;
+            ++IndexCurrentLevel;
             currentLevel = CreateLevel.instance.GetLevelData(IndexCurrentLevel);
             canClick = true;
             
@@ -284,7 +297,6 @@ namespace Game
                 answers.Add(uniqueValues.ElementAt(Random.Range(0, uniqueValues.Count)));
             }
             ShuffleList(answers);
-            Debug.LogWarning("Ok2");
             UIController.instance.ShowButtonShop(true);
         }
 
@@ -406,9 +418,9 @@ namespace Game
 
         private void SetActivePanel(int index)
         {
-            for (int i = 0; i < panelAnswers.Length; i++)
+            if (currentPanel != null)
             {
-                panelAnswers[i].gameObject.SetActive(i == index);
+                currentPanel.gameObject.SetActive(false);
             }
             currentPanel = panelAnswers[index];
             currentPanel.gameObject.SetActive(true);
@@ -418,7 +430,7 @@ namespace Game
         {
             IndexCurrentLevel++;
             /*CreateLevel.instance.SaveData(levelName, currentLevel);*/
-            Debug.Log(PlayerPrefs.GetInt("CurrentLevel", 0));
+            Debug.Log(PlayerPrefs.GetInt(USESTRING.CURRENT_LEVEL, 0));
         }
 
         public void Load()
@@ -441,13 +453,13 @@ namespace Game
         public int IDCanClick = 0;
         public bool IsFirstPlayGame
         {
-            get => PlayerPrefs.GetInt("IsFirstPlayGame", 1) == 1;
-            set => PlayerPrefs.SetInt("IsFirstPlayGame", value ? 1 : 0);
+            get => PlayerPrefs.GetInt(USESTRING.IS_FIRST_PLAYGAME, 1) == 1;
+            set => PlayerPrefs.SetInt(USESTRING.IS_FIRST_PLAYGAME, value ? 1 : 0);
         }
         public bool IsFinishTutorial
         {
-            get => PlayerPrefs.GetInt("IsFinishTutorial", 0) == 1;
-            set => PlayerPrefs.SetInt("IsFinishTutorial", value ? 1 : 0);
+            get => PlayerPrefs.GetInt(USESTRING.IS_FINISH_TUT, 0) == 1;
+            set => PlayerPrefs.SetInt(USESTRING.IS_FINISH_TUT, value ? 1 : 0);
         }
         public void UpdateStepsTutorial(int step)
         {

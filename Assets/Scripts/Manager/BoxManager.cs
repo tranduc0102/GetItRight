@@ -5,36 +5,34 @@ public class BoxManager : MonoBehaviour
 {
     [SerializeField] private GameObject[] allBoxes;
     [SerializeField] private HolderBox[] boxes;
+    private GameObject currentBox;
     public HolderBox[] Boxes => boxes;
     public void NextLevelOrReplay(int amountBox)
     {
-        foreach (GameObject obj in allBoxes)
+        if (currentBox != null)
         {
-            obj.SetActive(false);
+            currentBox.SetActive(false);
         }
         switch (amountBox)
         {
             case 3:
-                allBoxes[0].SetActive(true);  
-                boxes = allBoxes[0].GetComponentsInChildren<HolderBox>();
+                currentBox = allBoxes[0];  
                 break;
             case 4:
-                allBoxes[1].SetActive(true);  
-                boxes = allBoxes[1].GetComponentsInChildren<HolderBox>();
+                currentBox = allBoxes[1];  
                 break;
             case 5:
-                allBoxes[2].SetActive(true);  
-                boxes = allBoxes[2].GetComponentsInChildren<HolderBox>();
+                currentBox = allBoxes[2];  
                 break;
             case 6:
-                allBoxes[3].SetActive(true);  
-                boxes = allBoxes[3].GetComponentsInChildren<HolderBox>();
+                currentBox = allBoxes[3];
                 break; 
             case 7:
-                allBoxes[4].SetActive(true);  
-                boxes = allBoxes[4].GetComponentsInChildren<HolderBox>();
+                currentBox = allBoxes[4]; 
                 break;
         }
+        currentBox.SetActive(true);
+        boxes = currentBox.GetComponentsInChildren<HolderBox>();
         foreach (HolderBox box in boxes)
         {
             box.ResetBox();

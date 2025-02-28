@@ -71,7 +71,7 @@ GameObject:
   - component: {fileID: 1579649228858361970}
   - component: {fileID: 713118942693114595}
   - component: {fileID: 1773904891835103072}
-  - component: {fileID: 345484633089137727}
+  - component: {fileID: 2299619873750255247}
   m_Layer: 0
   m_Name: Emoji 5
   m_TagString: Untagged
@@ -144,8 +144,8 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &345484633089137727
-MeshCollider:
+--- !u!136 &2299619873750255247
+CapsuleCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -162,7 +162,8 @@ MeshCollider:
   m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 1
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 6128658794743632788, guid: 7b59b12a51073364981fb031d573e8e6, type: 3}
+  serializedVersion: 2
+  m_Radius: 0.005231337
+  m_Height: 0.010462679
+  m_Direction: 1
+  m_Center: {x: -0.000011369586, y: -0.0000029089886, z: 0.00016144896}

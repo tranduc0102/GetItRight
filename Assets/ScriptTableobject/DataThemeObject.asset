@@ -45,14 +45,6 @@ MonoBehaviour:
     - {fileID: 1015547536545657415, guid: 023a56e678d27d546952917a420433da, type: 3}
     - {fileID: 5863051229813614311, guid: 4c6d649db135b254cba87474ac34ba7a, type: 3}
     - {fileID: 1285873291584754414, guid: 6f8dc59d87d7f5646833e3a5525807e4, type: 3}
-  - name: Emoji_1
-    items:
-    - {fileID: 1895227521075701952, guid: 4d9100d2694823745be3c2ba947e1a53, type: 3}
-    - {fileID: 5603728399359094882, guid: 6ddcf8ffe641c1d4284454131c509a55, type: 3}
-    - {fileID: 1163520335986590133, guid: 16cf379b456a7504eabf956c297af3da, type: 3}
-    - {fileID: 3710089261797794204, guid: 678fb5baaf2493c4d8685c48eda9a56c, type: 3}
-    - {fileID: 6745322478421961556, guid: 33de8d433e638f14a9d238dac646365f, type: 3}
-    - {fileID: 621000397189019537, guid: 507c89c167603a0468e5436ca2a59323, type: 3}
   - name: Emoji_2
     items:
     - {fileID: 3681347028754930854, guid: dcdde56bf5c8f1a48b48c099126d3162, type: 3}

@@ -1,12 +1,8 @@
-using System;
 using System.Collections.Generic;
 using _Scripts;
-using _Scripts.Extension;
 using DG.Tweening;
 using Lean.Touch;
 using pooling;
-using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 
 namespace Game
@@ -20,8 +16,8 @@ namespace Game
         private List<Item> themeObjects = new List<Item>();
         private List<Item> results = new List<Item>();
         [SerializeField] private Camera cam;
-        
-        private void OnValidate()
+
+        private void Start()
         {
             cam = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
         }
@@ -29,7 +25,7 @@ namespace Game
         private void OnEnable()
         {
             transform.position = new Vector3(10f, transform.position.y, transform.position.z);
-            DOVirtual.DelayedCall(0.2f, InitializePanel);
+            InitializePanel();
             LeanTouch.OnFingerDown += HandleClick;
         }
 
@@ -42,7 +38,7 @@ namespace Game
         private void InitializePanel()
         {
             results.Clear();
-            if (GameController.Instance.IsFirstPlayGame && !GameController.Instance.IsFinishTutorial && PlayerPrefs.GetInt("CurrentLevel",1) == 1)
+            if (GameController.Instance.IsFirstPlayGame && !GameController.Instance.IsFinishTutorial && PlayerPrefs.GetInt(USESTRING.CURRENT_LEVEL,1) == 1)
             {
                 results.Clear();
                 themeObjects.Clear();
@@ -137,7 +133,6 @@ namespace Game
             {
                 objItem.Add(PoolingManager.Spawn(results[i].transform, posObject[i].position + Vector3.up, results[i].transform.rotation, posObject[i].transform));
             }
-            Debug.LogWarning("Ok1");
         }
 
         private void ShuffleList<T>(List<T> list)
@@ -211,12 +206,6 @@ namespace Game
                 }
             }
         }
-        public void BotClickRandom()
-        {
-            int index = UnityEngine.Random.Range(0, objItem.Count);
-            HandleItemSelection(objItem[index].GetComponent<Item>());
-        }
-
         private void HandleItemSelection(Item component)
         {
             for (int i = 0; i < GameController.Instance.Board.amountObjects.Length; i++)

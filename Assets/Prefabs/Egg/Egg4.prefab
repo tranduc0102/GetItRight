@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 2609652866774831454}
   - component: {fileID: 3277592372023928626}
   - component: {fileID: 244937239505595212}
-  - component: {fileID: 7050277489048075768}
+  - component: {fileID: 7242694364642915686}
   m_Layer: 0
   m_Name: Egg4
   m_TagString: Untagged
@@ -84,8 +84,8 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &7050277489048075768
-MeshCollider:
+--- !u!136 &7242694364642915686
+CapsuleCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -99,13 +99,14 @@ MeshCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 1
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 8230958875069380461, guid: 0ba00b0e2879ead46b4d54115908209a, type: 3}
+  serializedVersion: 2
+  m_Radius: 0.004680034
+  m_Height: 0.01170114
+  m_Direction: 1
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &8507140859332090787
 GameObject:
   m_ObjectHideFlags: 0

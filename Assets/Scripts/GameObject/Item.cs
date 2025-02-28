@@ -35,12 +35,10 @@ namespace Game
         {
             Parent = transform.parent;
         }
-
         private void OnEnable()
         {
             CanMove = true;
         }
-
         private void OnDestroy()
         {
             transform.DOKill();

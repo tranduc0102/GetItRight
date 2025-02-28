@@ -1,7 +1,5 @@
-using System;
 using DG.Tweening;
 using pooling;
-using TMPro;
 using UnityEngine;
 
 public class EffectRewardCoin : MonoBehaviour
