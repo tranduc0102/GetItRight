@@ -112,10 +112,15 @@ namespace Game
                         amountObjects[targetIndex].IsNone = false;
                         amountObjects[targetIndex].currentItem = PoolingManager.Spawn(amountObjects[index].currentItem,
                             amountObjects[targetIndex].transform.position, amountObjects[index].currentItem.rotation, amountObjects[targetIndex].transform);
-
-                        amountObjects[targetIndex].currentItem.localPosition = new Vector3(  amountObjects[targetIndex].currentItem.localPosition.x, amountObjects[targetIndex].currentItem.localPosition.y, amountObjects[index].currentItem.transform.localPosition.z);
-                        amountObjects[targetIndex].currentItem.DOLocalMoveY(amountObjects[index].currentItem.transform.localPosition.y, 0.5f);
-                        bonus++;
+                        amountObjects[targetIndex].currentItem.localPosition = new Vector3(amountObjects[targetIndex].currentItem.localPosition.x, amountObjects[targetIndex].currentItem.localPosition.y, amountObjects[index].currentItem.transform.localPosition.z);
+                        amountObjects[targetIndex].currentItem.DOLocalMoveY(amountObjects[index].currentItem.transform.localPosition.y, 0.5f).OnComplete(delegate
+                        {
+                            if(amountObjects[targetIndex].currentItem.TryGetComponent(out Item item))
+                            {
+                                item.CanMove = false;
+                            }
+                        });
+                        bonus++;  
                     }
                 }
             }
@@ -304,7 +309,14 @@ namespace Game
                 amountObjects[targetIndex].transform.position, amountObjects[targetIndex].currentItem.rotation, amountObjects[index].transform);
             
             amountObjects[index].currentItem.DOLocalMoveZ(amountObjects[targetIndex].currentItem.transform.localPosition.z, 0.05f);
-            amountObjects[index].currentItem.DOLocalMoveY(amountObjects[targetIndex].currentItem.transform.localPosition.y, 0.5f);
+            amountObjects[index].currentItem.DOLocalMoveY(amountObjects[targetIndex].currentItem.transform.localPosition.y, 0.5f).OnComplete(delegate
+            {
+                if(amountObjects[index].currentItem.TryGetComponent(out Item item))
+                {
+                    item.CanMove = false;
+                    Debug.Log(item.CanMove);
+                }
+            });
         }
 
         private void ResetRemainingItemsInGame1()
