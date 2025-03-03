@@ -89,7 +89,6 @@ public class PlayerManager : MonoBehaviour
     }
     public void SpawnOtherPlayers()
     {
-        ResetPlayers();
         var characters = GameController.Instance.DataCharacter.characters;
         int currentPlayer = PlayerPrefs.GetInt(USESTRING.CURRENT_PLAYER, 0);
 
@@ -121,6 +120,7 @@ public class PlayerManager : MonoBehaviour
         if (canChange && players[0] != null)
         {
             PoolingManager.Despawn(players[0].gameObject);
+            players.Remove(players[0]);
         }
         players.Add(PoolingManager.Spawn(player, transform.position + player.transform.position, player.transform.rotation, transform));
     }

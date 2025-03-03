@@ -42,10 +42,7 @@ namespace Game
             {
                 if (value < 0 || value > dataCharacter.characters.Count) return;
                 PlayerPrefs.SetInt(USESTRING.CURRENT_PLAYER, value);
-                if (currentPanel)
-                {
-                    playerManager.ChangePlayer(dataCharacter.characters[value], true);
-                }
+                playerManager.ChangePlayer(dataCharacter.characters[value], true);
             }
         }
         public LevelData CurrentLevelGame => currentLevel;
