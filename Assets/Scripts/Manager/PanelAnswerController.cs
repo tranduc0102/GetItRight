@@ -244,6 +244,10 @@ namespace Game
                 .OnComplete(delegate
                 {
                     objToMove.transform.position = targetPos.transform.position + new Vector3(0f, 1 * high, -distance);
+                    if (objToMove.TryGetComponent(out Item item))
+                    {
+                        item.CanMove = false;
+                    }
                 });
             UIController.instance.ShowButtonShop(false);
         }

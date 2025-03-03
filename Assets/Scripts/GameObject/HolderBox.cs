@@ -28,7 +28,13 @@ namespace Game
                 DOVirtual.DelayedCall(0.2f, delegate {
                     Transform t = PoolingManager.Spawn(answer, holderAnswer.position, answer.rotation, holderAnswer);
                     t.localScale = Vector3.one * 1.2f;
-                    t.DOLocalMoveY(0.006f + high, .2f).SetEase(Ease.OutBack); 
+                    t.DOLocalMoveY(0.006f + high, .2f).SetEase(Ease.OutBack).OnComplete(delegate
+                    {
+                        if (t.TryGetComponent(out Item item))
+                        {
+                            item.CanMove = false;
+                        }
+                    }); 
                 });
                 napThung.gameObject.SetActive(false);
             });
