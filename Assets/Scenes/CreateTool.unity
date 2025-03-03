@@ -22456,11 +22456,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   players: []
   currentPlayer: {fileID: 0}
-  _animFaces: []
   posSpawnOtherPlayer:
   - {x: 6.6, y: -7.5, z: 17}
   - {x: -6.6, y: -7.5, z: 17}
-  isBot: 0
 --- !u!4 &1889583610
 Transform:
   m_ObjectHideFlags: 0

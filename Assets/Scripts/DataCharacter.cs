@@ -7,5 +7,5 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "DataCharacter", menuName = "DataCharacter")]
 public class DataCharacter : ScriptableObject
 {
-    public List<Transform> characters;
+    public List<Player> characters;
 }

@@ -221,6 +221,7 @@ namespace Game
         }
         public void PlayOtherInGame()
         {
+            playerManager.SpawnOtherPlayers();
             inGame2 = true;
             inGame1 = false;
             IsWin = false;
@@ -245,7 +246,6 @@ namespace Game
             SpawnPanel();
             boxManager.NextLevelOrReplay(currentLevel.amountBox);
         }
-
         private void PlayAgain()
         {
             currentPanel.gameObject.SetActive(false);

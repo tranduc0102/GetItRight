@@ -388,6 +388,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5046216662358936172}
   - component: {fileID: 2558179337952970769}
+  - component: {fileID: 9043697137560951023}
   m_Layer: 0
   m_Name: spunky_do
   m_TagString: Untagged
@@ -427,6 +428,23 @@ MonoBehaviour:
   frameDuration: 0.08
   frameDelayDuration: 1.8
   State: 0
+--- !u!114 &9043697137560951023
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4545248712765810113}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8374acb6d80b403b887cb80cca0af32f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  animator: {fileID: 8815887182645499831}
+  animFace: {fileID: 2558179337952970769}
+  animClipsRandom:
+  - {fileID: 1827226128182048838, guid: 3a742445b2541c34cbf866de850d7592, type: 3}
+  - {fileID: 1827226128182048838, guid: 70908fc1db7648449bda6c200e849dbc, type: 3}
 --- !u!1 &5366158394018750729
 GameObject:
   m_ObjectHideFlags: 0
