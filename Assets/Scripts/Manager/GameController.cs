@@ -57,11 +57,7 @@ namespace Game
         public int AmountCoin
         {
             get => PlayerPrefs.GetInt(USESTRING.AMOUNT_COIN, 0);
-            set
-            {
-                PlayerPrefs.SetInt(USESTRING.AMOUNT_COIN, value);
-                _Scripts.UI.UIController.instance.UIHome.UpdateTextCoin(value);
-            }
+            set => PlayerPrefs.SetInt(USESTRING.AMOUNT_COIN, value);
         }
         public LevelData CurrentLevelGame => currentLevel;
         public DataCharacter DataCharacter => dataCharacter;
@@ -132,7 +128,7 @@ namespace Game
                 if (isWin)
                 {
                     playerManager.PlayAnim(StateFace.Win);
-                   
+                    effectWin.Play();
                     if (IsFirstPlayGame && !IsFinishTutorial)
                     {
                         DOVirtual.DelayedCall(1.5f, delegate
@@ -141,6 +137,7 @@ namespace Game
                             IsFinishTutorial = true;
                             tutorial.SetActive(false);
                             currentPanel.gameObject.SetActive(false);
+                            AmountCoin += 30;
                             ++IndexCurrentLevel;
                             NextLevel();
                         });
@@ -150,6 +147,7 @@ namespace Game
                     {
                         _Scripts.UI.UIController.instance.UIWin.ShowWinPanel(IndexCurrentLevel);
                         ++IndexCurrentLevel;
+                        AmountCoin += 30;
                     });
                     currentPanel.gameObject.SetActive(false);
                 }
@@ -161,10 +159,8 @@ namespace Game
         [SerializeField] private BoxManager boxManager;
         public BoxManager BoxManager => boxManager;
 
-        [Space]
-        [Header("Effect")]
-        [SerializeField] private EffectRewardCoin effectCoin;
-        public EffectRewardCoin EffectCoin => effectCoin;
+        [Space] [Header("Effect")] [SerializeField]
+        private ParticleSystem effectWin;
         [Space]
         [Header("Camera")]
         [SerializeField] SmoothCameraController cameraController;

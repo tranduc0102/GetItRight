@@ -21,6 +21,7 @@ namespace _Scripts.UI
         [SerializeField] private List<ItemInShop> itemTheme = new List<ItemInShop>();
         [SerializeField] private List<ItemInShop> itemChar = new List<ItemInShop>();
         private int currentSkin = 0;
+        [SerializeField] private Button buttonEquip;
 
         [SerializeField] private TextMeshProUGUI txtBtnEquip;
         
@@ -169,11 +170,21 @@ namespace _Scripts.UI
             if (item.UnLock)
             {
                 txtBtnEquip.text = "Locked";
+                buttonEquip.interactable = false;
                 txtBtnEquip.color = Color.gray;
             }
             else
             {
-                txtBtnEquip.text = (currentSkin == equippedIndex) ? "Equipped" : "Equip";
+                if (currentSkin == equippedIndex)
+                {
+                    buttonEquip.interactable = false;
+                    txtBtnEquip.text = "Equipped";
+                }
+                else
+                {
+                    buttonEquip.interactable = true;
+                    txtBtnEquip.text = "Equip";
+                }
                 txtBtnEquip.color = Color.white;
             }
         }

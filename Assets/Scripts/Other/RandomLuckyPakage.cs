@@ -19,16 +19,7 @@ public class RandomLuckPakage : MonoBehaviour
     void Start()
     {
         CalculateWeights();
-        TestRandomSystem(100);
     }
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            TestRandomSystem(100);
-        }
-    }
-
     private void CalculateWeights()
     {
         totalWeight = 0;

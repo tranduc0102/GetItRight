@@ -197,6 +197,8 @@ namespace _Scripts.UI
                 btnOpenGift.Close(delegate
                 {
                     //animation nhan qua
+                    GameController.Instance.NextLevel();
+                    DisplayWinPanel(false);
                 }, true);
                 btnNoThanks._Close(true);
                 
@@ -212,6 +214,8 @@ namespace _Scripts.UI
                         btnOpenGift.Close(delegate
                         {
                             //animation nhan qua
+                            GameController.Instance.NextLevel();
+                            DisplayWinPanel(false);
                         }, true);
                         btnNoThanks._Close(true);
                     });
