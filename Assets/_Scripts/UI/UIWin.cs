@@ -152,7 +152,7 @@ namespace _Scripts.UI
 
         private void ShineAnimation()
         {
-            shine.gameObject.transform.DORotate(Vector3.back * 360, 10f, RotateMode.WorldAxisAdd).SetEase(Ease.Linear).SetLoops(-1, LoopType.Incremental);
+            shine.gameObject.transform.DORotate(Vector3.back * 360, 10f, RotateMode.LocalAxisAdd).SetEase(Ease.Linear).SetLoops(-1, LoopType.Incremental);
         }
 
         private void GiftAnimation()
@@ -198,6 +198,7 @@ namespace _Scripts.UI
                 {
                     //animation nhan qua
                 }, true);
+                btnNoThanks._Close(true);
                 
             }
             else
@@ -206,13 +207,16 @@ namespace _Scripts.UI
                 if (BridgeController.instance.IsRewardReady())
                 {
                     UnityEvent e = new UnityEvent();
-                    e.AddListener(delegate {});
+                    e.AddListener(delegate
+                    {
+                        btnOpenGift.Close(delegate
+                        {
+                            //animation nhan qua
+                        }, true);
+                        btnNoThanks._Close(true);
+                    });
                     BridgeController.instance.ShowRewarded("Reward Open Gift", e);
                 }
-                btnOpenGift.Close(delegate
-                {
-                    //animation nhan qua
-                }, true);
             }
         }
     }
