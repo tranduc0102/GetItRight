@@ -66,7 +66,7 @@ public class EffectRewardCoin : MonoBehaviour
                     _action?.Invoke();
                     gameObject.SetActive(false);
                 }
-                GameController.Instance.AmountCoin += 10;
+                GameController.Instance.AmountCoin += 3;
             });
             posTarget.DOScale(1.1f, 0.1f).SetLoops(10,LoopType.Yoyo).SetEase(Ease.InOutSine).SetDelay(1.2f);
             delay += 0.1f;
@@ -75,7 +75,7 @@ public class EffectRewardCoin : MonoBehaviour
         {
             DOVirtual.DelayedCall(1.5f, delegate
             {
-                GameController.Instance.AmountCoin += (amount - 100);
+                GameController.Instance.AmountCoin += (amount - 30);
             });
         }
     }

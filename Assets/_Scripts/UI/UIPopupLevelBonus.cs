@@ -42,7 +42,7 @@ namespace _Scripts.UI
                     _callbackPlay?.Invoke();
                     DisplayLevelBonusPopup(false);
                 });
-                BridgeController.instance.ShowRewarded("Play_Level_Bonus", e);
+                BridgeController.instance.ShowRewarded("play_level_bonus", e);
             }
         }
 

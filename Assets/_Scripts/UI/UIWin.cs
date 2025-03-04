@@ -167,7 +167,7 @@ namespace _Scripts.UI
             {
                 DisplayWinPanel(false);
                 GameController.Instance.NextLevel();
-            }, 100);
+            }, 30);
             animRewardCoin.gameObject.SetActive(true);
         }
 
@@ -183,10 +183,10 @@ namespace _Scripts.UI
                     {
                         DisplayWinPanel(false);
                         GameController.Instance.NextLevel();
-                    }, 200);
+                    }, 60);
                     animRewardCoin.gameObject.SetActive(true);
                 });
-                BridgeController.instance.ShowRewarded("Reward X2 Coin", e);
+                BridgeController.instance.ShowRewarded("_reward_x2_coin", e);
             }
         }
 
@@ -215,7 +215,7 @@ namespace _Scripts.UI
                         }, true);
                         btnNoThanks._Close(true);
                     });
-                    BridgeController.instance.ShowRewarded("Reward Open Gift", e);
+                    BridgeController.instance.ShowRewarded("_reward_open_gift", e);
                 }
             }
         }

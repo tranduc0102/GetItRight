@@ -93,22 +93,6 @@ public class UIShop : MonoBehaviour
     }
     private void RewardCoin()
     {
-        if (BridgeController.instance.IsRewardReady())
-        {
-            UnityEvent e = new UnityEvent();
-            e.AddListener(delegate
-            {
-                /*
-                PoolingManager.Spawn(GameController.Instance.EffectCoin, transform.position, Quaternion.identity, UIController.instance.coinParent);
-                */
-                DOVirtual.DelayedCall(1.5f, delegate
-                {
-                    /*
-                    UIController.instance.UpdateCoin(990);
-                */
-                });
-            });
-            BridgeController.instance.ShowRewarded("RewardCoin", e);
-        }
+       
     }
 }

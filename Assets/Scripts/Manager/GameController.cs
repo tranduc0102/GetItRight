@@ -132,9 +132,24 @@ namespace Game
                 if (isWin)
                 {
                     playerManager.PlayAnim(StateFace.Win);
+                   
+                    if (IsFirstPlayGame && !IsFinishTutorial)
+                    {
+                        DOVirtual.DelayedCall(1.5f, delegate
+                        {
+                            IsFirstPlayGame = false;
+                            IsFinishTutorial = true;
+                            tutorial.SetActive(false);
+                            currentPanel.gameObject.SetActive(false);
+                            ++IndexCurrentLevel;
+                            NextLevel();
+                        });
+                        return;
+                    }
                     DOVirtual.DelayedCall(0.7f, delegate
                     {
                         _Scripts.UI.UIController.instance.UIWin.ShowWinPanel(IndexCurrentLevel);
+                        ++IndexCurrentLevel;
                     });
                     currentPanel.gameObject.SetActive(false);
                 }
@@ -170,7 +185,7 @@ namespace Game
         {
             _Scripts.UI.UIController.instance.UILevelFailed.SetRevice(SaveLevelFail);
             _Scripts.UI.UIController.instance.UILevelFailed.SetNoThanks(PlayAgain);
-            IsWin = false;
+            isWin = false;
             CanSkip = true;
             canClick = true;
             playerManager.ChangePlayer(dataCharacter.characters[CurrentPlayer], false);
@@ -201,6 +216,7 @@ namespace Game
             if (PlayerPrefs.GetInt(USESTRING.CURRENT_LEVEL, 1) == 1 && IsFirstPlayGame)
             {
                 answers.Clear();
+                CanSkip = false;
                 answers = new List<EnumAnswer>(3)
                 {
                     EnumAnswer.Zero,
@@ -210,17 +226,18 @@ namespace Game
                 currentBoard = tutorial.GetComponentInChildren<Board>();
                 currentPanel = tutorial.GetComponentInChildren<PanelAnswerController>();
                 tutorial.SetActive(true);
+                _Scripts.UI.UIController.instance.UIInGame.DisplayInGame(true);
             }
             else
             {
                 SpawnBoard();
+                _Scripts.UI.UIController.instance.UIInGame.DisplayInGame(true);
                 DOVirtual.DelayedCall(0.1f, SpawnPanel);
             }
             boxManager.NextLevelOrReplay(currentLevel.amountBox);
             AudioManager.instance.StopMusic();
             DOVirtual.DelayedCall(0.5f, delegate
             {
-                _Scripts.UI.UIController.instance.UIInGame.DisplayInGame(true);
                 AudioManager.instance.PlayInGameMusic();
             });
         }
@@ -231,14 +248,14 @@ namespace Game
                 UnityEvent e = new UnityEvent();
                 e.AddListener(delegate
                 {
-                    IsWin = false;
+                    isWin = false;
                     CanSkip = true;
                     canClick = true;
                     playerManager.PlayAnim(StateFace.Idle);
                     currentBoard.SaveMeBoard();
                     action?.Invoke();
                 });
-                BridgeController.instance.ShowRewarded("SaveMe", e);
+                BridgeController.instance.ShowRewarded("save_me", e);
             }
         }
         public void PlayOtherInGame()
@@ -247,7 +264,7 @@ namespace Game
             playerManager.SpawnOtherPlayers();
             inGame2 = true;
             inGame1 = false;
-            IsWin = false;
+            isWin = false;
             CanSkip = true;
             canClick = true;
             playerManager.PlayAnim(StateFace.Idle);
@@ -274,7 +291,7 @@ namespace Game
         {
             currentPanel.gameObject.SetActive(false);
             playerManager.PlayAnim(StateFace.Idle);
-            IsWin = false;
+            isWin = false;
             CanSkip = true;
             canClick = true;
             GetAnswers(currentLevel.amountDistinct);
@@ -296,7 +313,7 @@ namespace Game
                 {
                     IsWin = true;
                 });
-                BridgeController.instance.ShowRewarded($"SkipLevel + {IndexCurrentLevel}", e);
+                BridgeController.instance.ShowRewarded($"skip_level_{IndexCurrentLevel}", e);
             }
         }
         public void NextLevel()
@@ -309,16 +326,9 @@ namespace Game
             }
             inGame2 = false;
             inGame1 = true;
-            if (IsFirstPlayGame && !IsFinishTutorial)
-            {
-                IsFirstPlayGame = false;
-                IsFinishTutorial = true;
-                tutorial.SetActive(false);
-            }
-            IsWin = false;
+            isWin = false;
             CanSkip = true;
             playerManager.PlayAnim(StateFace.Idle);
-            ++IndexCurrentLevel;
             currentLevel = CreateLevel.instance.GetLevelData(IndexCurrentLevel);
             canClick = true;
             CurrentLevelBonus++;
@@ -483,7 +493,7 @@ namespace Game
 
         public void Load()
         {
-            IsWin = false;
+            isWin = false;
             BridgeController.instance.LogLevelCompleteWithParameter(PlayerPrefs.GetInt("CurrentLevel", 1));
             currentLevel = CreateLevel.instance.GetLevelData(PlayerPrefs.GetInt("CurrentLevel", 1));
             canClick = true;
