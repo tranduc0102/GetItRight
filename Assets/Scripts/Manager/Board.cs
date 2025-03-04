@@ -66,6 +66,10 @@ namespace Game
             GameController.Instance.CanClick = false;
 
             if (currentIndex > amountObjects.Length) yield break;
+            if (currentIndex >= amountObjects.Length)
+            {
+                GameController.Instance.CanSkip = false;
+            }
 
             if (currentIndex % countInRow == 0)
             {

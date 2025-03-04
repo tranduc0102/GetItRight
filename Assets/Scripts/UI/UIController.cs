@@ -111,8 +111,6 @@ public class UIController : MonoBehaviour
     public void UpdateCoin(int amountCoint)
     {
         imgCoin.transform.DOScale(Vector3.one * 1.2f, 0.05f).SetLoops(2, LoopType.Yoyo);
-        PlayerPrefs.SetInt("AmountCoin", PlayerPrefs.GetInt("AmountCoin") + amountCoint);
-        coinText.text = PlayerPrefs.GetInt("AmountCoin", 0).ToString();
         PlayerPrefs.Save();
     }
     public void UpdateTextedLevel(int level)

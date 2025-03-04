@@ -1,82 +1,28 @@
 using System;
 using System.Collections.Generic;
 using _Scripts.Extension;
+using ACEPlay.Bridge;
+using DanielLochner.Assets.SimpleScrollSnap;
 using DG.Tweening;
 using Game;
+using TMPro;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
 
 namespace _Scripts.UI
 {
     public class UIShop : MonoBehaviour
     {
-        
+        [SerializeField] private SimpleScrollSnap _simpleScrollSnapSkin;
+        [SerializeField] private SimpleScrollSnap _simpleScrollSnapTheme;
+        [SerializeField] private SimpleScrollSnap _simpleScrollSnapChar;
         [SerializeField] private List<ItemInShop> itemSkins = new List<ItemInShop>();
         [SerializeField] private List<ItemInShop> itemTheme = new List<ItemInShop>();
         [SerializeField] private List<ItemInShop> itemChar = new List<ItemInShop>();
+        private int currentSkin = 0;
 
-        private int IndexCurrentSkin = 0;
-        private int IndexCurrentTheme = 0;
-        private int IndexCurrentChar = 0;
-
-        private int CurrentIndex
-        {
-            get
-            {
-                if (inventoryTabs[0].activeSelf)
-                {
-                    return IndexCurrentSkin;
-                }
-                if (inventoryTabs[1].activeSelf)
-                {
-                    return IndexCurrentTheme;
-                }
-                if (inventoryTabs[2].activeSelf)
-                {
-                    return IndexCurrentChar;
-                }
-                return 0;
-            }
-            set
-            { 
-                if (inventoryTabs[0].activeSelf)
-                {
-                    if (value >= itemSkins.Count)
-                    {
-                        value = 0;
-                    }
-                    if (value < 0)
-                    {
-                        value = itemSkins.Count - 1;
-                    }
-                    IndexCurrentSkin = value;
-                }
-                if (inventoryTabs[1].activeSelf)
-                {
-                    if (value >= itemTheme.Count)
-                    {
-                        value = 0;
-                    }
-                    if (value < 0)
-                    {
-                        value = itemTheme.Count - 1;
-                    }
-                    IndexCurrentTheme = value;
-                }
-                if (inventoryTabs[2].activeSelf)
-                {
-                    if (value >= itemChar.Count)
-                    {
-                        value = 0;
-                    }
-                    if (value < 0)
-                    {
-                        value = itemChar.Count - 1;
-                    }
-                    IndexCurrentChar = value;
-                }
-            }
-        }
+        [SerializeField] private TextMeshProUGUI txtBtnEquip;
         
         [SerializeField] private UIAppear shopPanel;
         [SerializeField] private UIAppear inventoryTab;
@@ -89,7 +35,6 @@ namespace _Scripts.UI
         
         [SerializeField] private Color32 tabColorUnSelected;
         [SerializeField] private Color32 tabColorSelected;
-        
         public void DisplayShop(bool enable)
         {
             if (enable)
@@ -124,7 +69,9 @@ namespace _Scripts.UI
                         currentTab.SetActive(false);
                     }
                     inventoryTabs[0].SetActive(true);
-                    currentTab = inventoryTabs[0];
+                    currentTab = inventoryTabs[0]; 
+                    _simpleScrollSnapSkin.StartingPanel = GameController.Instance.CurrentSkin;
+                    UpdateIndex(GameController.Instance.CurrentSkin, GameController.Instance.CurrentSkin + 1);
                     break;
                 case 1:
                     if (currentButtonTab != null)
@@ -140,6 +87,8 @@ namespace _Scripts.UI
                     }
                     inventoryTabs[1].SetActive(true);
                     currentTab = inventoryTabs[1];
+                    _simpleScrollSnapTheme.StartingPanel = GameController.Instance.CurrentTheme;
+                    UpdateIndex(GameController.Instance.CurrentTheme, GameController.Instance.CurrentTheme + 1);
                     break;
                 case 2:
                     if (currentButtonTab != null)
@@ -155,12 +104,23 @@ namespace _Scripts.UI
                     }
                     inventoryTabs[2].SetActive(true);
                     currentTab = inventoryTabs[2];
+                    _simpleScrollSnapChar.StartingPanel = GameController.Instance.CurrentPlayer;
+                    UpdateIndex(GameController.Instance.CurrentPlayer, GameController.Instance.CurrentPlayer + 1);
                     break;
             }
         }
         public void OnButtonClaimRewardsClick()
         {
             //goi qc reward xong tang coin => 200 chac the
+            if (BridgeController.instance.IsRewardReady())
+            {
+                UnityEvent e = new UnityEvent();
+                e.AddListener(delegate
+                {
+                    GameController.Instance.AmountCoin += 200;
+                });
+                BridgeController.instance.ShowRewarded("Reward Coin", e);
+            }
         }
 
         public void OnButtonBuyBlindBoxClick(int index)
@@ -178,33 +138,73 @@ namespace _Scripts.UI
                     break;
             }
         }
-        public void UpdateIndex(int count)
+        
+        private ItemInShop item;
+        public void UpdateIndex(int current, int next)
         {
-            CurrentIndex += count;
+            List<ItemInShop> currentItems = null;
+            int equippedIndex = -1;
+            currentSkin = current;
+            if (inventoryTabs[0].activeSelf)
+            {
+                currentItems = itemSkins;
+                equippedIndex = GameController.Instance.CurrentSkin;
+            }
+            else if (inventoryTabs[1].activeSelf)
+            {
+                currentItems = itemTheme;
+                equippedIndex = GameController.Instance.CurrentTheme;
+            }
+            else if (inventoryTabs[2].activeSelf)
+            {
+                currentItems = itemChar;
+                equippedIndex = GameController.Instance.CurrentPlayer;
+            }
+
+            if (currentItems == null || current + 1 < 0 || current >= currentItems.Count || txtBtnEquip == null) return;
+
+            item = currentItems[current];
+            if (item == null) return;
+
+            if (item.UnLock)
+            {
+                txtBtnEquip.text = "Locked";
+                txtBtnEquip.color = Color.gray;
+            }
+            else
+            {
+                txtBtnEquip.text = (currentSkin == equippedIndex) ? "Equipped" : "Equip";
+                txtBtnEquip.color = Color.white;
+            }
         }
+
         public void OnButtonEquipClick()
         {
             //xu li equip o day
             //chac la se gan id cho tung item
             int value = -1;
+            
             if (inventoryTabs[0].activeSelf)
             {
-                itemSkins[IndexCurrentSkin].ActionEuqip(ref value);
+                item = itemSkins[currentSkin];
+                item.ActionEuqip(ref value);
                 if(value < 0) return;
                 GameController.Instance.CurrentSkin = value;
-            }
-            if (inventoryTabs[1].activeSelf)
+            } else if (inventoryTabs[1].activeSelf)
             {
-                itemTheme[IndexCurrentTheme].ActionEuqip(ref value);
+                item = itemTheme[currentSkin];
+                item.ActionEuqip(ref value);
                 if(value < 0) return;
                 GameController.Instance.CurrentTheme = value;
             }
-            if (inventoryTabs[2].activeSelf)
+            else if (inventoryTabs[2].activeSelf)
             {
-                itemChar[IndexCurrentChar].ActionEuqip(ref value);
+                item = itemChar[currentSkin];
+                item.ActionEuqip(ref value);
                 if(value < 0) return;
                 GameController.Instance.CurrentPlayer = value;
             }
+            UpdateIndex(currentSkin, currentSkin + 1);
         }
     }
 }

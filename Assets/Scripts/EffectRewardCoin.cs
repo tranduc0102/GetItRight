@@ -1,5 +1,6 @@
 using System;
 using DG.Tweening;
+using Game;
 using pooling;
 using UnityEngine;
 
@@ -9,6 +10,7 @@ public class EffectRewardCoin : MonoBehaviour
     [SerializeField] private Quaternion[] InitialRot;
     [SerializeField] private Transform posTarget;
     private Action _action;
+    private int amount;
 
     void Start()
     {
@@ -20,13 +22,14 @@ public class EffectRewardCoin : MonoBehaviour
             InitialRot[i] = transform.GetChild(i).GetComponent<RectTransform>().rotation;
         }
     }
-    public void SetActionFinishAnimation(Action onFinish)
+    public void SetActionFinishAnimation(Action onFinish, int amount)
     {
         _action = onFinish;
+        this.amount = amount;
     }
     private void OnEnable()
     {
-        RewardPileOfCoint();
+        RewardPileOfCoint(amount);
     }
     private void ResetState()
     {
@@ -44,7 +47,7 @@ public class EffectRewardCoin : MonoBehaviour
         }
     }
     private int completedCoins = 0;
-    private void RewardPileOfCoint()
+    private void RewardPileOfCoint(int amount)
     {
         ResetState();
         completedCoins = 0;
@@ -54,7 +57,7 @@ public class EffectRewardCoin : MonoBehaviour
             Transform coin = transform.GetChild(i);
             coin.DOScale(1f, 0.3f).SetDelay(delay).SetEase(Ease.OutBack);
             coin.GetComponent<RectTransform>().DOAnchorPos(new Vector2(325f, 880f), 1f).SetDelay(delay + 0.5f).SetEase(Ease.InBack);
-            coin.DORotate(Vector3.zero, 0.5f).SetDelay(delay + 0.5f).SetEase(Ease.Flash)/*.OnComplete(() => UIController.instance.UpdateCoin(1))*/;
+            coin.DORotate(Vector3.zero, 0.5f).SetDelay(delay + 0.5f).SetEase(Ease.Flash);
             coin.DOScale(0f, 0.3f).SetDelay(delay + 1.5f).SetEase(Ease.OutBack).OnComplete(() =>
             {
                 completedCoins++;
@@ -63,9 +66,17 @@ public class EffectRewardCoin : MonoBehaviour
                     _action?.Invoke();
                     gameObject.SetActive(false);
                 }
+                GameController.Instance.AmountCoin += 10;
             });
             posTarget.DOScale(1.1f, 0.1f).SetLoops(10,LoopType.Yoyo).SetEase(Ease.InOutSine).SetDelay(1.2f);
             delay += 0.1f;
+        }
+        if (amount > 100)
+        {
+            DOVirtual.DelayedCall(1.5f, delegate
+            {
+                GameController.Instance.AmountCoin += (amount - 100);
+            });
         }
     }
 }

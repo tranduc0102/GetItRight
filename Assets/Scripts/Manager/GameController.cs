@@ -2,10 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using _Scripts;
-using _Scripts.Extension;
 using ACEPlay.Bridge;
 using DG.Tweening;
-using Lean.Touch;
 using UnityEngine;
 using pooling;
 using UnityEngine.Events;
@@ -56,6 +54,15 @@ namespace Game
                 changeBackground.ApplyBackground(value);
             }
         }
+        public int AmountCoin
+        {
+            get => PlayerPrefs.GetInt(USESTRING.AMOUNT_COIN, 0);
+            set
+            {
+                PlayerPrefs.SetInt(USESTRING.AMOUNT_COIN, value);
+                _Scripts.UI.UIController.instance.UIHome.UpdateTextCoin(value);
+            }
+        }
         public LevelData CurrentLevelGame => currentLevel;
         public DataCharacter DataCharacter => dataCharacter;
         [SerializeField] private List<EnumAnswer> answers;
@@ -81,6 +88,8 @@ namespace Game
         [Space]
         [Header("Board Game")]
         [SerializeField] private Transform table;
+        [SerializeField] private int IndexRandomLevelBonus;
+        [SerializeField] private int CurrentLevelBonus;
 
         [Header("Boards")]
         [SerializeField] private Board[] boards3;
@@ -111,6 +120,7 @@ namespace Game
             }
             get => PlayerPrefs.GetInt(USESTRING.CURRENT_LEVEL, 0);
         }
+        public bool CanSkip { get; set; }
 
         private bool isWin;
         public bool IsWin
@@ -158,17 +168,25 @@ namespace Game
 
         private void Start()
         {
-         
             _Scripts.UI.UIController.instance.UILevelFailed.SetRevice(SaveLevelFail);
             _Scripts.UI.UIController.instance.UILevelFailed.SetNoThanks(PlayAgain);
             IsWin = false;
+            CanSkip = true;
             canClick = true;
             playerManager.ChangePlayer(dataCharacter.characters[CurrentPlayer], false);
             inGame2 = false;
             inGame1 = true;
             currentLevel = CreateLevel.instance.GetLevelData(PlayerPrefs.GetInt(USESTRING.CURRENT_LEVEL, 1));
             changeBackground.ApplyBackground(CurrentTheme);
+            _Scripts.UI.UIController.instance.UIHome.UpdateTextCoin(AmountCoin);
             GetAnswers(currentLevel.amountDistinct);
+            IndexRandomLevelBonus = Random.Range(3, 6);
+            _Scripts.UI.UIController.instance.UIPopupLevelBonus.SetPlayAction(PlayOtherInGame);
+            _Scripts.UI.UIController.instance.UIPopupLevelBonus.SetNoThanksAction(delegate
+            {
+                CurrentLevelBonus = 0;
+                NextLevel();
+            });
         }
         public void StartGame()
         {
@@ -214,6 +232,7 @@ namespace Game
                 e.AddListener(delegate
                 {
                     IsWin = false;
+                    CanSkip = true;
                     canClick = true;
                     playerManager.PlayAnim(StateFace.Idle);
                     currentBoard.SaveMeBoard();
@@ -224,10 +243,12 @@ namespace Game
         }
         public void PlayOtherInGame()
         {
+            CurrentLevelBonus = 0;
             playerManager.SpawnOtherPlayers();
             inGame2 = true;
             inGame1 = false;
             IsWin = false;
+            CanSkip = true;
             canClick = true;
             playerManager.PlayAnim(StateFace.Idle);
             int amountBox = Random.Range(3, 7);
@@ -254,6 +275,7 @@ namespace Game
             currentPanel.gameObject.SetActive(false);
             playerManager.PlayAnim(StateFace.Idle);
             IsWin = false;
+            CanSkip = true;
             canClick = true;
             GetAnswers(currentLevel.amountDistinct);
             Destroy(currentBoard.gameObject);
@@ -264,32 +286,29 @@ namespace Game
             BridgeController.instance.LogLevelFailWithParameter(PlayerPrefs.GetInt(USESTRING.CURRENT_LEVEL, 1));
         }
 
-        public void NextLevel(bool isSkipClick = false)
+        public void SkipLevel()
         {
-            if (isSkipClick)
+            if(!CanSkip) return;
+            if (BridgeController.instance.IsRewardReady())
             {
-                if (BridgeController.instance.IsRewardReady())
+                UnityEvent e = new UnityEvent();
+                e.AddListener(delegate
                 {
-                    UnityEvent e = new UnityEvent();
-                    e.AddListener(delegate
-                    {
-                        IsWin = false;
-                        playerManager.PlayAnim(StateFace.Idle);
-                        ++IndexCurrentLevel;
-                        currentLevel = CreateLevel.instance.GetLevelData(IndexCurrentLevel);
-                        canClick = true;
-            
-                        GetAnswers(currentLevel.amountDistinct);
-                        Destroy(currentBoard.gameObject);
-                        SpawnBoard();
-                        DOVirtual.DelayedCall(0.1f, SpawnPanel);
-                        _Scripts.UI.UIController.instance.UIInGame.ShowSkipButton(false);
-                        boxManager.NextLevelOrReplay(currentLevel.amountBox);
-                    });
-                    BridgeController.instance.ShowRewarded($"SkipLevel + {IndexCurrentLevel}", e);
-                }
+                    IsWin = true;
+                });
+                BridgeController.instance.ShowRewarded($"SkipLevel + {IndexCurrentLevel}", e);
+            }
+        }
+        public void NextLevel()
+        {
+            if (CurrentLevelBonus >= IndexRandomLevelBonus)
+            {
+                IndexRandomLevelBonus = Random.Range(3, 6);
+                _Scripts.UI.UIController.instance.UIPopupLevelBonus.DisplayLevelBonusPopup(true);
                 return;
             }
+            inGame2 = false;
+            inGame1 = true;
             if (IsFirstPlayGame && !IsFinishTutorial)
             {
                 IsFirstPlayGame = false;
@@ -297,11 +316,12 @@ namespace Game
                 tutorial.SetActive(false);
             }
             IsWin = false;
+            CanSkip = true;
             playerManager.PlayAnim(StateFace.Idle);
             ++IndexCurrentLevel;
             currentLevel = CreateLevel.instance.GetLevelData(IndexCurrentLevel);
             canClick = true;
-            
+            CurrentLevelBonus++;
             GetAnswers(currentLevel.amountDistinct);
             Destroy(currentBoard.gameObject);
             SpawnBoard();

@@ -167,7 +167,7 @@ namespace _Scripts.UI
             {
                 DisplayWinPanel(false);
                 GameController.Instance.NextLevel();
-            });
+            }, 100);
             animRewardCoin.gameObject.SetActive(true);
         }
 
@@ -183,7 +183,7 @@ namespace _Scripts.UI
                     {
                         DisplayWinPanel(false);
                         GameController.Instance.NextLevel();
-                    });
+                    }, 200);
                     animRewardCoin.gameObject.SetActive(true);
                 });
                 BridgeController.instance.ShowRewarded("Reward X2 Coin", e);

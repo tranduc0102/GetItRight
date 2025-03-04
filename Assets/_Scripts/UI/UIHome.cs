@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 
 namespace _Scripts.UI
@@ -6,6 +7,7 @@ namespace _Scripts.UI
     {
         [SerializeField] private GameObject home;
         [SerializeField] private GameObject coinBox;
+        [SerializeField] private TextMeshProUGUI coinText;
 
         public void DisplayHome(bool enable)
         {
@@ -19,6 +21,10 @@ namespace _Scripts.UI
                 home.SetActive(false);
                 coinBox.SetActive(false);
             }
+        }
+        public void UpdateTextCoin(int amountCoin)
+        {
+            coinText.text = amountCoin.ToString();
         }
     }
 }

@@ -912,7 +912,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   btn: {fileID: 0}
   type: 2
-  unclock: 0
+  unclock: 1
   ID: 10
 --- !u!1 &152299429
 GameObject:
@@ -2373,7 +2373,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   btn: {fileID: 0}
   type: 2
-  unclock: 0
+  unclock: 1
   ID: 7
 --- !u!1 &307669869
 GameObject:
@@ -4256,7 +4256,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   btn: {fileID: 0}
   type: 2
-  unclock: 0
+  unclock: 1
   ID: 12
 --- !u!1 &481492083
 GameObject:
@@ -6624,7 +6624,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   btn: {fileID: 0}
   type: 2
-  unclock: 0
+  unclock: 1
   ID: 8
 --- !u!1 &703644893
 GameObject:
@@ -11183,7 +11183,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   btn: {fileID: 0}
   type: 2
-  unclock: 0
+  unclock: 1
   ID: 11
 --- !u!1 &1182006088
 GameObject:
@@ -14927,6 +14927,8 @@ MonoBehaviour:
   - {fileID: 519761468265339166}
   - {fileID: 759952343412311333}
   table: {fileID: 225851117}
+  IndexRandomLevelBonus: 0
+  CurrentLevelBonus: 0
   boards3:
   - {fileID: 6321358434930484775, guid: ac90579b828cdd84eb7aa665468b800e, type: 3}
   - {fileID: 6321358434930484775, guid: 7f18edf00b5ab6941a49fbea7fdeeee8, type: 3}
@@ -16701,7 +16703,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   btn: {fileID: 0}
   type: 2
-  unclock: 0
+  unclock: 1
   ID: 13
 --- !u!1 &1703660243
 GameObject:
@@ -19162,7 +19164,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   btn: {fileID: 0}
   type: 2
-  unclock: 0
+  unclock: 1
   ID: 9
 --- !u!1 &1947973969
 GameObject:
@@ -23498,8 +23500,8 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1526666859}
         m_TargetAssemblyTypeName: Game.GameController, Assembly-CSharp
-        m_MethodName: NextLevel
-        m_Mode: 6
+        m_MethodName: SkipLevel
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -24027,13 +24029,25 @@ MonoBehaviour:
         m_CallState: 2
   onPanelSelecting:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: _Scripts.UI.UIShop, Assembly-CSharp
+        m_MethodName: 
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   onPanelSelected:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: _Scripts.UI.ContentManager, Assembly-CSharp
-        m_MethodName: Test
+        m_TargetAssemblyTypeName: _Scripts.UI.UIShop, Assembly-CSharp
+        m_MethodName: 
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -24049,9 +24063,9 @@ MonoBehaviour:
   onPanelCentered:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: _Scripts.UI.ContentManager, Assembly-CSharp
-        m_MethodName: Test
+      - m_Target: {fileID: 3811147755891419957}
+        m_TargetAssemblyTypeName: _Scripts.UI.UIShop, Assembly-CSharp
+        m_MethodName: UpdateIndex
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -29356,9 +29370,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 3811147755891419957}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: _Scripts.UI.UIShop, Assembly-CSharp
-        m_MethodName: UpdateIndex
+        m_MethodName: 
         m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -35491,9 +35505,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 3811147755891419957}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: _Scripts.UI.UIShop, Assembly-CSharp
-        m_MethodName: UpdateIndex
+        m_MethodName: 
         m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -36144,6 +36158,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a3108612836b4ce090f7cbd1c71ad183, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _simpleScrollSnapSkin: {fileID: 6644541059219053158}
+  _simpleScrollSnapTheme: {fileID: 4614100028510705186}
+  _simpleScrollSnapChar: {fileID: 521334655602755364}
   itemSkins:
   - {fileID: 8816365109615624399}
   - {fileID: 7770742484893708641}
@@ -36173,6 +36190,7 @@ MonoBehaviour:
   - {fileID: 1175444813}
   - {fileID: 475540638}
   - {fileID: 1703068355}
+  txtBtnEquip: {fileID: 5578770367602477787}
   shopPanel: {fileID: 6602821578199239867}
   inventoryTab: {fileID: 1959534237840188651}
   shopTab: {fileID: 460397250096568036}
@@ -39014,13 +39032,25 @@ MonoBehaviour:
         m_CallState: 2
   onPanelSelecting:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: _Scripts.UI.UIShop, Assembly-CSharp
+        m_MethodName: 
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   onPanelSelected:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: _Scripts.UI.ContentManager, Assembly-CSharp
-        m_MethodName: Test
+        m_TargetAssemblyTypeName: _Scripts.UI.UIShop, Assembly-CSharp
+        m_MethodName: 
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -39036,9 +39066,9 @@ MonoBehaviour:
   onPanelCentered:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: _Scripts.UI.ContentManager, Assembly-CSharp
-        m_MethodName: Test
+      - m_Target: {fileID: 3811147755891419957}
+        m_TargetAssemblyTypeName: _Scripts.UI.UIShop, Assembly-CSharp
+        m_MethodName: UpdateIndex
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -39837,14 +39867,14 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5201141828348685180}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0.0107159605, y: -0.00052222755, z: -0.006102264, w: 0.9999238}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 6349277264623652883}
   m_Father: {fileID: 7025879228647286617}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: -1.228, y: -0.052, z: -0.699}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
@@ -41520,6 +41550,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   home: {fileID: 7828195103456143158}
   coinBox: {fileID: 4212607405957121189}
+  coinText: {fileID: 1463789454265267157}
 --- !u!33 &5399143739570568464
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -46364,13 +46395,25 @@ MonoBehaviour:
         m_CallState: 2
   onPanelSelecting:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: _Scripts.UI.UIShop, Assembly-CSharp
+        m_MethodName: 
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   onPanelSelected:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: _Scripts.UI.ContentManager, Assembly-CSharp
-        m_MethodName: Test
+        m_TargetAssemblyTypeName: _Scripts.UI.UIShop, Assembly-CSharp
+        m_MethodName: 
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -46386,9 +46429,9 @@ MonoBehaviour:
   onPanelCentered:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: _Scripts.UI.ContentManager, Assembly-CSharp
-        m_MethodName: Test
+      - m_Target: {fileID: 3811147755891419957}
+        m_TargetAssemblyTypeName: _Scripts.UI.UIShop, Assembly-CSharp
+        m_MethodName: UpdateIndex
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -47984,7 +48027,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   btn: {fileID: 0}
   type: 1
-  unclock: 0
+  unclock: 1
   ID: 5
 --- !u!222 &7003530604253489705
 CanvasRenderer:
@@ -48915,9 +48958,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 3811147755891419957}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: _Scripts.UI.UIShop, Assembly-CSharp
-        m_MethodName: UpdateIndex
+        m_MethodName: 
         m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -49430,9 +49473,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 3811147755891419957}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: _Scripts.UI.UIShop, Assembly-CSharp
-        m_MethodName: UpdateIndex
+        m_MethodName: 
         m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -49785,7 +49828,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 6522639106142753101}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 3510192005599011645}
+        m_TargetAssemblyTypeName: _Scripts.UI.UIPopupRemoveAds, Assembly-CSharp
+        m_MethodName: DisplayRemovePopup
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
 --- !u!1 &7483998440412763455
 GameObject:
   m_ObjectHideFlags: 0
@@ -49867,7 +49922,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   btn: {fileID: 0}
   type: 1
-  unclock: 0
+  unclock: 1
   ID: 3
 --- !u!4 &7490531093452107770
 Transform:
@@ -51706,9 +51761,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 3811147755891419957}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: _Scripts.UI.UIShop, Assembly-CSharp
-        m_MethodName: UpdateIndex
+        m_MethodName: 
         m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -53312,7 +53367,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   btn: {fileID: 0}
   type: 0
-  unclock: 0
+  unclock: 1
   ID: 3
 --- !u!4 &8393071790310040995
 Transform:
@@ -55513,9 +55568,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 3811147755891419957}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: _Scripts.UI.UIShop, Assembly-CSharp
-        m_MethodName: UpdateIndex
+        m_MethodName: 
         m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -56028,7 +56083,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   btn: {fileID: 0}
   type: 0
-  unclock: 0
+  unclock: 1
   ID: 5
 --- !u!114 &9032675397918567296
 MonoBehaviour:
@@ -56151,7 +56206,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   btn: {fileID: 0}
   type: 0
-  unclock: 0
+  unclock: 1
   ID: 4
 --- !u!222 &9073808599109595553
 CanvasRenderer:
@@ -56860,7 +56915,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   btn: {fileID: 0}
   type: 1
-  unclock: 0
+  unclock: 1
   ID: 4
 --- !u!224 &9171134659164404441
 RectTransform:
