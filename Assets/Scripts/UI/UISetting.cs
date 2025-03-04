@@ -1,87 +1,140 @@
 using _Scripts;
+using _Scripts.Extension;
+using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class UISetting : MonoBehaviour
 {
-    [SerializeField] private GameObject panelSetting;
+    [SerializeField] private UIAppear dime;
+    [SerializeField] private UIAppear popup;
 
     public bool IsMuteMusic
     {
         get => PlayerPrefs.GetInt("IsMuteMusic", 0) == 1;
-        set => PlayerPrefs.SetInt("IsMuteMusic", value ? 1 : 0);
+        set
+        {
+            if (value == false)
+            {
+                PlayerPrefs.SetInt("IsMuteMusic", 0);
+            }
+            else
+            {
+                PlayerPrefs.SetInt("IsMuteMusic", 1);
+            }
+        }    
     }
     public bool IsMuteSound
     {
         get => PlayerPrefs.GetInt("IsMuteSound", 0) == 1;
-        set => PlayerPrefs.SetInt("IsMuteSound", value ? 1 : 0);
+        set
+        {
+            if (value == false)
+            {
+                PlayerPrefs.SetInt("IsMuteSound", 0);
+            }
+            else
+            {
+                PlayerPrefs.SetInt("IsMuteSound", 1);
+            }
+        }
     }
     public bool IsOffVibration
     {
         get => PlayerPrefs.GetInt("IsOffVibration", 0) == 1;
-        set => PlayerPrefs.SetInt("IsOffVibration", value ? 1 : 0);
+        set
+        {
+            if (value == false)
+            {
+                PlayerPrefs.SetInt("IsOffVibration", 0);
+            }
+            else
+            {
+                PlayerPrefs.SetInt("IsOffVibration", 1);
+            }
+        } 
     }
     
-    [Header("Button Music")]
-    [SerializeField] private Button _btnMusic;
-    [SerializeField] private Image _spriteIconMusic;
-    [SerializeField] private Sprite[] _spritesIconMusic;
-    
-    [Header("Button Sound")]
-    [SerializeField] private Button _btnSound;
-    [SerializeField] private Image _spriteIconSound;
-    [SerializeField] private Sprite[] _spritesIconSound;
-    
-    [Header("Button Vibration")]
-    [SerializeField] private Button _btnVibration;
-    [SerializeField] private Image _spriteIconVibration;
-    [SerializeField] private Sprite[] _spritesIconVibration;
+    [Header("Toggle")]
+    [SerializeField] private Toggle toggleSound;
+    [SerializeField] private Toggle toggleMusic;
+    [SerializeField] private Toggle toggleVibrate;
 
-    void Start()
+    private void Awake()
     {
-        _btnMusic.onClick.AddListener(ButtonMusicClick);
-        _btnSound.onClick.AddListener(ButtonSoundClick);
-        _btnVibration.onClick.AddListener(ButtonVibrationClick);
-        
-        LoadSettings();
+        DOTween.SetTweensCapacity(500, 500);
+
+        if (IsMuteMusic)
+        {
+            toggleMusic.isOn = false;
+        }
+        else
+        {
+            toggleMusic.isOn = true;
+        }
+
+        if (IsMuteSound)
+        {
+            toggleSound.isOn = false;
+        }
+        else
+        {
+            toggleSound.isOn = true;
+        }
+
+        if (IsOffVibration)
+        {
+            toggleVibrate.isOn = false;
+        }
+        else
+        {
+            toggleVibrate.isOn = true;
+        }
+    }
+
+    public void DisplaySetting(bool enable)
+    {
+        if (enable)
+        {
+            dime.gameObject.SetActive(true);
+            popup.gameObject.SetActive(true);
+        }
+        else
+        {
+            popup.Close(delegate
+            {
+                dime._Close(true);
+            },true);
+        }
     }
     
-    public void ShowDisplay(bool enable = false)
+    public void ButtonMusicClick()
     {
-        AudioManager.instance.PlaySoundButtonClick();
-        panelSetting.SetActive(enable);
+        if (IsMuteMusic == toggleMusic.isOn)
+        {
+            IsMuteMusic = !IsMuteMusic;
+            AudioManager.instance.SetMuteMusic();
+        }
     }
     
-    private void LoadSettings()
+    public void ButtonSoundClick()
     {
-        _spriteIconMusic.sprite = IsMuteMusic ? _spritesIconMusic[1] : _spritesIconMusic[0];
-        _spriteIconSound.sprite = IsMuteSound ? _spritesIconSound[1] : _spritesIconSound[0];
-        _spriteIconVibration.sprite = IsOffVibration ? _spritesIconVibration[1] : _spritesIconVibration[0];
+        if (IsMuteSound == toggleSound.isOn)
+        {
+            IsMuteSound = !IsMuteSound;
+            AudioManager.instance.SetMuteSounds();
+        }
+
     }
     
-    private void ButtonMusicClick()
+    public void ButtonVibrationClick()
     {
-        AudioManager.instance.PlaySoundButtonClick();
-        IsMuteMusic = !IsMuteMusic;
-        _spriteIconMusic.sprite = IsMuteMusic ? _spritesIconMusic[1] : _spritesIconMusic[0];
-        _spriteIconMusic.SetNativeSize();
-        AudioManager.instance.SetMuteMusic();
-    }
-    
-    private void ButtonSoundClick()
-    {
-        AudioManager.instance.PlaySoundButtonClick();
-        IsMuteSound = !IsMuteSound;
-        _spriteIconSound.sprite = IsMuteSound ? _spritesIconSound[1] : _spritesIconSound[0];
-        _spriteIconSound.SetNativeSize();
-        AudioManager.instance.SetMuteSounds();
-    }
-    
-    private void ButtonVibrationClick()
-    {
-        AudioManager.instance.PlaySoundButtonClick();
-        IsOffVibration = !IsOffVibration;
-        _spriteIconVibration.sprite = IsOffVibration ? _spritesIconVibration[1] : _spritesIconVibration[0];
-        _spriteIconVibration.SetNativeSize();
+        if (IsOffVibration == toggleVibrate.isOn)
+        {
+            IsOffVibration = !IsOffVibration;
+            /*
+            AudioManager.instance.SetVibration();
+        */
+        }
     }
 }

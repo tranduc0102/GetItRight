@@ -89,7 +89,7 @@ namespace _Scripts
         }
         public void SetMuteSounds()
         {
-            if (UIController.instance.UISetting.IsMuteSound)
+            if (UI.UIController.instance.UISetting.IsMuteSound)
             {
                 soundSource.mute = true;
                 return;
@@ -98,7 +98,7 @@ namespace _Scripts
         }
         public void SetMuteMusic()
         {
-            if (UIController.instance.UISetting.IsMuteMusic)
+            if (UI.UIController.instance.UISetting.IsMuteMusic)
             {
                 musicSource.mute = true;
                 return;
@@ -189,7 +189,7 @@ namespace _Scripts
 
         public void PlaySfx(AudioClip audioClip, bool repeat = false)
         {
-            if (UIController.instance.UISetting.IsMuteSound) return;
+            if (UI.UIController.instance.UISetting.IsMuteSound) return;
 
             if (audioClip != null)
             {

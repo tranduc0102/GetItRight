@@ -1,4 +1,6 @@
-using _Scripts;
+using System;
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -7,7 +9,8 @@ namespace Game
     public enum TypeItemInShop
     {
         Theme,
-        Skin
+        Skin,
+        Character
     }
     public class ItemInShop : MonoBehaviour
     {
@@ -24,34 +27,19 @@ namespace Game
                 PlayerPrefs.Save();
             }
         }
-
-        private void OnValidate()
-        {
-            btn = GetComponent<Button>();
-        }
-
+        
         private void Start()
         {
             if (unclock && !UnLock)
             {
                 UnLock = true;
             }
-            btn.onClick.AddListener(ActionClick);
         }
 
-        private void ActionClick()
+        public void ActionEuqip(ref int updateChange)
         {
-            if(!UnLock)return;
-            AudioManager.instance.PlaySoundButtonClick();
-            if (type == TypeItemInShop.Theme)
-            {
-                GameController.Instance.CurrentSkin = ID;
-                Debug.Log("OK");
-            }
-            else
-            {
-                ///
-            }
+            if(UnLock)return;
+            updateChange = ID;
         }
     }
 }

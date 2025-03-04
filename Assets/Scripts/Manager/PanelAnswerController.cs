@@ -249,7 +249,7 @@ namespace Game
                         item.CanMove = false;
                     }
                 });
-            UIController.instance.ShowButtonShop(false);
+            _Scripts.UI.UIController.instance.UIInGame.ShowSkipButton(true);
         }
     }
 }

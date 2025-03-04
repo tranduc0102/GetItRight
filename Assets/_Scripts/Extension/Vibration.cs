@@ -43,7 +43,7 @@ namespace _Scripts.Extension
 #endif
         public static void Vibrate()
         {
-            if (UIController.instance.UISetting.IsOffVibration) return;
+            if (UI.UIController.instance.UISetting.IsOffVibration) return;
             if (isAndroid())
                 vibrator.Call("vibrate");
             else
@@ -52,7 +52,7 @@ namespace _Scripts.Extension
 
         public static void Vibrate(long milliseconds)
         {
-            if (UIController.instance.UISetting.IsOffVibration) return;
+            if (UI.UIController.instance.UISetting.IsOffVibration) return;
             if (isAndroid())
                 vibrator.Call("vibrate", milliseconds);
             else
@@ -65,7 +65,7 @@ namespace _Scripts.Extension
 
         public static void Vibrate(long[] pattern, int repeat)
         {
-            if (UIController.instance.UISetting.IsOffVibration) return;
+            if (UI.UIController.instance.UISetting.IsOffVibration) return;
             if (isAndroid())
                 vibrator.Call("vibrate", pattern, repeat);
             else
@@ -115,7 +115,7 @@ namespace _Scripts.Extension
         {
             if (Application.isMobilePlatform)
             {
-                if (UIController.instance.UISetting.IsOffVibration) return;
+                if (UI.UIController.instance.UISetting.IsOffVibration) return;
 #if UNITY_IOS
                 _VibratePop ();
 #elif UNITY_ANDROID
@@ -130,7 +130,7 @@ namespace _Scripts.Extension
         {
             if (Application.isMobilePlatform)
             {
-                if (UIController.instance.UISetting.IsOffVibration) return;
+                if (UI.UIController.instance.UISetting.IsOffVibration) return;
 #if UNITY_IOS
                 _VibratePeek ();
 #elif UNITY_ANDROID
@@ -145,7 +145,7 @@ namespace _Scripts.Extension
         {
             if (Application.isMobilePlatform)
             {
-                if (UIController.instance.UISetting.IsOffVibration) return;
+                if (UI.UIController.instance.UISetting.IsOffVibration) return;
 #if UNITY_IOS
                 _VibrateNope ();
 #elif UNITY_ANDROID

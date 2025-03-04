@@ -1,4 +1,3 @@
-using _Scripts;
 using ACEPlay.Bridge;
 using DG.Tweening;
 using Game;
@@ -33,7 +32,6 @@ public class UIShop : MonoBehaviour
         var imgSkin = btnSkin.GetComponent<Image>();
         btnTheme.onClick.AddListener(delegate
         {
-            AudioManager.instance.PlaySoundButtonClick();
             isTheme = true;
             imgTheme.sprite = sprites[0];
             imgSkin.sprite = sprites[1];
@@ -46,7 +44,6 @@ public class UIShop : MonoBehaviour
         });
         btnSkin.onClick.AddListener(delegate
         {
-            AudioManager.instance.PlaySoundButtonClick();
             isTheme = false;
             imgSkin.sprite = sprites[0];
             imgTheme.sprite = sprites[1];
@@ -63,7 +60,6 @@ public class UIShop : MonoBehaviour
 
     private void BuyNew()
     {
-        AudioManager.instance.PlaySoundButtonClick();
         if (PlayerPrefs.GetInt("AmountCoin", 0) >= 500)
         {
             if (isTheme)
@@ -78,7 +74,9 @@ public class UIShop : MonoBehaviour
                         break;
                     }
                 }
+                /*
                 if(i != null) UIController.instance.UpdateCoin(-500);
+            */
             }
             else
             {
@@ -95,16 +93,19 @@ public class UIShop : MonoBehaviour
     }
     private void RewardCoin()
     {
-        AudioManager.instance.PlaySoundButtonClick();
         if (BridgeController.instance.IsRewardReady())
         {
             UnityEvent e = new UnityEvent();
             e.AddListener(delegate
             {
+                /*
                 PoolingManager.Spawn(GameController.Instance.EffectCoin, transform.position, Quaternion.identity, UIController.instance.coinParent);
+                */
                 DOVirtual.DelayedCall(1.5f, delegate
                 {
+                    /*
                     UIController.instance.UpdateCoin(990);
+                */
                 });
             });
             BridgeController.instance.ShowRewarded("RewardCoin", e);

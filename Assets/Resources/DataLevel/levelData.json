@@ -49,19 +49,19 @@
             "amountDistinct": 4
         },
         {
-            "difficultyLevel": "Easy",
+            "difficultyLevel": "Hard",
             "level": 7,
-            "amountBox": 3,
-            "amountLine": 5,
-            "amountCan": 4,
-            "amountDistinct": 3
+            "amountBox": 6,
+            "amountLine": 4,
+            "amountCan": 5,
+            "amountDistinct": 4
         },
         {
             "difficultyLevel": "Normal",
             "level": 8,
             "amountBox": 4,
             "amountLine": 4,
-            "amountCan": 4,
+            "amountCan": 5,
             "amountDistinct": 4
         },
         {

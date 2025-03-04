@@ -24,9 +24,7 @@ public class PlayerManager : MonoBehaviour
         Player player = players[currentIndex];           
         int nextIndex = (currentIndex + 1) % players.Count;
         Player nextPlayer = players[nextIndex];        
-        Vector3 originalPos = player.transform.localPosition;           
-        
-        Animator animator = player.GetComponentInChildren<Animator>();
+        Vector3 originalPos = player.transform.localPosition;
         Sequence sequence = DOTween.Sequence();
         
         player.PlayAnimation(Run);
@@ -35,7 +33,7 @@ public class PlayerManager : MonoBehaviour
 
         sequence.Append(player.transform.DOLocalRotate(Quaternion.Euler(15.35f, -180f, 0f).eulerAngles * -1f, 0.5f).OnComplete(delegate
         {
-            player.PlayAnimation(Run);
+            player.PlayAnimation(Idle);
         }));
        
         nextPlayer.PlayAnimation(Run);
@@ -47,6 +45,7 @@ public class PlayerManager : MonoBehaviour
         sequence.OnComplete(() =>
         {
             currentIndex = nextIndex;
+            GameController.Instance.CanClick = true;
         });
     }
     // ReSharper disable Unity.PerformanceAnalysis

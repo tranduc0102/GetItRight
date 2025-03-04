@@ -164,7 +164,7 @@ namespace Game
         private void HandleLevelFail()
         {
             GameController.Instance.PlayerManager.PlayAnim(StateFace.ThatBai);
-            UIController.instance.ShowDisplayLevelFail(true);
+            _Scripts.UI.UIController.instance.UILevelFailed.ShowLevelFailedPanel(PlayerPrefs.GetInt(USESTRING.CURRENT_LEVEL, 1));
             BridgeController.instance.LogLevelFailWithParameter(PlayerPrefs.GetInt(USESTRING.CURRENT_LEVEL, 1));
         }
 
@@ -314,7 +314,6 @@ namespace Game
                 if(amountObjects[index].currentItem.TryGetComponent(out Item item))
                 {
                     item.CanMove = false;
-                    Debug.Log(item.CanMove);
                 }
             });
         }

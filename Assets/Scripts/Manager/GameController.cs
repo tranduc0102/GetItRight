@@ -22,6 +22,7 @@ namespace Game
         [Header("DataGame")]
         [SerializeField] private LevelData currentLevel;
         [SerializeField] private DataCharacter dataCharacter;
+        [SerializeField] private ChangeBackground changeBackground;
         public int CurrentSkin
         {
             get => PlayerPrefs.GetInt(USESTRING.CURRENT_SKIN, 0);
@@ -43,6 +44,16 @@ namespace Game
                 if (value < 0 || value > dataCharacter.characters.Count) return;
                 PlayerPrefs.SetInt(USESTRING.CURRENT_PLAYER, value);
                 playerManager.ChangePlayer(dataCharacter.characters[value], true);
+            }
+        }
+        public int CurrentTheme
+        {
+            get => PlayerPrefs.GetInt(USESTRING.CURRENT_THEME, 0);
+            set
+            {
+                if (value < 0) return;
+                PlayerPrefs.SetInt(USESTRING.CURRENT_THEME, value);
+                changeBackground.ApplyBackground(value);
             }
         }
         public LevelData CurrentLevelGame => currentLevel;
@@ -97,7 +108,6 @@ namespace Game
             set
             {
                 PlayerPrefs.SetInt(USESTRING.CURRENT_LEVEL, value);
-                UIController.instance.UpdateTextedLevel(value + 1);
             }
             get => PlayerPrefs.GetInt(USESTRING.CURRENT_LEVEL, 0);
         }
@@ -114,7 +124,7 @@ namespace Game
                     playerManager.PlayAnim(StateFace.Win);
                     DOVirtual.DelayedCall(0.7f, delegate
                     {
-                        UIController.instance.ShowDisplayWin(true);
+                        _Scripts.UI.UIController.instance.UIWin.ShowWinPanel(IndexCurrentLevel);
                     });
                     currentPanel.gameObject.SetActive(false);
                 }
@@ -148,30 +158,24 @@ namespace Game
 
         private void Start()
         {
-            UIController.instance.SetActionOnWin(NextLevel);
-            UIController.instance.SetActionSave(SaveLevelFail);
-            UIController.instance.SetActionOnLose(PlayAgain);
+         
+            _Scripts.UI.UIController.instance.UILevelFailed.SetRevice(SaveLevelFail);
+            _Scripts.UI.UIController.instance.UILevelFailed.SetNoThanks(PlayAgain);
             IsWin = false;
             canClick = true;
             playerManager.ChangePlayer(dataCharacter.characters[CurrentPlayer], false);
             inGame2 = false;
             inGame1 = true;
             currentLevel = CreateLevel.instance.GetLevelData(PlayerPrefs.GetInt(USESTRING.CURRENT_LEVEL, 1));
+            changeBackground.ApplyBackground(CurrentTheme);
             GetAnswers(currentLevel.amountDistinct);
         }
-        private void OnEnable()
+        public void StartGame()
         {
-            LeanTouch.OnFingerDown += StartGame;
-        }
-        private void OnDisable()
-        {
-            LeanTouch.OnFingerDown -= StartGame;
-        }
-        private void StartGame(LeanFinger leanFinger)
-        {
-            if(UIDetection.IsPointerOverUIObject() || isPlay)return;
+            if(isPlay)return;
             isPlay = true;
             StartCoroutine(playerManager.AnimRun(cameraController.MoveAndRotateTo, InitializeGame)); 
+            _Scripts.UI.UIController.instance.UIHome.DisplayHome(false);
             BridgeController.instance.LogLevelStartWithParameter(PlayerPrefs.GetInt(USESTRING.CURRENT_LEVEL, 1));
         }
         private void InitializeGame()
@@ -198,10 +202,11 @@ namespace Game
             AudioManager.instance.StopMusic();
             DOVirtual.DelayedCall(0.5f, delegate
             {
+                _Scripts.UI.UIController.instance.UIInGame.DisplayInGame(true);
                 AudioManager.instance.PlayInGameMusic();
             });
         }
-        private void SaveLevelFail()
+        private void SaveLevelFail(Action action)
         {
             if (BridgeController.instance.IsRewardReady())
             {
@@ -212,6 +217,7 @@ namespace Game
                     canClick = true;
                     playerManager.PlayAnim(StateFace.Idle);
                     currentBoard.SaveMeBoard();
+                    action?.Invoke();
                 });
                 BridgeController.instance.ShowRewarded("SaveMe", e);
             }
@@ -254,11 +260,36 @@ namespace Game
             SpawnBoard();
             SpawnPanel();
             boxManager.NextLevelOrReplay(currentLevel.amountBox);
+            _Scripts.UI.UIController.instance.UIInGame.ShowSkipButton(false);
             BridgeController.instance.LogLevelFailWithParameter(PlayerPrefs.GetInt(USESTRING.CURRENT_LEVEL, 1));
         }
 
-        public void NextLevel()
+        public void NextLevel(bool isSkipClick = false)
         {
+            if (isSkipClick)
+            {
+                if (BridgeController.instance.IsRewardReady())
+                {
+                    UnityEvent e = new UnityEvent();
+                    e.AddListener(delegate
+                    {
+                        IsWin = false;
+                        playerManager.PlayAnim(StateFace.Idle);
+                        ++IndexCurrentLevel;
+                        currentLevel = CreateLevel.instance.GetLevelData(IndexCurrentLevel);
+                        canClick = true;
+            
+                        GetAnswers(currentLevel.amountDistinct);
+                        Destroy(currentBoard.gameObject);
+                        SpawnBoard();
+                        DOVirtual.DelayedCall(0.1f, SpawnPanel);
+                        _Scripts.UI.UIController.instance.UIInGame.ShowSkipButton(false);
+                        boxManager.NextLevelOrReplay(currentLevel.amountBox);
+                    });
+                    BridgeController.instance.ShowRewarded($"SkipLevel + {IndexCurrentLevel}", e);
+                }
+                return;
+            }
             if (IsFirstPlayGame && !IsFinishTutorial)
             {
                 IsFirstPlayGame = false;
@@ -274,6 +305,7 @@ namespace Game
             GetAnswers(currentLevel.amountDistinct);
             Destroy(currentBoard.gameObject);
             SpawnBoard();
+            _Scripts.UI.UIController.instance.UIInGame.ShowSkipButton(false);
             DOVirtual.DelayedCall(0.1f, SpawnPanel);
             boxManager.NextLevelOrReplay(currentLevel.amountBox);
         }
@@ -294,7 +326,6 @@ namespace Game
                 answers.Add(uniqueValues.ElementAt(Random.Range(0, uniqueValues.Count)));
             }
             ShuffleList(answers);
-            UIController.instance.ShowButtonShop(true);
         }
 
         private void ShuffleList<T>(List<T> list)

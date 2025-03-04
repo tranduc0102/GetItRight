@@ -225,13 +225,21 @@ namespace _Scripts.Extension
 			}
 
 			// finish
-			t = fading ? closeDuration : 0;
+			// if (fading)
+			// 	t = closeDuration;
+			// else
+			// 	t = 0;
+			t = closeDuration;
 			float a = canvasGroup.alpha;
 
 			while (t > 0)
 			{
-				a = Mathf.MoveTowards(a, 0f, 1f / closeDuration * Time.unscaledDeltaTime);
-				canvasGroup.alpha = a;
+				if (fading)
+				{
+					a = Mathf.MoveTowards(a, 0f, 1f / closeDuration * Time.unscaledDeltaTime);
+					canvasGroup.alpha = a;
+				}
+				
 				t -= Time.unscaledDeltaTime;
 				yield return null;
 			}

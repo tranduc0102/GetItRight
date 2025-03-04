@@ -6,17 +6,9 @@ public class ChangeBackground : MonoBehaviour
 {
     [SerializeField] private Image backgroundImage;
     [SerializeField] private Sprite[] backgroundSprites;
-    private int index = 0;
-    public void ApplyBackground(Sprite sprite)
+   
+    public void ApplyBackground(int id)
     {
-        backgroundImage.sprite = sprite;
-    }
-    public void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.A))
-        {
-            ApplyBackground(backgroundSprites[index]);
-            index = (index + 1) % backgroundSprites.Length;
-        }
+        backgroundImage.sprite = backgroundSprites[id];
     }
 }

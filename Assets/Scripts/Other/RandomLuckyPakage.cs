@@ -1,17 +1,17 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-[Serializable]
-public class PakagePiece
-{
-    public string Name;
-    public Transform Transform;
-    public float Chance;
-    [HideInInspector] public float AccumulatedWeight;
-}
-
 public class RandomLuckPakage : MonoBehaviour
 {
+    [Serializable]
+    public class PakagePiece
+    {
+        public string Name;
+        public Transform Transform;
+        public float Chance;
+        [HideInInspector] public float AccumulatedWeight;
+    }
+    
     public PakagePiece[] pakagePieces;
     private float totalWeight;
     private System.Random rand = new System.Random();
@@ -19,12 +19,13 @@ public class RandomLuckPakage : MonoBehaviour
     void Start()
     {
         CalculateWeights();
+        TestRandomSystem(100);
     }
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            TestRandomSystem(1);
+            TestRandomSystem(100);
         }
     }
 

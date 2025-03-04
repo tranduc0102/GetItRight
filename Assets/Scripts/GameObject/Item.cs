@@ -34,6 +34,9 @@ namespace Game
         private void Start()
         {
             Parent = transform.parent;
+        }
+        private void OnEnable()
+        {
             CanMove = true;
         }
         private void OnDestroy()

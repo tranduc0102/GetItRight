@@ -1,14 +1,13 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using _Scripts;
 using DG.Tweening;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
 
-public class UIController : Singleton<UIController>
+public class UIController : MonoBehaviour
 {
     [Space]
     [Header("UI Text")]
@@ -49,18 +48,15 @@ public class UIController : Singleton<UIController>
         btnNext.onClick.AddListener(delegate
         {
             uiWin.SetActive(false);
-            AudioManager.instance.PlaySoundButtonClick();
             actionNext?.Invoke();
         });
         btnPlayAgain.onClick.AddListener(delegate
         {
             uiLose.SetActive(false);
-            AudioManager.instance.PlaySoundButtonClick();
             actionAgain?.Invoke();
         });
         btnShop.onClick.AddListener(delegate
         {
-            AudioManager.instance.PlaySoundButtonClick();
             objShop.SetActive(true);
         });
         btnBackShop.onClick.AddListener(delegate
@@ -69,14 +65,11 @@ public class UIController : Singleton<UIController>
         });
         btnNoThanks.onClick.AddListener(delegate
         {
-            AudioManager.instance.PlaySoundButtonClick();
             uiLevelFail.SetActive(false);
             uiLose.SetActive(true);
-            AudioManager.instance.PlaySoundLose();
         });
         btnSave.onClick.AddListener(delegate
         {
-            AudioManager.instance.PlaySoundButtonClick();
             uiLevelFail.SetActive(false);
             actionSave?.Invoke();
         });
@@ -94,10 +87,6 @@ public class UIController : Singleton<UIController>
     public void ShowDisplayWin(bool enable)
     {
         uiWin.SetActive(enable);
-        if(enable)
-        {
-            AudioManager.instance.PlaySoundWin();
-        }
     }
     public void ShowDisplayLose(bool enable)
     {
@@ -106,7 +95,6 @@ public class UIController : Singleton<UIController>
     public void ShowDisplayLevelFail(bool enable)
     {
         uiLevelFail.SetActive(enable);
-        AudioManager.instance.PlaySoundlevelFail();
     }
     public void SetActionOnWin(UnityAction action)
     {
