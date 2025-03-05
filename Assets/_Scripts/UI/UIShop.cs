@@ -120,6 +120,7 @@ namespace _Scripts.UI
                 e.AddListener(delegate
                 {
                     GameController.Instance.AmountCoin += 200;
+                    UIController.instance.UIHome.UpdateTextCoin(GameController.Instance.AmountCoin);
                 });
                 BridgeController.instance.ShowRewarded("Reward Coin", e);
             }
@@ -127,18 +128,28 @@ namespace _Scripts.UI
 
         public void OnButtonBuyBlindBoxClick(int index)
         {
-            if(GameController.Instance.AmountCoin < 200) return;
-            GameController.Instance.AmountCoin -= 200;
             switch (index)
             {
                 case 0:
                     //tru tien va mo blind box
+                    if(GameController.Instance.AmountCoin < 200) return;
+                    GameController.Instance.AmountCoin -= 200;
+                    UIController.instance.UIHome.UpdateTextCoin(GameController.Instance.AmountCoin);
+                    ItemShopManager.instance.BlindBags[index].ActiveAnimation(index);
                     break;
                 case 1:
                     //tru tien va mo blind box
+                    if(GameController.Instance.AmountCoin < 200) return;
+                    GameController.Instance.AmountCoin -= 200;
+                    UIController.instance.UIHome.UpdateTextCoin(GameController.Instance.AmountCoin);
+                    ItemShopManager.instance.BlindBags[index].ActiveAnimation(index);
                     break;
                 case 2:
                     //tru tien va mo blind box
+                    if(GameController.Instance.AmountCoin < 200) return;
+                    GameController.Instance.AmountCoin -= 200;
+                    UIController.instance.UIHome.UpdateTextCoin(GameController.Instance.AmountCoin);
+                    ItemShopManager.instance.BlindBags[index].ActiveAnimation(index);
                     break;
             }
         }

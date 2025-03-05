@@ -53,14 +53,7 @@ public class EffectRewardCoin : MonoBehaviour
         completedCoins = 0;
         float delay = 0;
         int amountCoin;
-        if (GameController.Instance.AmountCoin > 0)
-        {
-            amountCoin = GameController.Instance.AmountCoin - 30;
-        }
-        else
-        {
-            amountCoin = GameController.Instance.AmountCoin;
-        }
+        amountCoin = GameController.Instance.AmountCoin - 30;
         for (int i = 0; i < transform.childCount; i++)
         {
             Transform coin = transform.GetChild(i);
@@ -75,7 +68,7 @@ public class EffectRewardCoin : MonoBehaviour
                     _action?.Invoke();
                     gameObject.SetActive(false);
                 }
-               amountCoin += 3;
+                amountCoin += 3;
                _Scripts.UI.UIController.instance.UIHome.UpdateTextCoin(amountCoin);
             });
             posTarget.DOScale(1.1f, 0.1f).SetLoops(10,LoopType.Yoyo).SetEase(Ease.InOutSine).SetDelay(1.2f);
@@ -83,10 +76,10 @@ public class EffectRewardCoin : MonoBehaviour
         }
         if (amount > 30)
         {
-            DOVirtual.DelayedCall(1.5f, delegate
+            DOVirtual.DelayedCall(2f, delegate
             {
-                amountCoin += 30;
                 GameController.Instance.AmountCoin += 30;
+                amountCoin += 30;
                 _Scripts.UI.UIController.instance.UIHome.UpdateTextCoin(amountCoin);
             });
         }

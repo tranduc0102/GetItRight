@@ -18,7 +18,6 @@ public class PlayerManager : MonoBehaviour
     [SerializeField] private Player currentPlayer;
     [SerializeField] private Vector3[] posSpawnOtherPlayer;
     private int currentIndex = 0;
-
     private void NextPlayerMovement()
     {
         Player player = players[currentIndex];           

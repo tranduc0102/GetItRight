@@ -2,6 +2,8 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
+using Game;
+using Lean.Touch;
 using UnityEngine;
 
 public class AnimationOpenBlindBag : MonoBehaviour
@@ -19,83 +21,92 @@ public class AnimationOpenBlindBag : MonoBehaviour
 
     private Vector2 bag1InitialPos;    
     private Vector2 bag2InitialPos;    
-    private RectTransform rectTransform;   
-    [SerializeField] private Canvas canvas; 
+    private RectTransform rectTransform;  
+    private Transform orginParent;
+    private Vector3 originalPosition;
+    [SerializeField] private Canvas canvas;
+    [SerializeField] private CanvasGroup shine;
+    [SerializeField] private CanvasGroup dime;
+    private bool canReset;
 
     private void Start()
     {
         bag1InitialPos = bag1.anchoredPosition;
         bag2InitialPos = bag2.anchoredPosition;
         rectTransform = GetComponent<RectTransform>(); 
-        
-        ActiveAnimation();
     }
-
-    public void ActiveAnimation()
+    private void OnEnable()
     {
+        LeanTouch.OnFingerDown += ResetAnimation;
+    }
+    private void OnDisable()
+    {
+        LeanTouch.OnFingerDown -= ResetAnimation;
+    }
+    public void ActiveAnimation(int index)
+    {
+        if(!ItemShopManager.instance.CanBuyBag) return;
+        ItemShopManager.instance.CanBuyBag = false;
         Sequence sequence = DOTween.Sequence();
-    
-        Vector2 centerScreen = GetCanvasCenter();
-
-        Transform originalParent = transform.parent;
-        transform.SetParent(canvas.transform, true);
-
-        sequence.Append(rectTransform.DOAnchorPos(centerScreen, moveToCenterDuration))
+        originalPosition = rectTransform.anchoredPosition;
+        orginParent = transform.parent;
+        transform.SetParent(canvas.transform);
+        sequence.Append(rectTransform.DOAnchorPos(Vector2.zero, moveToCenterDuration))
                 .Join(rectTransform.DOScale(Vector3.one * scaleFactor, scaleDuration))
                 .SetEase(Ease.InOutQuad)
-                .OnComplete(() =>
+                .OnComplete(() => 
                 {
-                    transform.SetParent(originalParent, true);
-                    ShakeBag();
+                    ShakeBag(index);
                 });
     }
-
-
-
-
-    private void ShakeBag()
+    private void ShakeBag(int index)
     {
         Sequence shakeSequence = DOTween.Sequence();
-        
         shakeSequence.Append(rectTransform.DORotate(new Vector3(0f, 0f, -shakeAngle), shakeDuration, RotateMode.Fast))
                     .Append(rectTransform.DORotate(new Vector3(0f, 0f, shakeAngle), shakeDuration, RotateMode.Fast))
                     .SetLoops(4, LoopType.Yoyo)
                     .OnComplete(() => 
                     {
-                        rectTransform.DORotate(new Vector3(0f, 0f, 0f), 0.1f);
-                        SeparateBags();
+                        rectTransform.DOLocalRotate(new Vector3(0f, 0f, 0f), 0.1f);
+                        SeparateBags(index);
                     });
     }
 
-    private void SeparateBags()
+    private void SeparateBags(int index)
     {
         Sequence separateSequence = DOTween.Sequence();
-        
+        shine.gameObject.SetActive(true);
+        ShineAnimation();
+        ItemShopManager.instance.SpawnRandomItemInShop(index);
         separateSequence.Append(bag1.DOAnchorPos(bag1InitialPos + Vector2.up * separateDistance, separateDuration))
                        .Join(bag2.DOAnchorPos(bag2InitialPos + Vector2.down * separateDistance, separateDuration))
-                       .SetEase(Ease.OutQuad);
+                       .SetEase(Ease.OutQuad).OnComplete(delegate
+                       {
+                           canReset = true;
+                       });
+    }
+    private void ShineAnimation()
+    {
+        dime.gameObject.SetActive(true);
+        dime.DOFade(1, 0.3f);
+        shine.gameObject.transform.DORotate(Vector3.back * 360, 10f, RotateMode.LocalAxisAdd).SetEase(Ease.Linear).SetLoops(-1, LoopType.Incremental);
+        shine.DOFade(1f, 0.5f);
     }
 
-    public void ResetAnimation()
+    public void ResetAnimation(LeanFinger finger)
     {
-        DOTween.KillAll();
-        
-        rectTransform.rotation = Quaternion.identity;
-        rectTransform.localScale = Vector3.one; 
-        rectTransform.anchoredPosition = GetCanvasCenter(); 
+        if(!canReset) return;
+        canReset = false;
+        rectTransform.localRotation = Quaternion.identity;
+        rectTransform.localScale = Vector3.one;
+        transform.SetParent(orginParent);
+        ItemShopManager.instance.ResetObject();
+        rectTransform.anchoredPosition = originalPosition;
+        shine.gameObject.SetActive(false);
+        dime.gameObject.SetActive(false);
         bag1.anchoredPosition = bag1InitialPos;
         bag2.anchoredPosition = bag2InitialPos;
         bag1.localScale = Vector3.one; 
         bag2.localScale = Vector3.one;
-        
-        ActiveAnimation();
-    }
-    private Vector2 GetCanvasCenter()
-    {
-        if (canvas == null) return Vector2.zero;
-        
-        RectTransform canvasRect = canvas.GetComponent<RectTransform>();
-        Vector2 canvasSize = canvasRect.sizeDelta;
-        return canvasSize * 0.5f; 
     }
 }
