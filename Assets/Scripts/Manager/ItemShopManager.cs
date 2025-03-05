@@ -120,7 +120,7 @@ namespace Game
                             parent = itemSkinParent;
                         }
                         ResetObject(parent);
-                        t = PoolingManager.Spawn(item1, itemSkinParent.position, itemSkinParent.rotation, parent);
+                        t = Instantiate(item1, itemSkinParent.position, itemSkinParent.rotation, parent);
                     }
                     break;
                 case 1:
@@ -134,7 +134,7 @@ namespace Game
                             parent = itemThemeParent;
                         }
                         ResetObject(parent);
-                        t = PoolingManager.Spawn(item2, itemThemeParent.position, Quaternion.identity, parent);   
+                        t = Instantiate(item2, itemThemeParent.position, Quaternion.identity, parent);   
                     }
                     break;
                 case 2:
@@ -147,7 +147,7 @@ namespace Game
                             parent = itemCharParent;
                         }
                         ResetObject(parent);
-                        t = PoolingManager.Spawn(item3, itemCharParent.position, itemCharParent.rotation, parent);   
+                        t = Instantiate(item3, itemCharParent.position, itemCharParent.rotation, parent);   
                     }
                     break;
             }
@@ -160,12 +160,35 @@ namespace Game
         }
         public void ResetObject(Transform parent)
         {
-            if(parent == null) return;
-            if (parent.childCount > 0)
+            if (parent != null)
             {
-                foreach (Transform item in parent)
+                if (parent.childCount > 0)
                 {
-                    PoolingManager.Despawn(item.gameObject);
+                    foreach (Transform item in parent)
+                    {
+                        Destroy(item.gameObject);
+                    }
+                }
+            }
+            if (itemCharParent.childCount > 0)
+            {
+                foreach (Transform item in itemCharParent)
+                {
+                    Destroy(item.gameObject);
+                }
+            }
+            if (itemThemeParent.childCount > 0)
+            {
+                foreach (Transform item in itemThemeParent)
+                {
+                    Destroy(item.gameObject);
+                }
+            }
+            if (itemSkinParent.childCount > 0)
+            {
+                foreach (Transform item in itemSkinParent)
+                {
+                    Destroy(item.gameObject);
                 }
             }
             CanBuyBag = true;

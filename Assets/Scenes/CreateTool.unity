@@ -2000,7 +2000,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: b44f87e478c644d42bc8e76c272b18da, type: 3}
+  m_audioClip: {fileID: 8300000, guid: 9560419339940414095e7bb037e6b3e9, type: 3}
   m_PlayOnAwake: 1
   m_Volume: 1
   m_Pitch: 1
@@ -56809,20 +56809,20 @@ MonoBehaviour:
   bag2: {fileID: 1443072448}
   parentSpawn:
   - {fileID: 2058005846}
-  - {fileID: 1006631762}
   - {fileID: 517391961}
+  - {fileID: 1006631762}
   spriteGiftBag:
   - {fileID: 21300000, guid: edefca94c1b5d4840a91e3647eaffcf9, type: 3}
-  - {fileID: 21300000, guid: 100b7a2f55b948042b31f7f9a17a1d36, type: 3}
   - {fileID: 21300000, guid: edefca94c1b5d4840a91e3647eaffcf9, type: 3}
+  - {fileID: 21300000, guid: 100b7a2f55b948042b31f7f9a17a1d36, type: 3}
   imgBag1:
   - {fileID: 21300000, guid: 4d604eb8c99ab394a83669fdd1ced873, type: 3}
-  - {fileID: 21300000, guid: ac35651f3e798454192bf6f0e9f76494, type: 3}
   - {fileID: 21300000, guid: 06c31eeecd3c5d245af3d47dccc8887c, type: 3}
+  - {fileID: 21300000, guid: ac35651f3e798454192bf6f0e9f76494, type: 3}
   imgBag2:
   - {fileID: 21300000, guid: f3b03f74d7ca9bd43bcd439a96319ac1, type: 3}
-  - {fileID: 21300000, guid: e50c3f260c05c984cae30f53bea61fc2, type: 3}
   - {fileID: 21300000, guid: 74734689f62d37f43b1b4927d926a0d2, type: 3}
+  - {fileID: 21300000, guid: e50c3f260c05c984cae30f53bea61fc2, type: 3}
 --- !u!4 &5750506146844151446
 Transform:
   m_ObjectHideFlags: 0
@@ -80764,10 +80764,10 @@ MonoBehaviour:
   - Name: Blue
     Chance: 5
     AccumulatedWeight: 0
-  - Name: Yellow
+  - Name: Purple
     Chance: 3
     AccumulatedWeight: 0
-  - Name: Purple
+  - Name: Yellow
     Chance: 2
     AccumulatedWeight: 0
 --- !u!23 &8414982762496838420

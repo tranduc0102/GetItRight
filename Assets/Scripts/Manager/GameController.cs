@@ -137,7 +137,6 @@ namespace Game
                             IsFinishTutorial = true;
                             tutorial.SetActive(false);
                             currentPanel.gameObject.SetActive(false);
-                            AmountCoin += 30;
                             ++IndexCurrentLevel;
                             NextLevel();
                         });
@@ -145,9 +144,17 @@ namespace Game
                     }
                     DOVirtual.DelayedCall(0.7f, delegate
                     {
-                        _Scripts.UI.UIController.instance.UIWin.ShowWinPanel(IndexCurrentLevel);
                         ++IndexCurrentLevel;
-                        AmountCoin += 30;
+                        if (inGame1)
+                        {
+                            _Scripts.UI.UIController.instance.UIWin.ShowWinPanel(IndexCurrentLevel);
+                            AmountCoin += 30;
+                        }
+                        else
+                        {
+                            playerManager.ResetPlayers();
+                            NextLevel();
+                        }
                     });
                     currentPanel.gameObject.SetActive(false);
                 }
@@ -178,7 +185,6 @@ namespace Game
 
         private void Start()
         {
-            PlayerPrefs.DeleteAll();
             _Scripts.UI.UIController.instance.UILevelFailed.SetRevice(SaveLevelFail);
             _Scripts.UI.UIController.instance.UILevelFailed.SetNoThanks(PlayAgain);
             isWin = false;
