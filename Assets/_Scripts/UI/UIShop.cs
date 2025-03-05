@@ -143,6 +143,7 @@ namespace _Scripts.UI
         private ItemInShop item;
         public void UpdateIndex(int current, int next)
         {
+            Debug.Log(current);
             List<ItemInShop> currentItems = null;
             int equippedIndex = -1;
             currentSkin = current;
@@ -167,7 +168,7 @@ namespace _Scripts.UI
             item = currentItems[current];
             if (item == null) return;
 
-            if (item.UnLock)
+            if (item.Lock)
             {
                 txtBtnEquip.text = "Locked";
                 buttonEquip.interactable = false;

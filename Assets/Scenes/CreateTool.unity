@@ -912,7 +912,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   btn: {fileID: 0}
   type: 2
-  unclock: 1
+  unclock: 0
+  Chance: 0
+  AccumulatedWeight: 0
   ID: 10
 --- !u!1 &152299429
 GameObject:
@@ -2374,6 +2376,8 @@ MonoBehaviour:
   btn: {fileID: 0}
   type: 2
   unclock: 1
+  Chance: 0
+  AccumulatedWeight: 0
   ID: 7
 --- !u!1 &307669869
 GameObject:
@@ -4256,7 +4260,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   btn: {fileID: 0}
   type: 2
-  unclock: 1
+  unclock: 0
+  Chance: 0
+  AccumulatedWeight: 0
   ID: 12
 --- !u!1 &481492083
 GameObject:
@@ -6624,7 +6630,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   btn: {fileID: 0}
   type: 2
-  unclock: 1
+  unclock: 0
+  Chance: 0
+  AccumulatedWeight: 0
   ID: 8
 --- !u!1 &703644893
 GameObject:
@@ -11183,7 +11191,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   btn: {fileID: 0}
   type: 2
-  unclock: 1
+  unclock: 0
+  Chance: 0
+  AccumulatedWeight: 0
   ID: 11
 --- !u!1 &1182006088
 GameObject:
@@ -16703,7 +16713,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   btn: {fileID: 0}
   type: 2
-  unclock: 1
+  unclock: 0
+  Chance: 0
+  AccumulatedWeight: 0
   ID: 13
 --- !u!1 &1703660243
 GameObject:
@@ -16788,6 +16800,66 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1703660243}
   m_Mesh: {fileID: -127990876336822857, guid: 553cb215a4fbb8647a0cf1c88b206a94, type: 3}
+--- !u!1 &1709908883
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1709908884}
+  - component: {fileID: 1709908885}
+  m_Layer: 5
+  m_Name: parentSpawnChar
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1709908884
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1709908883}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 0.8, y: 0.8, z: 0.8}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5879508411605642423}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 75}
+  m_SizeDelta: {x: 100, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1709908885
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1709908883}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8a8695521f0d02e499659fee002a26c2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Padding:
+    m_Left: 0
+    m_Right: 0
+    m_Top: 0
+    m_Bottom: 0
+  m_ChildAlignment: 4
+  m_StartCorner: 0
+  m_StartAxis: 0
+  m_CellSize: {x: 100, y: 100}
+  m_Spacing: {x: 0, y: 0}
+  m_Constraint: 0
+  m_ConstraintCount: 2
 --- !u!1 &1716657337
 GameObject:
   m_ObjectHideFlags: 0
@@ -17461,6 +17533,7 @@ MonoBehaviour:
   - {fileID: 7486071934184536580}
   - {fileID: 9160720628174825893}
   - {fileID: 6994407807764581228}
+  itemSkinParent: {fileID: 2130851321}
   itemTheme:
   - {fileID: 8028060987548647260}
   - {fileID: 8371804108317307362}
@@ -17468,6 +17541,7 @@ MonoBehaviour:
   - {fileID: 8391531726645136948}
   - {fileID: 9065231257465706909}
   - {fileID: 9030356493875189396}
+  itemThemeParent: {fileID: 2133014637}
   itemChar:
   - {fileID: 8075411339896406426}
   - {fileID: 5686143948510583704}
@@ -17483,6 +17557,7 @@ MonoBehaviour:
   - {fileID: 1175444813}
   - {fileID: 475540638}
   - {fileID: 1703068355}
+  itemCharParent: {fileID: 1709908884}
 --- !u!4 &1789151204
 Transform:
   m_ObjectHideFlags: 0
@@ -17602,7 +17677,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   btn: {fileID: 0}
   type: 2
-  unclock: 0
+  unclock: 1
+  Chance: 0
+  AccumulatedWeight: 0
   ID: 6
 --- !u!1 &1801118470
 GameObject:
@@ -19237,7 +19314,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   btn: {fileID: 0}
   type: 2
-  unclock: 1
+  unclock: 0
+  Chance: 0
+  AccumulatedWeight: 0
   ID: 9
 --- !u!1 &1947973969
 GameObject:
@@ -21429,9 +21508,9 @@ MonoBehaviour:
   backgroundSprites:
   - {fileID: 21300000, guid: 19a1a500ced4f7c448ffafc5948577b0, type: 3}
   - {fileID: 21300000, guid: 5f288ed4b258dae4aa32ab668a351f49, type: 3}
-  - {fileID: 21300000, guid: 26d4e5e89f0249f43b5e6a037aaccd6b, type: 3}
   - {fileID: 21300000, guid: 2e3d168cd08f0bc4d919a16f14cb165e, type: 3}
   - {fileID: 21300000, guid: 1246f2b2d49d9c24683c8eb50c1556c8, type: 3}
+  - {fileID: 21300000, guid: 26d4e5e89f0249f43b5e6a037aaccd6b, type: 3}
 --- !u!1 &2071877467
 GameObject:
   m_ObjectHideFlags: 0
@@ -21956,6 +22035,66 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2125616591}
   m_Mesh: {fileID: -8545447256379345787, guid: 4b30a91aafe862d4f932ed3c92afe254, type: 3}
+--- !u!1 &2130851320
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2130851321}
+  - component: {fileID: 2130851322}
+  m_Layer: 5
+  m_Name: parentSpawnSkin
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &2130851321
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2130851320}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8044234110579308320}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 100, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &2130851322
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2130851320}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8a8695521f0d02e499659fee002a26c2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Padding:
+    m_Left: 0
+    m_Right: 0
+    m_Top: 0
+    m_Bottom: 0
+  m_ChildAlignment: 4
+  m_StartCorner: 0
+  m_StartAxis: 0
+  m_CellSize: {x: 300, y: 200}
+  m_Spacing: {x: 0, y: 0}
+  m_Constraint: 0
+  m_ConstraintCount: 2
 --- !u!1 &2132234998
 GameObject:
   m_ObjectHideFlags: 0
@@ -22039,6 +22178,66 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2132234998}
   m_Mesh: {fileID: -2480762519168882292, guid: 553cb215a4fbb8647a0cf1c88b206a94, type: 3}
+--- !u!1 &2133014636
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2133014637}
+  - component: {fileID: 2133014638}
+  m_Layer: 5
+  m_Name: parentSpawnTheme
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &2133014637
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2133014636}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4013308313684049478}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 100, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &2133014638
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2133014636}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8a8695521f0d02e499659fee002a26c2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Padding:
+    m_Left: 0
+    m_Right: 0
+    m_Top: 0
+    m_Bottom: 0
+  m_ChildAlignment: 4
+  m_StartCorner: 0
+  m_StartAxis: 0
+  m_CellSize: {x: 250, y: 450}
+  m_Spacing: {x: 0, y: 0}
+  m_Constraint: 0
+  m_ConstraintCount: 2
 --- !u!1 &2136109646
 GameObject:
   m_ObjectHideFlags: 0
@@ -23303,6 +23502,18 @@ MonoBehaviour:
         m_TargetAssemblyTypeName: _Scripts.AudioManager, Assembly-CSharp
         m_MethodName: PlaySoundButtonClick
         m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 1789151203}
+        m_TargetAssemblyTypeName: Game.ItemShopManager, Assembly-CSharp
+        m_MethodName: SpawnRandomItemInShop
+        m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -41932,6 +42143,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 2133014637}
   - {fileID: 926736924810864857}
   - {fileID: 5510335005722601250}
   m_Father: {fileID: 8056649919820277350}
@@ -43446,7 +43658,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 3c4e1d594a063a74e8921670b1b97154, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 1dbb3c5a5a7eef146a09487d99a65d86, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -49184,6 +49396,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 1789151203}
+        m_TargetAssemblyTypeName: Game.ItemShopManager, Assembly-CSharp
+        m_MethodName: SpawnRandomItemInShop
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 2
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &5478537722629215265
 GameObject:
   m_ObjectHideFlags: 0
@@ -50269,7 +50493,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   btn: {fileID: 0}
   type: 2
-  unclock: 0
+  unclock: 1
+  Chance: 0
+  AccumulatedWeight: 0
   ID: 1
 --- !u!222 &5696797339942274466
 CanvasRenderer:
@@ -51012,6 +51238,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 1709908884}
   - {fileID: 6513167258895291562}
   - {fileID: 3753023748676040312}
   m_Father: {fileID: 4663438399937259940}
@@ -52851,6 +53078,8 @@ MonoBehaviour:
   btn: {fileID: 0}
   type: 2
   unclock: 0
+  Chance: 0
+  AccumulatedWeight: 0
   ID: 4
 --- !u!224 &6406845766090587446
 RectTransform:
@@ -54819,6 +55048,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 1789151203}
+        m_TargetAssemblyTypeName: Game.ItemShopManager, Assembly-CSharp
+        m_MethodName: SpawnRandomItemInShop
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 1
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!4 &6782398123691677376
 Transform:
   m_ObjectHideFlags: 0
@@ -55713,7 +55954,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   btn: {fileID: 0}
   type: 1
-  unclock: 1
+  unclock: 0
+  Chance: 0
+  AccumulatedWeight: 0
   ID: 5
 --- !u!198 &7000289918674804476
 ParticleSystem:
@@ -64598,7 +64841,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 9b6d1f27ed8e6274aa1143b91678b0ef, type: 3}
+  m_Sprite: {fileID: 21300000, guid: bf636e8b5fff6374ab74dbd9ca6821bf, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -64622,7 +64865,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   btn: {fileID: 0}
   type: 1
-  unclock: 1
+  unclock: 0
+  Chance: 0
+  AccumulatedWeight: 0
   ID: 3
 --- !u!4 &7490531093452107770
 Transform:
@@ -64774,6 +65019,8 @@ MonoBehaviour:
   btn: {fileID: 0}
   type: 0
   unclock: 0
+  Chance: 0
+  AccumulatedWeight: 0
   ID: 2
 --- !u!33 &7536879679376131239
 MeshFilter:
@@ -65537,6 +65784,8 @@ MonoBehaviour:
   btn: {fileID: 0}
   type: 2
   unclock: 0
+  Chance: 0
+  AccumulatedWeight: 0
   ID: 2
 --- !u!224 &7741154827575855762
 RectTransform:
@@ -65635,7 +65884,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   btn: {fileID: 0}
   type: 1
-  unclock: 0
+  unclock: 1
+  Chance: 0
+  AccumulatedWeight: 0
   ID: 1
 --- !u!114 &7773379052648432984
 MonoBehaviour:
@@ -68929,7 +69180,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   btn: {fileID: 0}
   type: 0
-  unclock: 0
+  unclock: 1
+  Chance: 0
+  AccumulatedWeight: 0
   ID: 0
 --- !u!108 &8033375088309095689
 Light:
@@ -69035,6 +69288,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 2130851321}
   - {fileID: 2694386174422379152}
   - {fileID: 2311316776312747308}
   m_Father: {fileID: 1731888364011393389}
@@ -69162,7 +69416,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   btn: {fileID: 0}
   type: 2
-  unclock: 0
+  unclock: 1
+  Chance: 0
+  AccumulatedWeight: 0
   ID: 0
 --- !u!4 &8078148882850065540
 Transform:
@@ -69590,6 +69846,8 @@ MonoBehaviour:
   btn: {fileID: 0}
   type: 2
   unclock: 0
+  Chance: 0
+  AccumulatedWeight: 0
   ID: 3
 --- !u!114 &8159429658063306343
 MonoBehaviour:
@@ -70338,6 +70596,8 @@ MonoBehaviour:
   btn: {fileID: 0}
   type: 0
   unclock: 0
+  Chance: 0
+  AccumulatedWeight: 0
   ID: 1
 --- !u!114 &8379446512863787498
 MonoBehaviour:
@@ -70387,7 +70647,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   btn: {fileID: 0}
   type: 0
-  unclock: 1
+  unclock: 0
+  Chance: 0
+  AccumulatedWeight: 0
   ID: 3
 --- !u!4 &8393071790310040995
 Transform:
@@ -72154,7 +72416,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: bf636e8b5fff6374ab74dbd9ca6821bf, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 9b6d1f27ed8e6274aa1143b91678b0ef, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -72178,7 +72440,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   btn: {fileID: 0}
   type: 1
-  unclock: 0
+  unclock: 1
+  Chance: 0
+  AccumulatedWeight: 0
   ID: 0
 --- !u!225 &8826220926198736625
 CanvasGroup:
@@ -75264,6 +75528,8 @@ MonoBehaviour:
   btn: {fileID: 0}
   type: 2
   unclock: 0
+  Chance: 0
+  AccumulatedWeight: 0
   ID: 5
 --- !u!23 &9024801704676413421
 MeshRenderer:
@@ -75364,7 +75630,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 1dbb3c5a5a7eef146a09487d99a65d86, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 3c4e1d594a063a74e8921670b1b97154, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -75388,7 +75654,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   btn: {fileID: 0}
   type: 0
-  unclock: 1
+  unclock: 0
+  Chance: 0
+  AccumulatedWeight: 0
   ID: 5
 --- !u!114 &9032675397918567296
 MonoBehaviour:
@@ -75511,7 +75779,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   btn: {fileID: 0}
   type: 0
-  unclock: 1
+  unclock: 0
+  Chance: 0
+  AccumulatedWeight: 0
   ID: 4
 --- !u!222 &9073808599109595553
 CanvasRenderer:
@@ -76177,6 +76447,8 @@ MonoBehaviour:
   btn: {fileID: 0}
   type: 1
   unclock: 0
+  Chance: 0
+  AccumulatedWeight: 0
   ID: 2
 --- !u!224 &9160560520264931131
 RectTransform:
@@ -76232,7 +76504,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   btn: {fileID: 0}
   type: 1
-  unclock: 1
+  unclock: 0
+  Chance: 0
+  AccumulatedWeight: 0
   ID: 4
 --- !u!224 &9171134659164404441
 RectTransform:

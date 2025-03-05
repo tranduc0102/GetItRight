@@ -17,10 +17,12 @@ namespace Game
         [SerializeField] private Button btn;
         [SerializeField] private TypeItemInShop type;
         [SerializeField] private bool unclock;
+        public float Chance;
+        [HideInInspector] public float AccumulatedWeight;
         public int ID;
-        public bool UnLock
+        public bool Lock
         {
-            get => PlayerPrefs.GetInt($"UnLock: Type {type}, ID {ID}" , 0) == 1;
+            get => PlayerPrefs.GetInt($"UnLock: Type {type}, ID {ID}" , 1) == 1;
             set
             {
                 PlayerPrefs.SetInt($"UnLock: Type {type}, ID {ID}", value ? 1 : 0);
@@ -30,15 +32,16 @@ namespace Game
         
         private void Start()
         {
-            if (unclock && !UnLock)
+            if (unclock && Lock)
             {
-                UnLock = true;
+                Debug.Log($"UnLock: Type {type}, ID {ID}");
+                Lock = false;
             }
         }
 
         public void ActionEuqip(ref int updateChange)
         {
-            if(UnLock)return;
+            if(Lock)return;
             updateChange = ID;
         }
     }
