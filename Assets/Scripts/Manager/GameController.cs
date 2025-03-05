@@ -144,14 +144,15 @@ namespace Game
                     }
                     DOVirtual.DelayedCall(0.7f, delegate
                     {
-                        ++IndexCurrentLevel;
                         if (inGame1)
                         {
                             _Scripts.UI.UIController.instance.UIWin.ShowWinPanel(IndexCurrentLevel);
                             AmountCoin += 30;
+                            ++IndexCurrentLevel;
                         }
                         else
                         {
+                            ++IndexCurrentLevel;
                             playerManager.ResetPlayers();
                             NextLevel();
                         }

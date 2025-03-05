@@ -263,6 +263,7 @@ namespace _Scripts.UI
             UpdateSpriteGift(PlayerPrefs.GetInt(USESTRING.ID_IMAGE_GIFT, 0));
             DisplayWinPanel(false);
             canOpenGift = false;
+            animationOpen.gameObject.SetActive(false);
             rewardImage.gameObject.SetActive(true);
             giftEmpty.SetActive(true);
         }
