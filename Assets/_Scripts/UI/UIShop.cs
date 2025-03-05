@@ -69,8 +69,9 @@ namespace _Scripts.UI
                     }
                     inventoryTabs[0].SetActive(true);
                     currentTab = inventoryTabs[0]; 
+                    _simpleScrollSnapSkin.SelectedPanel = GameController.Instance.CurrentSkin;
                     _simpleScrollSnapSkin.StartingPanel = GameController.Instance.CurrentSkin;
-                    UpdateIndex(GameController.Instance.CurrentSkin, GameController.Instance.CurrentSkin + 1);
+                    UpdateIndex(  _simpleScrollSnapSkin.SelectedPanel,   _simpleScrollSnapSkin.SelectedPanel + 1);
                     break;
                 case 1:
                     if (currentButtonTab != null)
@@ -86,8 +87,9 @@ namespace _Scripts.UI
                     }
                     inventoryTabs[1].SetActive(true);
                     currentTab = inventoryTabs[1];
+                    _simpleScrollSnapTheme.SelectedPanel = GameController.Instance.CurrentTheme;
                     _simpleScrollSnapTheme.StartingPanel = GameController.Instance.CurrentTheme;
-                    UpdateIndex(GameController.Instance.CurrentTheme, GameController.Instance.CurrentTheme + 1);
+                    UpdateIndex( _simpleScrollSnapTheme.SelectedPanel,  _simpleScrollSnapTheme.SelectedPanel + 1);
                     break;
                 case 2:
                     if (currentButtonTab != null)
@@ -103,8 +105,9 @@ namespace _Scripts.UI
                     }
                     inventoryTabs[2].SetActive(true);
                     currentTab = inventoryTabs[2];
+                    _simpleScrollSnapChar.SelectedPanel = GameController.Instance.CurrentPlayer;
                     _simpleScrollSnapChar.StartingPanel = GameController.Instance.CurrentPlayer;
-                    UpdateIndex(GameController.Instance.CurrentPlayer, GameController.Instance.CurrentPlayer + 1);
+                    UpdateIndex( _simpleScrollSnapChar.SelectedPanel,  _simpleScrollSnapChar.SelectedPanel + 1);
                     break;
             }
         }
@@ -143,7 +146,6 @@ namespace _Scripts.UI
         private ItemInShop item;
         public void UpdateIndex(int current, int next)
         {
-            Debug.Log(current);
             List<ItemInShop> currentItems = null;
             int equippedIndex = -1;
             currentSkin = current;

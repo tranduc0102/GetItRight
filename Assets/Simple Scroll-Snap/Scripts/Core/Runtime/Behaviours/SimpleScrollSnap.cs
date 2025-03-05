@@ -261,8 +261,7 @@ namespace DanielLochner.Assets.SimpleScrollSnap
         }
         public int SelectedPanel
         {
-            get;
-            private set;
+            get; set;
         }
         public int CenteredPanel
         {
