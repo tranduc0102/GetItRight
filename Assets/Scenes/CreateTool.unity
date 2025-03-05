@@ -22610,7 +22610,7 @@ MonoBehaviour:
     Bottom: 0
   useInfiniteScrolling: 1
   infiniteScrollingSpacing: 0
-  useOcclusionCulling: 0
+  useOcclusionCulling: 1
   startingPanel: 0
   useSwipeGestures: 0
   minimumSwipeSpeed: 0
@@ -32886,7 +32886,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1934932901354535480
 Transform:
   m_ObjectHideFlags: 0
@@ -36953,7 +36953,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &2716321257257396314
 GameObject:
   m_ObjectHideFlags: 0
@@ -48231,7 +48231,7 @@ MonoBehaviour:
     Bottom: 0
   useInfiniteScrolling: 1
   infiniteScrollingSpacing: 0
-  useOcclusionCulling: 0
+  useOcclusionCulling: 1
   startingPanel: 0
   useSwipeGestures: 0
   minimumSwipeSpeed: 0
@@ -60945,7 +60945,7 @@ MonoBehaviour:
     Bottom: 0
   useInfiniteScrolling: 1
   infiniteScrollingSpacing: 0
-  useOcclusionCulling: 0
+  useOcclusionCulling: 1
   startingPanel: 0
   useSwipeGestures: 0
   minimumSwipeSpeed: 0
@@ -72415,7 +72415,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!33 &7473314733430106108
 MeshFilter:
   m_ObjectHideFlags: 0
