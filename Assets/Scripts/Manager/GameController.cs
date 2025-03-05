@@ -164,7 +164,6 @@ namespace Game
         [Space]
         [Header("Camera")]
         [SerializeField] SmoothCameraController cameraController;
-
         private bool isPlay;
         
         private void Awake()
@@ -179,6 +178,7 @@ namespace Game
 
         private void Start()
         {
+            PlayerPrefs.DeleteAll();
             _Scripts.UI.UIController.instance.UILevelFailed.SetRevice(SaveLevelFail);
             _Scripts.UI.UIController.instance.UILevelFailed.SetNoThanks(PlayAgain);
             isWin = false;
@@ -478,26 +478,6 @@ namespace Game
             }
             currentPanel = panelAnswers[index];
             currentPanel.gameObject.SetActive(true);
-        }
-
-        public void Save(string levelName)
-        {
-            IndexCurrentLevel++;
-            /*CreateLevel.instance.SaveData(levelName, currentLevel);*/
-            Debug.Log(PlayerPrefs.GetInt(USESTRING.CURRENT_LEVEL, 0));
-        }
-
-        public void Load()
-        {
-            isWin = false;
-            BridgeController.instance.LogLevelCompleteWithParameter(PlayerPrefs.GetInt("CurrentLevel", 1));
-            currentLevel = CreateLevel.instance.GetLevelData(PlayerPrefs.GetInt("CurrentLevel", 1));
-            canClick = true;
-            GetAnswers(currentLevel.amountDistinct);
-            Destroy(currentBoard.gameObject);
-            SpawnBoard();
-            SpawnPanel();
-            boxManager.NextLevelOrReplay(currentLevel.amountBox);
         }
     #region Tutorial
         [Header("Tutorial")]

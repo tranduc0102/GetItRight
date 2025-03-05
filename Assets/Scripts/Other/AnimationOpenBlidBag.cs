@@ -27,6 +27,10 @@ public class AnimationOpenBlindBag : MonoBehaviour
     [SerializeField] private Canvas canvas;
     [SerializeField] private CanvasGroup shine;
     [SerializeField] private CanvasGroup dime;
+    [SerializeField] private Transform parentSpawn;
+
+    [SerializeField] private bool isWin;
+    private Action onComplete;
     private bool canReset;
 
     private void Start()
@@ -43,21 +47,46 @@ public class AnimationOpenBlindBag : MonoBehaviour
     {
         LeanTouch.OnFingerDown -= ResetAnimation;
     }
-    public void ActiveAnimation(int index)
+    public void SetAction(Action onComplete)
     {
-        if(!ItemShopManager.instance.CanBuyBag) return;
+        this.onComplete = onComplete;
+    }
+    public void SetParentSpawn(Transform parentSpawn)
+    {
+        this.parentSpawn = parentSpawn;
+    }
+    public bool ActiveAnimation(int index)
+    {
+        if (!ItemShopManager.instance.CheckCanSpawn(index))
+        {
+            return false;
+        }
+        if (!ItemShopManager.instance.CanBuyBag) return false;
+        orginParent = transform.parent;
         ItemShopManager.instance.CanBuyBag = false;
         Sequence sequence = DOTween.Sequence();
-        originalPosition = rectTransform.anchoredPosition;
-        orginParent = transform.parent;
-        transform.SetParent(canvas.transform);
-        sequence.Append(rectTransform.DOAnchorPos(Vector2.zero, moveToCenterDuration))
-                .Join(rectTransform.DOScale(Vector3.one * scaleFactor, scaleDuration))
-                .SetEase(Ease.InOutQuad)
-                .OnComplete(() => 
-                {
-                    ShakeBag(index);
-                });
+        if (isWin)
+        {
+            sequence.Append(rectTransform.DOScale(Vector3.one * scaleFactor, scaleDuration))
+                   .SetEase(Ease.InOutQuad)
+                   .OnComplete(() => 
+                   {
+                       ShakeBag(index);
+                   });   
+        }
+        else
+        {
+            originalPosition = rectTransform.anchoredPosition;
+            transform.SetParent(canvas.transform);
+            sequence.Append(rectTransform.DOAnchorPos(Vector2.zero, moveToCenterDuration))
+                    .Join(rectTransform.DOScale(Vector3.one * scaleFactor, scaleDuration))
+                    .SetEase(Ease.InOutQuad)
+                    .OnComplete(() => 
+                    {
+                        ShakeBag(index);
+                    });   
+        }
+        return true;
     }
     private void ShakeBag(int index)
     {
@@ -75,9 +104,12 @@ public class AnimationOpenBlindBag : MonoBehaviour
     private void SeparateBags(int index)
     {
         Sequence separateSequence = DOTween.Sequence();
-        shine.gameObject.SetActive(true);
-        ShineAnimation();
-        ItemShopManager.instance.SpawnRandomItemInShop(index);
+        if (shine != null)
+        {
+            shine.gameObject.SetActive(true);
+            ShineAnimation();
+        }
+        ItemShopManager.instance.SpawnRandomItemInShop(index, parentSpawn);
         separateSequence.Append(bag1.DOAnchorPos(bag1InitialPos + Vector2.up * separateDistance, separateDuration))
                        .Join(bag2.DOAnchorPos(bag2InitialPos + Vector2.down * separateDistance, separateDuration))
                        .SetEase(Ease.OutQuad).OnComplete(delegate
@@ -97,16 +129,24 @@ public class AnimationOpenBlindBag : MonoBehaviour
     {
         if(!canReset) return;
         canReset = false;
+        onComplete?.Invoke();
         rectTransform.localRotation = Quaternion.identity;
         rectTransform.localScale = Vector3.one;
         transform.SetParent(orginParent);
-        ItemShopManager.instance.ResetObject();
+        ItemShopManager.instance.ResetObject(parentSpawn);
         rectTransform.anchoredPosition = originalPosition;
-        shine.gameObject.SetActive(false);
-        dime.gameObject.SetActive(false);
+        if (shine != null)
+        {
+            shine.gameObject.SetActive(false);
+            dime.gameObject.SetActive(false);
+        }
         bag1.anchoredPosition = bag1InitialPos;
         bag2.anchoredPosition = bag2InitialPos;
         bag1.localScale = Vector3.one; 
         bag2.localScale = Vector3.one;
+        if (isWin)
+        {
+            gameObject.SetActive(false);
+        }
     }
 }

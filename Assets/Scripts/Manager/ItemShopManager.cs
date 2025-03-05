@@ -48,6 +48,21 @@ namespace Game
             }
             return shopItems;
         }
+        private void Start()
+        {
+            foreach (ItemInShop item in itemTheme)
+            {
+                item.LoadLock();
+            }
+            foreach (ItemInShop item in itemSkins)
+            {
+                item.LoadLock();
+            }  
+            foreach (ItemInShop item in itemChar)
+            {
+                item.LoadLock();
+            }
+        }
 
         private ItemInShop GetRandomPieceIndex(List<ItemInShop> items)
         {
@@ -57,17 +72,40 @@ namespace Game
             float r = (float)(rand.NextDouble() * totalWeight);
             for (int i = 0; i < shopItems.Count; i++)
             {
-                if (shopItems[i].AccumulatedWeight >= r)
+                if (shopItems[i].AccumulatedWeight >= r && shopItems[i].Lock)
                 {
-                    shopItems[i].Lock = false;
                     return shopItems[i];
                 }
             }
             return null;
         }
-        public void SpawnRandomItemInShop(int index)
+        public bool CheckCanSpawn(int index)
         {
-            ResetObject();
+            switch (index)
+            {
+                case 0:
+                    if (GetRandomPieceIndex(itemSkins) != null)
+                    {
+                        return true;
+                    }
+                    break;
+                case 1:
+                    if (GetRandomPieceIndex(itemTheme) != null)
+                    {
+                        return true;
+                    }
+                    break;
+                case 2:
+                    if (GetRandomPieceIndex(itemChar) != null)
+                    {
+                        return true;
+                    }
+                    break;
+            }
+            return false;
+        }
+        public void SpawnRandomItemInShop(int index, Transform parent = null)
+        {
             ItemInShop t = null;
             switch (index)
             {
@@ -75,8 +113,14 @@ namespace Game
                     ItemInShop item1 = GetRandomPieceIndex(itemSkins);
                     if (item1 != null)
                     {
-                        item1.GetComponent<CanvasGroup>().alpha = 1; 
-                        t = PoolingManager.Spawn(item1, itemSkinParent.position, itemSkinParent.rotation, itemSkinParent);
+                        item1.GetComponent<CanvasGroup>().alpha = 1;
+                        item1.Lock = false;
+                        if (parent == null)
+                        {
+                            parent = itemSkinParent;
+                        }
+                        ResetObject(parent);
+                        t = PoolingManager.Spawn(item1, itemSkinParent.position, itemSkinParent.rotation, parent);
                     }
                     break;
                 case 1:
@@ -84,39 +128,42 @@ namespace Game
                     if (item2 != null)
                     {
                         item2.GetComponent<CanvasGroup>().alpha = 1;
-                        t = PoolingManager.Spawn(item2, itemThemeParent.position, Quaternion.identity, itemThemeParent);   
+                        item2.Lock = false;
+                        if (parent == null)
+                        {
+                            parent = itemThemeParent;
+                        }
+                        ResetObject(parent);
+                        t = PoolingManager.Spawn(item2, itemThemeParent.position, Quaternion.identity, parent);   
                     }
                     break;
                 case 2:
                     ItemInShop item3 = GetRandomPieceIndex(itemChar);
                     if (item3 != null)
                     {
-                        t = PoolingManager.Spawn(item3, itemCharParent.position, itemCharParent.rotation, itemCharParent);   
+                        item3.Lock = false;
+                        if (parent == null)
+                        {
+                            parent = itemCharParent;
+                        }
+                        ResetObject(parent);
+                        t = PoolingManager.Spawn(item3, itemCharParent.position, itemCharParent.rotation, parent);   
                     }
                     break;
             }
-            t.transform.localScale = Vector3.zero;
-            t.transform.DOScale(Vector3.one, 0.7f);
+            if (t != null)
+            {
+                t.transform.localScale = Vector3.zero;
+                t.transform.DOScale(Vector3.one, 0.7f);   
+                t.gameObject.SetActive(true);
+            }
         }
-        public void ResetObject()
+        public void ResetObject(Transform parent)
         {
-            if (itemSkinParent.childCount > 0)
+            if(parent == null) return;
+            if (parent.childCount > 0)
             {
-                foreach (Transform item in itemSkinParent)
-                {
-                    PoolingManager.Despawn(item.gameObject);
-                }
-            }
-            if (itemThemeParent.childCount > 0)
-            {
-                foreach (Transform item in itemThemeParent)
-                {
-                    PoolingManager.Despawn(item.gameObject);
-                }
-            }
-            if (itemCharParent.childCount > 0)
-            {
-                foreach (Transform item in itemCharParent)
+                foreach (Transform item in parent)
                 {
                     PoolingManager.Despawn(item.gameObject);
                 }

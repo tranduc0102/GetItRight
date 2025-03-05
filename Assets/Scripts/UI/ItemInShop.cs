@@ -29,8 +29,7 @@ namespace Game
                 PlayerPrefs.Save();
             }
         }
-        
-        private void Start()
+        public void LoadLock()
         {
             if (unclock && Lock)
             {

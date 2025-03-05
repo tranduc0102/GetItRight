@@ -132,24 +132,33 @@ namespace _Scripts.UI
             {
                 case 0:
                     //tru tien va mo blind box
-                    if(GameController.Instance.AmountCoin < 200) return;
-                    GameController.Instance.AmountCoin -= 200;
-                    UIController.instance.UIHome.UpdateTextCoin(GameController.Instance.AmountCoin);
-                    ItemShopManager.instance.BlindBags[index].ActiveAnimation(index);
+                    if (GameController.Instance.AmountCoin < 200)
+                    {
+                        return;
+                    }
+                    if (ItemShopManager.instance.BlindBags[index].ActiveAnimation(index))
+                    {
+                        GameController.Instance.AmountCoin -= 200;
+                        UIController.instance.UIHome.UpdateTextCoin(GameController.Instance.AmountCoin);
+                    }
                     break;
                 case 1:
                     //tru tien va mo blind box
                     if(GameController.Instance.AmountCoin < 200) return;
-                    GameController.Instance.AmountCoin -= 200;
-                    UIController.instance.UIHome.UpdateTextCoin(GameController.Instance.AmountCoin);
-                    ItemShopManager.instance.BlindBags[index].ActiveAnimation(index);
+                    if (ItemShopManager.instance.BlindBags[index].ActiveAnimation(index))
+                    {
+                        GameController.Instance.AmountCoin -= 200;
+                        UIController.instance.UIHome.UpdateTextCoin(GameController.Instance.AmountCoin);
+                    }
                     break;
                 case 2:
                     //tru tien va mo blind box
                     if(GameController.Instance.AmountCoin < 200) return;
-                    GameController.Instance.AmountCoin -= 200;
-                    UIController.instance.UIHome.UpdateTextCoin(GameController.Instance.AmountCoin);
-                    ItemShopManager.instance.BlindBags[index].ActiveAnimation(index);
+                    if (ItemShopManager.instance.BlindBags[index].ActiveAnimation(index))
+                    {
+                        GameController.Instance.AmountCoin -= 200;
+                        UIController.instance.UIHome.UpdateTextCoin(GameController.Instance.AmountCoin);
+                    }
                     break;
             }
         }

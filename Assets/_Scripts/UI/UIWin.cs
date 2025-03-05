@@ -36,6 +36,20 @@ namespace _Scripts.UI
         [SerializeField] private UIAppear coinReward;
         [SerializeField] private TextMeshProUGUI coinAmount;
         [SerializeField] private EffectRewardCoin animRewardCoin;
+        
+        
+        [Space]
+        [Header("Setup Animation Gift")]
+        [SerializeField] private RandomLuckPakage randomLuckPakage;
+        [SerializeField] private AnimationOpenBlindBag animationOpen;
+        [SerializeField] private GameObject giftEmpty;
+        private bool canOpenGift;
+        [SerializeField] private Image bag1;
+        [SerializeField] private Image bag2;
+        [SerializeField] private Transform[] parentSpawn;
+        [SerializeField] private Sprite[] spriteGiftBag;
+        [SerializeField] private Sprite[] imgBag1;
+        [SerializeField] private Sprite[] imgBag2;
 
         private void Start()
         {
@@ -47,6 +61,11 @@ namespace _Scripts.UI
             
             shine.SetOnFinishEvent(eShineRotate);
             reward.SetOnFinishEvent(eRewardAnim);
+            animationOpen.SetAction(ActionAfterFinishOpenGift);
+        }
+        private void OnEnable()
+        {
+            UpdateSpriteGift(PlayerPrefs.GetInt(USESTRING.ID_IMAGE_GIFT, 0));
         }
 
         private void Update()
@@ -147,6 +166,9 @@ namespace _Scripts.UI
                         iconAds.SetActive(true);
                     }
                     btnOpenGift.gameObject.SetActive(true);
+                    canOpenGift = true;
+                    animationOpen.gameObject.SetActive(true);
+                    
                     btnNoThanks.duration = 3.5f;
                 }
                 else
@@ -175,8 +197,15 @@ namespace _Scripts.UI
             //animation nhan coin o day => complete thi goi ham ben duoi
             animRewardCoin.SetActionFinishAnimation(delegate
             {
-                DisplayWinPanel(false);
-                GameController.Instance.NextLevel();
+                if (canOpenGift)
+                {
+                    ActionAfterFinishOpenGift();
+                }
+                else
+                {
+                    DisplayWinPanel(false);
+                    GameController.Instance.NextLevel();
+                }
             }, 30);
             animRewardCoin.gameObject.SetActive(true);
         }
@@ -202,13 +231,14 @@ namespace _Scripts.UI
 
         public void OnButtonOpenGiftClick()
         {
+            rewardImage.gameObject.SetActive(false);
+            giftEmpty.SetActive(false);
             if (level <= 15)
             {
                 btnOpenGift.Close(delegate
                 {
                     //animation nhan qua
-                    GameController.Instance.NextLevel();
-                    DisplayWinPanel(false);
+                    animationOpen.ActiveAnimation(PlayerPrefs.GetInt(USESTRING.ID_IMAGE_GIFT, 0));
                 }, true);
                 btnNoThanks._Close(true);
                 
@@ -224,14 +254,31 @@ namespace _Scripts.UI
                         btnOpenGift.Close(delegate
                         {
                             //animation nhan qua
-                            GameController.Instance.NextLevel();
-                            DisplayWinPanel(false);
+                            animationOpen.ActiveAnimation(PlayerPrefs.GetInt(USESTRING.ID_IMAGE_GIFT, 0));
                         }, true);
                         btnNoThanks._Close(true);
                     });
                     BridgeController.instance.ShowRewarded("_reward_open_gift", e);
                 }
             }
+        }
+        private void ActionAfterFinishOpenGift()
+        {
+            GameController.Instance.NextLevel();
+            PlayerPrefs.SetInt(USESTRING.ID_IMAGE_GIFT, randomLuckPakage.GetRandomPieceIndex());
+            UpdateSpriteGift(PlayerPrefs.GetInt(USESTRING.ID_IMAGE_GIFT, 0));
+            DisplayWinPanel(false);
+            canOpenGift = false;
+            rewardImage.gameObject.SetActive(true);
+            giftEmpty.SetActive(true);
+        }
+        
+        public void UpdateSpriteGift(int index)
+        {
+            rewardImage.sprite = spriteGiftBag[index];
+            bag1.sprite = imgBag1[index];
+            bag2.sprite = imgBag2[index];
+            animationOpen.SetParentSpawn(parentSpawn[index]);
         }
     }
 }
