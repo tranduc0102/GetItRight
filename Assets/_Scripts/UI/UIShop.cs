@@ -17,9 +17,7 @@ namespace _Scripts.UI
         [SerializeField] private SimpleScrollSnap _simpleScrollSnapSkin;
         [SerializeField] private SimpleScrollSnap _simpleScrollSnapTheme;
         [SerializeField] private SimpleScrollSnap _simpleScrollSnapChar;
-        [SerializeField] private List<ItemInShop> itemSkins = new List<ItemInShop>();
-        [SerializeField] private List<ItemInShop> itemTheme = new List<ItemInShop>();
-        [SerializeField] private List<ItemInShop> itemChar = new List<ItemInShop>();
+ 
         private int currentSkin = 0;
         [SerializeField] private Button buttonEquip;
 
@@ -126,6 +124,8 @@ namespace _Scripts.UI
 
         public void OnButtonBuyBlindBoxClick(int index)
         {
+            if(GameController.Instance.AmountCoin < 200) return;
+            GameController.Instance.AmountCoin -= 200;
             switch (index)
             {
                 case 0:
@@ -148,17 +148,17 @@ namespace _Scripts.UI
             currentSkin = current;
             if (inventoryTabs[0].activeSelf)
             {
-                currentItems = itemSkins;
+                currentItems = ItemShopManager.instance.ItemSkins;
                 equippedIndex = GameController.Instance.CurrentSkin;
             }
             else if (inventoryTabs[1].activeSelf)
             {
-                currentItems = itemTheme;
+                currentItems = ItemShopManager.instance.ItemTheme;
                 equippedIndex = GameController.Instance.CurrentTheme;
             }
             else if (inventoryTabs[2].activeSelf)
             {
-                currentItems = itemChar;
+                currentItems = ItemShopManager.instance.ItemChar;
                 equippedIndex = GameController.Instance.CurrentPlayer;
             }
 
@@ -197,20 +197,20 @@ namespace _Scripts.UI
             
             if (inventoryTabs[0].activeSelf)
             {
-                item = itemSkins[currentSkin];
+                item = ItemShopManager.instance.ItemSkins[currentSkin];
                 item.ActionEuqip(ref value);
                 if(value < 0) return;
                 GameController.Instance.CurrentSkin = value;
             } else if (inventoryTabs[1].activeSelf)
             {
-                item = itemTheme[currentSkin];
+                item = ItemShopManager.instance.ItemTheme[currentSkin];
                 item.ActionEuqip(ref value);
                 if(value < 0) return;
                 GameController.Instance.CurrentTheme = value;
             }
             else if (inventoryTabs[2].activeSelf)
             {
-                item = itemChar[currentSkin];
+                item = ItemShopManager.instance.ItemChar[currentSkin];
                 item.ActionEuqip(ref value);
                 if(value < 0) return;
                 GameController.Instance.CurrentPlayer = value;

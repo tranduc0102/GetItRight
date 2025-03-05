@@ -132,9 +132,6 @@ public class UISetting : MonoBehaviour
         if (IsOffVibration == toggleVibrate.isOn)
         {
             IsOffVibration = !IsOffVibration;
-            /*
-            AudioManager.instance.SetVibration();
-        */
         }
     }
 }
