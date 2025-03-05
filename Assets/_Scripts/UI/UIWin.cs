@@ -168,14 +168,11 @@ namespace _Scripts.UI
                     btnOpenGift.gameObject.SetActive(true);
                     canOpenGift = true;
                     animationOpen.gameObject.SetActive(true);
-                    
-                    btnNoThanks.duration = 3.5f;
                 }
                 else
                 {
                     coinReward.gameObject.SetActive(true);
                     btnGetIt.gameObject.SetActive(true);
-                    btnNoThanks.duration = 5f;
                 }
 
                 btnNoThanks.gameObject.SetActive(true);
