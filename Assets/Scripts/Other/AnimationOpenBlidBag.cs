@@ -53,6 +53,7 @@ public class AnimationOpenBlindBag : MonoBehaviour
     }
     public void SetParentSpawn(Transform parentSpawn)
     {
+        ItemShopManager.instance.ResetObject(parentSpawn);
         this.parentSpawn = parentSpawn;
     }
     public bool ActiveAnimation(int index)

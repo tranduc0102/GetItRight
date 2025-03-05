@@ -63,10 +63,6 @@ namespace _Scripts.UI
             reward.SetOnFinishEvent(eRewardAnim);
             animationOpen.SetAction(ActionAfterFinishOpenGift);
         }
-        private void OnEnable()
-        {
-            UpdateSpriteGift(PlayerPrefs.GetInt(USESTRING.ID_IMAGE_GIFT, 0));
-        }
 
         private void Update()
         {
@@ -86,7 +82,7 @@ namespace _Scripts.UI
         {
             level = lv;
             levelComplete.text = $"Level {level}";
-                            
+            UpdateSpriteGift(PlayerPrefs.GetInt(USESTRING.ID_IMAGE_GIFT, 0));
             if (level <= 3)
             {
                 rewardImage.fillAmount = (float)(level - 1) / 3;
@@ -263,6 +259,7 @@ namespace _Scripts.UI
         {
             GameController.Instance.NextLevel();
             PlayerPrefs.SetInt(USESTRING.ID_IMAGE_GIFT, randomLuckPakage.GetRandomPieceIndex());
+            PlayerPrefs.Save();
             UpdateSpriteGift(PlayerPrefs.GetInt(USESTRING.ID_IMAGE_GIFT, 0));
             DisplayWinPanel(false);
             canOpenGift = false;
