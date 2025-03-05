@@ -86,7 +86,14 @@ namespace _Scripts.UI
             {
                 rewardImage.fillAmount = (float)(level - 9) % 7 / 7;
                 percent.text = $"{Mathf.FloorToInt(((float)(level - 9) % 7 / 7) * 100)}%";
-                currentValue = (float)(level - 8) % 7 / 7;
+                if ((float)(level - 8) % 7 == 0)
+                {
+                    currentValue = 1;
+                }
+                else
+                {
+                    currentValue = (float)(level - 8) % 7 / 7;
+                }
             }
             
             DisplayWinPanel(true);
@@ -111,6 +118,7 @@ namespace _Scripts.UI
                     btnGetIt.gameObject.SetActive(false);
                     btnOpenGift.gameObject.SetActive(false);
                     btnNoThanks.gameObject.SetActive(false);
+                    DOTween.Kill("giftAnimation");
                 },true);
             }
         }
@@ -139,11 +147,13 @@ namespace _Scripts.UI
                         iconAds.SetActive(true);
                     }
                     btnOpenGift.gameObject.SetActive(true);
+                    btnNoThanks.duration = 3.5f;
                 }
                 else
                 {
                     coinReward.gameObject.SetActive(true);
                     btnGetIt.gameObject.SetActive(true);
+                    btnNoThanks.duration = 5f;
                 }
 
                 btnNoThanks.gameObject.SetActive(true);
