@@ -19,6 +19,7 @@ namespace _Scripts.UI
         [SerializeField] private UIAppear btnGetIt;
         [SerializeField] private UIAppear btnNoThanks;
         [SerializeField] private UIAppear btnOpenGift;
+        [SerializeField] private UIAppear btnContinue;
         [SerializeField] private ParticleSystem vfx;
         
         [Space]
@@ -232,6 +233,10 @@ namespace _Scripts.UI
                 {
                     //animation nhan qua
                     animationOpen.ActiveAnimation(PlayerPrefs.GetInt(USESTRING.ID_IMAGE_GIFT, 0));
+                    DOVirtual.DelayedCall(3, delegate
+                    {
+                        btnContinue.gameObject.SetActive(true);
+                    });
                 }, true);
                 btnNoThanks._Close(true);
                 
@@ -248,6 +253,10 @@ namespace _Scripts.UI
                         {
                             //animation nhan qua
                             animationOpen.ActiveAnimation(PlayerPrefs.GetInt(USESTRING.ID_IMAGE_GIFT, 0));
+                            DOVirtual.DelayedCall(3, delegate
+                            {
+                                btnContinue.gameObject.SetActive(true);
+                            });
                         }, true);
                         btnNoThanks._Close(true);
                     });
@@ -255,13 +264,32 @@ namespace _Scripts.UI
                 }
             }
         }
+
+        public void OnButtonContinueClick()
+        {
+            btnContinue.Close(delegate
+            {
+                DisplayWinPanel(false);
+                animationOpen.ResetAnimation();
+            },true);
+        }
+        
         private void ActionAfterFinishOpenGift()
         {
             GameController.Instance.NextLevel();
-            PlayerPrefs.SetInt(USESTRING.ID_IMAGE_GIFT, randomLuckPakage.GetRandomPieceIndex());
+            if (level is >= 3 and < 8)
+            {
+                PlayerPrefs.SetInt(USESTRING.ID_IMAGE_GIFT, 1);
+            }
+            else if (level is >= 8 and < 15)
+            {
+                PlayerPrefs.SetInt(USESTRING.ID_IMAGE_GIFT, 2);
+            }
+            else
+            {
+                PlayerPrefs.SetInt(USESTRING.ID_IMAGE_GIFT, randomLuckPakage.GetRandomPieceIndex());
+            }
             PlayerPrefs.Save();
-            UpdateSpriteGift(PlayerPrefs.GetInt(USESTRING.ID_IMAGE_GIFT, 0));
-            DisplayWinPanel(false);
             canOpenGift = false;
             animationOpen.gameObject.SetActive(false);
             rewardImage.gameObject.SetActive(true);

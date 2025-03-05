@@ -129,6 +129,28 @@ public class AnimationOpenBlindBag : MonoBehaviour
     public void ResetAnimation(LeanFinger finger)
     {
         if(!canReset) return;
+        if (isWin) return;
+        canReset = false;
+        onComplete?.Invoke();
+        rectTransform.localRotation = Quaternion.identity;
+        rectTransform.localScale = Vector3.one;
+        transform.SetParent(orginParent);
+        ItemShopManager.instance.ResetObject(parentSpawn);
+        rectTransform.anchoredPosition = originalPosition;
+        if (shine != null)
+        {
+            shine.gameObject.SetActive(false);
+            dime.gameObject.SetActive(false);
+        }
+        bag1.anchoredPosition = bag1InitialPos;
+        bag2.anchoredPosition = bag2InitialPos;
+        bag1.localScale = Vector3.one; 
+        bag2.localScale = Vector3.one;
+    }
+
+    public void ResetAnimation()
+    {
+        if(!canReset) return;
         canReset = false;
         onComplete?.Invoke();
         rectTransform.localRotation = Quaternion.identity;
