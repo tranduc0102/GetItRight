@@ -27,6 +27,8 @@ namespace _Scripts.UI
         [SerializeField] private UIAppear inventoryTab;
         [SerializeField] private UIAppear shopTab;
         
+        [SerializeField] private UIAppear popupGetMoreCoin;
+        
         [SerializeField] private List<GameObject> inventoryTabs = new List<GameObject>();
         [SerializeField] private GameObject currentTab;
         [SerializeField] private List<Image> tabButtons = new List<Image>();
@@ -48,6 +50,18 @@ namespace _Scripts.UI
                     shopPanel._Close(true);
                 });
                 inventoryTab._Close();
+            }
+        }
+
+        public void DisplayPopupGetMoreCoin(bool enable)
+        {
+            if (enable)
+            {
+                popupGetMoreCoin.gameObject.SetActive(true);
+            }
+            else
+            {
+                popupGetMoreCoin._Close(true);
             }
         }
 
