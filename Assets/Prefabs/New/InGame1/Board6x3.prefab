@@ -1349,6 +1349,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7704462395004275567}
+  - component: {fileID: 5453592172547643372}
   m_Layer: 0
   m_Name: Board2
   m_TagString: Untagged
@@ -1378,6 +1379,23 @@ Transform:
   - {fileID: 798492792272237740}
   m_Father: {fileID: 686308820379532645}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5453592172547643372
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3967823085403870800}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 48f96e409b28f9f4f8a0c2a77d781c4c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  startPosition: {x: 0, y: 0, z: 0}
+  direction: -11
+  duration: 1
+  isTable: 0
+  canMove: 0
 --- !u!1 &4255732775200693070
 GameObject:
   m_ObjectHideFlags: 0
@@ -1452,6 +1470,7 @@ MonoBehaviour:
   materialNo: {fileID: 2100000, guid: 5e72cca0cdabdff49be7cb12d6696b3e, type: 2}
   materialMaybe: {fileID: 2100000, guid: 89b1e3f2231d37d46af715800056d5a5, type: 2}
   heightOfObjects: 2.45
+  currentIndex: 0
 --- !u!1 &4453174013351398717
 GameObject:
   m_ObjectHideFlags: 0
@@ -1508,6 +1527,8 @@ MonoBehaviour:
   startPosition: {x: 0, y: 0, z: 0}
   direction: -11
   duration: 1
+  isTable: 0
+  canMove: 1
 --- !u!1 &4732264091619175484
 GameObject:
   m_ObjectHideFlags: 0
@@ -1772,6 +1793,8 @@ MonoBehaviour:
   startPosition: {x: 0, y: 0, z: 0}
   direction: 11
   duration: 1
+  isTable: 0
+  canMove: 1
 --- !u!1 &5293961340803667793
 GameObject:
   m_ObjectHideFlags: 0
@@ -4570,6 +4593,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5184715350139351346}
+  - component: {fileID: 118153640439005147}
   m_Layer: 0
   m_Name: Board3
   m_TagString: Untagged
@@ -4599,6 +4623,23 @@ Transform:
   - {fileID: 7677907111700120330}
   m_Father: {fileID: 686308820379532645}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &118153640439005147
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8160305395743903706}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 48f96e409b28f9f4f8a0c2a77d781c4c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  startPosition: {x: 0, y: 0, z: 0}
+  direction: 11
+  duration: 1
+  isTable: 0
+  canMove: 0
 --- !u!1 &8227961316392040595
 GameObject:
   m_ObjectHideFlags: 0
@@ -4655,6 +4696,8 @@ MonoBehaviour:
   startPosition: {x: 0, y: 0, z: 0}
   direction: 11
   duration: 1
+  isTable: 0
+  canMove: 1
 --- !u!1 &8263878137592000043
 GameObject:
   m_ObjectHideFlags: 0

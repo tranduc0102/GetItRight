@@ -643,6 +643,7 @@ MonoBehaviour:
   materialNo: {fileID: 2100000, guid: 5e72cca0cdabdff49be7cb12d6696b3e, type: 2}
   materialMaybe: {fileID: 2100000, guid: 89b1e3f2231d37d46af715800056d5a5, type: 2}
   heightOfObjects: 2.45
+  currentIndex: 0
 --- !u!1 &1038895520993789650
 GameObject:
   m_ObjectHideFlags: 0
@@ -2642,6 +2643,8 @@ MonoBehaviour:
   startPosition: {x: 0, y: 0, z: 0}
   direction: 11
   duration: 1
+  isTable: 0
+  canMove: 1
 --- !u!1 &3572699111918480612
 GameObject:
   m_ObjectHideFlags: 0
@@ -3499,6 +3502,8 @@ MonoBehaviour:
   startPosition: {x: 0, y: 0, z: 0}
   direction: -11
   duration: 1
+  isTable: 0
+  canMove: 1
 --- !u!1 &4687963706735531395
 GameObject:
   m_ObjectHideFlags: 0
@@ -3830,6 +3835,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5461976063203374203}
+  - component: {fileID: 8552126239592379080}
   m_Layer: 0
   m_Name: Board2
   m_TagString: Untagged
@@ -3860,6 +3866,23 @@ Transform:
   - {fileID: 8394294511438910570}
   m_Father: {fileID: 4309567322599814463}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8552126239592379080
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4938167246229592173}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 48f96e409b28f9f4f8a0c2a77d781c4c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  startPosition: {x: 0, y: 0, z: 0}
+  direction: -11
+  duration: 1
+  isTable: 0
+  canMove: 0
 --- !u!1 &4956374652213633234
 GameObject:
   m_ObjectHideFlags: 0
@@ -5206,6 +5229,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7190252061738301848}
+  - component: {fileID: 2406680946112900174}
   m_Layer: 0
   m_Name: Board3
   m_TagString: Untagged
@@ -5236,6 +5260,23 @@ Transform:
   - {fileID: 1043023540576965514}
   m_Father: {fileID: 4309567322599814463}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2406680946112900174
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7148346940781618540}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 48f96e409b28f9f4f8a0c2a77d781c4c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  startPosition: {x: 0, y: 0, z: 0}
+  direction: 11
+  duration: 1
+  isTable: 0
+  canMove: 0
 --- !u!1 &7771937465226456891
 GameObject:
   m_ObjectHideFlags: 0
@@ -5291,6 +5332,8 @@ MonoBehaviour:
   startPosition: {x: 0, y: 0, z: 0}
   direction: 11
   duration: 1
+  isTable: 0
+  canMove: 1
 --- !u!1 &8092854863199767075
 GameObject:
   m_ObjectHideFlags: 0

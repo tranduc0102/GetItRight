@@ -11,11 +11,24 @@ namespace Game
         [SerializeField] private float direction;
         [SerializeField] private float duration;
         [SerializeField] private bool isTable;
+        [SerializeField] private bool canMove = true;
+        private bool isActive = true;
         private void Start()
         {
             startPosition = transform.position;
+            if(!canMove) return;
             transform.position = new Vector3(startPosition.x + direction, startPosition.y, startPosition.z);
             transform.DOMove(startPosition, duration);
+            isActive = true;
+        }
+
+        private void OnEnable()
+        {
+            if (isTable && !isActive)
+            {
+                transform.DOMove(startPosition, duration);
+                isActive = true;
+            } 
         }
 
         public void ResetState()
@@ -26,6 +39,7 @@ namespace Game
                     if (isTable)
                     {
                         gameObject.SetActive(false);
+                        isActive = false;
                     }
                     else
                     {

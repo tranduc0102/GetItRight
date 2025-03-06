@@ -122,7 +122,14 @@ namespace Game
         public bool CanSkip
         {
             get => canSkip;
-            set => canSkip = value;
+            set
+            {
+                canSkip = value;
+                if (value == false)
+                {
+                    _Scripts.UI.UIController.instance.UIInGame.ShowSKip(false);
+                }
+            }
         }
 
         private bool isWin;
@@ -212,6 +219,7 @@ namespace Game
                 CurrentLevelBonus = 0;
                 NextLevel();
             });
+            Application.targetFrameRate = 60;
         }
         public void StartGame()
         {

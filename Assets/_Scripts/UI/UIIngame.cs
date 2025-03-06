@@ -48,5 +48,10 @@ namespace _Scripts.UI
                 });
             }
         }
+
+        public void ShowSKip(bool enable)
+        {
+            btnSkip.SetActive(enable);
+        }
     }
 }

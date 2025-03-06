@@ -827,6 +827,8 @@ MonoBehaviour:
   startPosition: {x: 0, y: 0, z: 0}
   direction: 11
   duration: 1
+  isTable: 0
+  canMove: 1
 --- !u!1 &1394028448298540619
 GameObject:
   m_ObjectHideFlags: 0
@@ -919,6 +921,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4183283035966313929}
+  - component: {fileID: 686320153341069158}
   m_Layer: 0
   m_Name: Board4
   m_TagString: Untagged
@@ -948,6 +951,23 @@ Transform:
   - {fileID: 4467797895554641760}
   m_Father: {fileID: 686308820379532645}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &686320153341069158
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1601868102102021212}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 48f96e409b28f9f4f8a0c2a77d781c4c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  startPosition: {x: 0, y: 0, z: 0}
+  direction: -11
+  duration: 1
+  isTable: 0
+  canMove: 0
 --- !u!1 &1679854751610283055
 GameObject:
   m_ObjectHideFlags: 0
@@ -1818,6 +1838,8 @@ MonoBehaviour:
   startPosition: {x: 0, y: 0, z: 0}
   direction: -11
   duration: 1
+  isTable: 0
+  canMove: 1
 --- !u!1 &3489269376396465652
 GameObject:
   m_ObjectHideFlags: 0
@@ -2273,6 +2295,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7704462395004275567}
+  - component: {fileID: 4767226941998353808}
   m_Layer: 0
   m_Name: Board2
   m_TagString: Untagged
@@ -2302,6 +2325,23 @@ Transform:
   - {fileID: 8542414166324245247}
   m_Father: {fileID: 686308820379532645}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4767226941998353808
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3967823085403870800}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 48f96e409b28f9f4f8a0c2a77d781c4c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  startPosition: {x: 0, y: 0, z: 0}
+  direction: -11
+  duration: 1
+  isTable: 0
+  canMove: 0
 --- !u!1 &4029169279871723352
 GameObject:
   m_ObjectHideFlags: 0
@@ -2580,6 +2620,7 @@ MonoBehaviour:
   materialNo: {fileID: 2100000, guid: 5e72cca0cdabdff49be7cb12d6696b3e, type: 2}
   materialMaybe: {fileID: 2100000, guid: 89b1e3f2231d37d46af715800056d5a5, type: 2}
   heightOfObjects: 2.45
+  currentIndex: 0
 --- !u!1 &4502822631196243658
 GameObject:
   m_ObjectHideFlags: 0
@@ -2748,6 +2789,8 @@ MonoBehaviour:
   startPosition: {x: 0, y: 0, z: 0}
   direction: -11
   duration: 1
+  isTable: 0
+  canMove: 1
 --- !u!1 &4699725555893673185
 GameObject:
   m_ObjectHideFlags: 0
@@ -3109,6 +3152,8 @@ MonoBehaviour:
   startPosition: {x: 0, y: 0, z: 0}
   direction: 11
   duration: 1
+  isTable: 0
+  canMove: 1
 --- !u!1 &4937029756793553795
 GameObject:
   m_ObjectHideFlags: 0
@@ -6338,6 +6383,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5184715350139351346}
+  - component: {fileID: 8197362392289863523}
   m_Layer: 0
   m_Name: Board3
   m_TagString: Untagged
@@ -6367,6 +6413,23 @@ Transform:
   - {fileID: 2867577272153226508}
   m_Father: {fileID: 686308820379532645}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8197362392289863523
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8160305395743903706}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 48f96e409b28f9f4f8a0c2a77d781c4c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  startPosition: {x: 0, y: 0, z: 0}
+  direction: 11
+  duration: 1
+  isTable: 0
+  canMove: 0
 --- !u!1 &8263878137592000043
 GameObject:
   m_ObjectHideFlags: 0

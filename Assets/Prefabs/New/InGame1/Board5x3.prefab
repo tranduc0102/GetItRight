@@ -9,6 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7607368499157012095}
+  - component: {fileID: 2129406713706870327}
   m_Layer: 0
   m_Name: Board3
   m_TagString: Untagged
@@ -37,6 +38,23 @@ Transform:
   - {fileID: 475329115502174578}
   m_Father: {fileID: 5001409570001708685}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2129406713706870327
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 667117766506084153}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 48f96e409b28f9f4f8a0c2a77d781c4c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  startPosition: {x: 0, y: 0, z: 0}
+  direction: 11
+  duration: 1
+  isTable: 0
+  canMove: 0
 --- !u!1 &1044217749778122450
 GameObject:
   m_ObjectHideFlags: 0
@@ -1207,6 +1225,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4831312568532285816}
+  - component: {fileID: 4267796645678709020}
   m_Layer: 0
   m_Name: Board2
   m_TagString: Untagged
@@ -1235,6 +1254,23 @@ Transform:
   - {fileID: 3259918038657504617}
   m_Father: {fileID: 5001409570001708685}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4267796645678709020
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2821713358791869456}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 48f96e409b28f9f4f8a0c2a77d781c4c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  startPosition: {x: 0, y: 0, z: 0}
+  direction: -11
+  duration: 1
+  isTable: 0
+  canMove: 0
 --- !u!1 &2959815790117466220
 GameObject:
   m_ObjectHideFlags: 0
@@ -2753,6 +2789,8 @@ MonoBehaviour:
   startPosition: {x: 0, y: 0, z: 0}
   direction: 11
   duration: 1
+  isTable: 0
+  canMove: 1
 --- !u!1 &6184847340685346190
 GameObject:
   m_ObjectHideFlags: 0
@@ -3113,6 +3151,8 @@ MonoBehaviour:
   startPosition: {x: 0, y: 0, z: 0}
   direction: 11
   duration: 1
+  isTable: 0
+  canMove: 1
 --- !u!1 &6803469973936268184
 GameObject:
   m_ObjectHideFlags: 0
@@ -4145,6 +4185,8 @@ MonoBehaviour:
   startPosition: {x: 0, y: 0, z: 0}
   direction: -11
   duration: 1
+  isTable: 0
+  canMove: 1
 --- !u!1 &8623419774343455109
 GameObject:
   m_ObjectHideFlags: 0
