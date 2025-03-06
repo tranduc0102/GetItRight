@@ -13,7 +13,7 @@ namespace _Scripts.Extension
         
         private string sceneName
         {
-            get => PlayerPrefs.GetString("sceneName", "GamePlay");
+            get => PlayerPrefs.GetString("sceneName", "CreateTool");
             set => PlayerPrefs.SetString("sceneName", value);
         }
 
@@ -21,6 +21,11 @@ namespace _Scripts.Extension
         {
             base.KeepAlive(true);
             base.Awake();
+        }
+
+        private void Start()
+        {
+            IntoGamePlay();
         }
 
         public void IntoGamePlay()
