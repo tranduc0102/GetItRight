@@ -29919,8 +29919,8 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1829071211140241216}
         m_TargetAssemblyTypeName: UISetting, Assembly-CSharp
-        m_MethodName: DisplaySetting
-        m_Mode: 6
+        m_MethodName: OnButtonCloseClick
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -40511,8 +40511,8 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1829071211140241216}
         m_TargetAssemblyTypeName: UISetting, Assembly-CSharp
-        m_MethodName: DisplaySetting
-        m_Mode: 6
+        m_MethodName: OnButtonSettingClick
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -74660,8 +74660,8 @@ MonoBehaviour:
         m_CallState: 2
       - m_Target: {fileID: 1829071211140241216}
         m_TargetAssemblyTypeName: UISetting, Assembly-CSharp
-        m_MethodName: DisplaySetting
-        m_Mode: 6
+        m_MethodName: OnButtonSettingClick
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine

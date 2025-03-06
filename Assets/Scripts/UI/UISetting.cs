@@ -1,3 +1,4 @@
+using System;
 using _Scripts;
 using _Scripts.Extension;
 using DG.Tweening;
@@ -93,7 +94,7 @@ public class UISetting : MonoBehaviour
         }
     }
 
-    public void DisplaySetting(bool enable)
+    public void DisplaySetting(bool enable, Action onClosed = null)
     {
         if(GameController.Instance.IsWin || !GameController.Instance.CanSkip) return;
         if (enable)
@@ -105,8 +106,9 @@ public class UISetting : MonoBehaviour
         {
             popup.Close(delegate
             {
-                dime._Close(true);
+                onClosed?.Invoke();
             },true);
+            dime._Close(true);
         }
     }
     
@@ -135,5 +137,15 @@ public class UISetting : MonoBehaviour
         {
             IsOffVibration = !IsOffVibration;
         }
+    }
+
+    public void OnButtonSettingClick()
+    {
+        DisplaySetting(true);
+    }
+
+    public void OnButtonCloseClick()
+    {
+        DisplaySetting(false);
     }
 }

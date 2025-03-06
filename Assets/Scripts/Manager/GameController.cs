@@ -316,23 +316,25 @@ namespace Game
         public void ReturnHome()
         {
             if(!isPlay) return;
-            _Scripts.UI.UIController.instance.UISetting.DisplaySetting(false);
-            _Scripts.UI.UIController.instance.UIInGame.DisplayInGame(false);
-            MovementObject[] movementObjects = FindObjectsOfType<MovementObject>();
-            foreach (var obj in movementObjects)
+            _Scripts.UI.UIController.instance.UISetting.DisplaySetting(false, delegate
             {
-                obj.ResetState();
-            }
-
-            currentPanel.ResetState();
-
-            DOVirtual.DelayedCall(1f, delegate
-            {
-                StartCoroutine(playerManager.AnimationResetState());
-                cameraController.ResetState(delegate
+                _Scripts.UI.UIController.instance.UIInGame.DisplayInGame(false);
+                MovementObject[] movementObjects = FindObjectsOfType<MovementObject>();
+                foreach (var obj in movementObjects)
                 {
-                    _Scripts.UI.UIController.instance.UIHome.DisplayHome(true);
-                    isPlay = false;
+                    obj.ResetState();
+                }
+
+                currentPanel.ResetState();
+
+                DOVirtual.DelayedCall(1f, delegate
+                {
+                    StartCoroutine(playerManager.AnimationResetState());
+                    cameraController.ResetState(delegate
+                    {
+                        _Scripts.UI.UIController.instance.UIHome.DisplayHome(true);
+                        isPlay = false;
+                    });
                 });
             });
         }
