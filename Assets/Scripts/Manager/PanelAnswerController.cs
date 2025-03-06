@@ -164,13 +164,6 @@ namespace Game
             {
                 return;
             }
-
-            if (!canShowBtnSkip)
-            {
-                canShowBtnSkip = true;
-                _Scripts.UI.UIController.instance.UIInGame.ShowSkipButton(true);
-            }
-
             if (cam != null)
             {
                 Ray ray = cam.ScreenPointToRay(leanFinger.StartScreenPosition);
@@ -249,6 +242,11 @@ namespace Game
             targetPos.IsNone = false;
             float high = 0.75f;
             float distance = 0f;
+            if (!canShowBtnSkip)
+            {
+                canShowBtnSkip = true;
+                _Scripts.UI.UIController.instance.UIInGame.ShowSkipButton(true);
+            }
             objToMove.DOJump(targetPos.transform.position + new Vector3(0f, 1 * high, -distance), jumpPower: 0.5f, numJumps: 1, duration: 0.5f)
                 .SetEase(Ease.OutQuad)
                 .OnUpdate(delegate
