@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using _Scripts;
+using _Scripts.UI;
 using DG.Tweening;
 using Lean.Touch;
 using pooling;
@@ -16,6 +17,7 @@ namespace Game
         private List<Item> themeObjects = new List<Item>();
         private List<Item> results = new List<Item>();
         [SerializeField] private Camera cam;
+        private bool canShowBtnSkip;
 
         private void Start()
         {
@@ -26,6 +28,7 @@ namespace Game
         {
             transform.position = new Vector3(10f, transform.position.y, transform.position.z);
             InitializePanel();
+            canShowBtnSkip = false;
             LeanTouch.OnFingerDown += HandleClick;
         }
 
@@ -162,6 +165,12 @@ namespace Game
                 return;
             }
 
+            if (!canShowBtnSkip)
+            {
+                canShowBtnSkip = true;
+                _Scripts.UI.UIController.instance.UIInGame.ShowSkipButton(true);
+            }
+
             if (cam != null)
             {
                 Ray ray = cam.ScreenPointToRay(leanFinger.StartScreenPosition);
@@ -257,7 +266,6 @@ namespace Game
                         item.CanMove = false;
                     }
                 });
-          _Scripts.UI.UIController.instance.UIInGame.ShowSkipButton(true);
         }
     }
 }
