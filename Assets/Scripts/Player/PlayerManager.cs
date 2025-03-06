@@ -138,4 +138,12 @@ public class PlayerManager : MonoBehaviour
         yield return new WaitForSeconds(0.5f);
         currentPlayer.transform.DOLocalRotate(Quaternion.Euler(15.35f, -180f, 0f).eulerAngles * -1f, 1f);
     }
+
+    public IEnumerator AnimationResetState()
+    {
+        currentPlayer = players[0];
+        currentPlayer.PlayAnimation(Run);
+        yield return new WaitForSeconds(1.8f);
+        currentPlayer.PlayAnimation(Idle);
+    }
 }

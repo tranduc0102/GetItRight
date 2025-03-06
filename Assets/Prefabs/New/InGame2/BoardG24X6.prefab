@@ -3706,6 +3706,7 @@ MonoBehaviour:
   materialNo: {fileID: 2100000, guid: 5e72cca0cdabdff49be7cb12d6696b3e, type: 2}
   materialMaybe: {fileID: 2100000, guid: 89b1e3f2231d37d46af715800056d5a5, type: 2}
   heightOfObjects: 0.0891
+  currentIndex: 0
 --- !u!1 &7644497350701108143
 GameObject:
   m_ObjectHideFlags: 0

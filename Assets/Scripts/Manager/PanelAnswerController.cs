@@ -65,6 +65,14 @@ namespace Game
             });
         }
 
+        public void ResetState()
+        {
+            transform.DOLocalMoveX(10f, 1f).OnComplete(delegate
+            {
+                gameObject.SetActive(false);
+            });
+        }
+
         private void ClearPanel()
         {
             if (objItem.Count > 0)
@@ -249,7 +257,7 @@ namespace Game
                         item.CanMove = false;
                     }
                 });
-            _Scripts.UI.UIController.instance.UIInGame.ShowSkipButton(true);
+          _Scripts.UI.UIController.instance.UIInGame.ShowSkipButton(true);
         }
     }
 }

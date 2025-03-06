@@ -1,6 +1,7 @@
 using _Scripts;
 using _Scripts.Extension;
 using DG.Tweening;
+using Game;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -94,6 +95,7 @@ public class UISetting : MonoBehaviour
 
     public void DisplaySetting(bool enable)
     {
+        if(GameController.Instance.IsWin || !GameController.Instance.CanSkip) return;
         if (enable)
         {
             dime.gameObject.SetActive(true);

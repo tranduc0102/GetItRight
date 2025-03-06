@@ -135,6 +135,10 @@ namespace _Scripts.UI
                 {
                     GameController.Instance.AmountCoin += 200;
                     UIController.instance.UIHome.UpdateTextCoin(GameController.Instance.AmountCoin);
+                    if (popupGetMoreCoin.gameObject.activeSelf)
+                    {
+                        DisplayPopupGetMoreCoin(false);
+                    }
                 });
                 BridgeController.instance.ShowRewarded("Reward Coin", e);
             }
@@ -148,6 +152,7 @@ namespace _Scripts.UI
                     //tru tien va mo blind box
                     if (GameController.Instance.AmountCoin < 200)
                     {
+                        DisplayPopupGetMoreCoin(true);
                         return;
                     }
                     if (ItemShopManager.instance.BlindBags[index].ActiveAnimation(index))
@@ -158,7 +163,11 @@ namespace _Scripts.UI
                     break;
                 case 1:
                     //tru tien va mo blind box
-                    if(GameController.Instance.AmountCoin < 200) return;
+                    if (GameController.Instance.AmountCoin < 200)
+                    {
+                        DisplayPopupGetMoreCoin(true);
+                        return;
+                    }
                     if (ItemShopManager.instance.BlindBags[index].ActiveAnimation(index))
                     {
                         GameController.Instance.AmountCoin -= 200;
@@ -167,7 +176,11 @@ namespace _Scripts.UI
                     break;
                 case 2:
                     //tru tien va mo blind box
-                    if(GameController.Instance.AmountCoin < 200) return;
+                    if (GameController.Instance.AmountCoin < 200)
+                    {
+                        DisplayPopupGetMoreCoin(true);
+                        return;
+                    }
                     if (ItemShopManager.instance.BlindBags[index].ActiveAnimation(index))
                     {
                         GameController.Instance.AmountCoin -= 200;

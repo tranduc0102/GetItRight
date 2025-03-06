@@ -15,8 +15,6 @@ namespace _Scripts.UI
         {
             if (enable)
             {
-                Debug.Log("chk");
-                
                 inGame.SetActive(true);
                 coinBox.SetActive(true);
                 btnShop.SetActive(true);

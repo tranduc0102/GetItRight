@@ -116,7 +116,14 @@ namespace Game
             }
             get => PlayerPrefs.GetInt(USESTRING.CURRENT_LEVEL, 0);
         }
-        public bool CanSkip { get; set; }
+
+        private bool canSkip;
+
+        public bool CanSkip
+        {
+            get => canSkip;
+            set => canSkip = value;
+        }
 
         private bool isWin;
         public bool IsWin
@@ -304,6 +311,30 @@ namespace Game
             boxManager.NextLevelOrReplay(currentLevel.amountBox);
             _Scripts.UI.UIController.instance.UIInGame.ShowSkipButton(false);
             BridgeController.instance.LogLevelFailWithParameter(PlayerPrefs.GetInt(USESTRING.CURRENT_LEVEL, 1));
+        }
+        
+        public void ReturnHome()
+        {
+            if(!isPlay) return;
+            _Scripts.UI.UIController.instance.UISetting.DisplaySetting(false);
+            _Scripts.UI.UIController.instance.UIInGame.DisplayInGame(false);
+            MovementObject[] movementObjects = FindObjectsOfType<MovementObject>();
+            foreach (var obj in movementObjects)
+            {
+                obj.ResetState();
+            }
+
+            currentPanel.ResetState();
+
+            DOVirtual.DelayedCall(1f, delegate
+            {
+                StartCoroutine(playerManager.AnimationResetState());
+                cameraController.ResetState(delegate
+                {
+                    _Scripts.UI.UIController.instance.UIHome.DisplayHome(true);
+                    isPlay = false;
+                });
+            });
         }
 
         public void SkipLevel()
